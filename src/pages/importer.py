@@ -1,6 +1,4 @@
 import json
-# @REVIEW: rewrite into `import from` syntax
-# @RESPONSE: done
 from datetime import datetime, timezone
 from src.internals.cache.redis import get_conn, serialize_dict_list, deserialize_dict_list
 from src.utils.utils import get_import_id
@@ -164,6 +162,9 @@ def importer_submit():
         # @RESPONSE: I fixed(?) the first bit, but I disagree with you on the second.
         # This message in particular needs to be sent to the user before Kitsune's watcher or importers
         # process anything, so doing it on the frontend server is the only real option.
+        # @REVIEW: Timestamp is obviously a separate variable too.
+        # In regards to logs, all it does is adding a value into redis key,
+        # which can be done in Kitsune at the moment when the `import_id` is added to queue.
         msg = f'[{import_id}]@{datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")}: '
         msg += 'Successfully added your import to the queue. Waiting...'
         redis.rpush(f'importer_logs:{import_id}', msg)
