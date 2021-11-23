@@ -1,6 +1,7 @@
 import json
 # @REVIEW: rewrite into `import from` syntax
-import datetime
+# @RESPONSE: done
+from datetime import datetime, timezone
 from src.internals.cache.redis import get_conn, serialize_dict_list, deserialize_dict_list
 from src.utils.utils import get_import_id
 from flask import Blueprint, request, make_response, render_template, current_app, g, session
@@ -160,8 +161,11 @@ def importer_submit():
         # @REVIEW: These are different variables and so is the timestamp.
         # Why does a random endpoint add logs to the import?
         # It's a job of the importer manager.
-        msg = 'Successfully added your import to the queue. Waiting...'
-        msg = f'[{import_id}]@{datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")}: {msg}'
+        # @RESPONSE: I fixed(?) the first bit, but I disagree with you on the second.
+        # This message in particular needs to be sent to the user before Kitsune's watcher or importers
+        # process anything, so doing it on the frontend server is the only real option.
+        msg = f'[{import_id}]@{datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")}: '
+        msg += 'Successfully added your import to the queue. Waiting...'
         redis.rpush(f'importer_logs:{import_id}', msg)
 
         props = SuccessProps(
