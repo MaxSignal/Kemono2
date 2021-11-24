@@ -233,9 +233,7 @@
         <div>
       {% endif %}
       {% if props.service == 'fantia' %}
-        <pre>
-          {{ post.content|safe }}
-        </pre>
+        <pre>{{ post.content|safe }}</pre>
       {% else %}
         {{ post.content|safe }}
       {% endif %}

@@ -31,22 +31,38 @@ export async function postPage(section) {
 }
 
 /**
+ * Apply some fixes to the content of the post.
  * @param {HTMLElement} contentElement
  */
 function cleanupBody(contentElement) {
-  [...document.links].forEach((link) => {
+  // content is empty
+  if (!contentElement.childElementCount && !contentElement.childNodes.length) {
+    return;
+  }
 
+  // pixiv post and its contents is a text node
+  if (meta.service === "fanbox" && !contentElement.childElementCount && contentElement.childNodes.length == 1) {
+    // wrap the text node into `<pre>`
+    const [textNode] = Array.from(contentElement.childNodes);
+    const pre = document.createElement("pre");
+    textNode.after(pre);
+    pre.appendChild(textNode);
+  }
+
+  Array.from(document.links).forEach((link) => {
+    // remove links to fanbox from the post
     if (link.href.startsWith("https://downloads.fanbox.cc")) {
       link.remove();
     }
 
   });
 
+  // Remove needless spaces and empty paragraphs.
   /**
    * @type {NodeListOf<HTMLParagraphElement}
    */
   const paragraphs = contentElement.querySelectorAll("p:empty");
-  [...paragraphs].forEach((paragraph) => {
+  Array.from(paragraphs).forEach((paragraph) => {
     if (paragraph.nextElementSibling && paragraph.nextElementSibling.tagName === "BR") {
       paragraph.nextElementSibling.remove();
       paragraph.remove();
