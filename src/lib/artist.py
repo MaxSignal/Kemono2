@@ -8,6 +8,7 @@ import ujson
 import dateutil
 import copy
 import datetime
+import time
 
 
 def get_top_artists_by_faves(offset, count, reload=False):
@@ -34,6 +35,7 @@ def get_top_artists_by_faves(offset, count, reload=False):
             redis.set(key, serialize_artists(artists), ex=3600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_top_artists_by_faves(offset, count, reload=reload)
     else:
         artists = deserialize_artists(artists)
@@ -60,6 +62,7 @@ def get_count_of_artists_faved(reload=False):
             redis.set(key, count, ex=3600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_count_of_artists_faved(reload=reload)
     else:
         count = int(count)
@@ -131,6 +134,7 @@ def get_random_artist_keys(count, reload=False):
             redis.set(key, ujson.dumps(artist_keys), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_random_artist_keys(count, reload=reload)
     else:
         artist_keys = ujson.loads(artist_keys)
@@ -151,6 +155,7 @@ def get_non_discord_artist_keys(reload=False):
             redis.set(key, ujson.dumps(artist_keys), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_non_discord_artist_keys(reload=reload)
     else:
         artist_keys = ujson.loads(artist_keys)
@@ -171,6 +176,7 @@ def get_all_non_discord_artists(reload=False):
             redis.set(key, serialize_artists(artists), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_all_non_discord_artists(reload=reload)
     else:
         artists = deserialize_artists(artists)
@@ -191,6 +197,7 @@ def get_artists_by_service(service, reload=False):
             redis.set(key, serialize_artists(artists), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_artists_by_service(service, reload=reload)
     else:
         artists = deserialize_artists(artists)
@@ -211,6 +218,7 @@ def get_artist(service: str, artist_id: str, reload: bool = False) -> dict:
             redis.set(key, serialize_artist(artist), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_artist(service, artist_id, reload=reload)
     else:
         artist = deserialize_artist(artist)
@@ -231,6 +239,7 @@ def get_artist_post_count(service, artist_id, reload=False):
             redis.set(key, str(count), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_artist_post_count(service, artist_id, reload=reload)
     else:
         count = int(count)
@@ -255,6 +264,7 @@ def get_artist_last_updated(service, artist_id, reload=False):
             redis.set(key, last_updated.isoformat(), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             get_artist_last_updated(service, artist_id, reload=reload)
     else:
         last_updated = dateutil.parser.parse(last_updated)
@@ -280,6 +290,7 @@ def get_artists_by_update_time(offset, reload=False):
             redis.set(key, serialize_artists(artists), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             get_artists_by_update_time(offset, reload=reload)
     else:
         artists = deserialize_artists(artists)

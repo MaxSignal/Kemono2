@@ -5,6 +5,7 @@ import base64
 import hashlib
 import dateutil
 import redis_lock
+import time
 from flask import session, current_app, flash
 from threading import Lock
 from bleach.sanitizer import Cleaner
@@ -67,6 +68,7 @@ def get_saved_key_import_ids(key_id, reload=False):
             redis.set(key, serialize_dict_list(saved_key_import_ids), ex=3600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_saved_key_import_ids(key_id, reload=reload)
     else:
         saved_key_import_ids = deserialize_dict_list(saved_key_import_ids)
@@ -98,6 +100,7 @@ def get_saved_keys(account_id: int, reload: bool = False):
             redis.set(key, serialize_dict_list(result), ex=3600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_saved_keys(account_id, reload=reload)
     else:
         result = deserialize_dict_list(saved_keys)

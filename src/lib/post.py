@@ -6,6 +6,7 @@ import dateutil
 import datetime
 import copy
 import re
+import time
 
 
 def get_random_posts_keys(count, reload=False):
@@ -22,6 +23,7 @@ def get_random_posts_keys(count, reload=False):
             redis.set(key, ujson.dumps(post_keys), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_random_posts_keys(count, reload=reload)
     else:
         post_keys = ujson.loads(post_keys)
@@ -42,6 +44,7 @@ def get_all_post_keys(reload=False):
             redis.set(key, ujson.dumps(post_keys), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_all_post_keys(reload=reload)
     else:
         post_keys = ujson.loads(post_keys)
@@ -62,6 +65,7 @@ def get_post(post_id, artist_id, service, reload=False):
             redis.set(key, serialize_post(post), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_post(post_id, artist_id, service, reload=reload)
     else:
         post = deserialize_post(post)
@@ -82,6 +86,7 @@ def get_post_comments(post_id, service, reload=False):
             redis.set(key, serialize_comments(comments), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_post_comments(post_id, service, reload=reload)
     else:
         comments = deserialize_comments(comments)
@@ -102,6 +107,7 @@ def get_all_posts_by_artist(artist_id, service, reload=False):
             redis.set(key, serialize_posts(posts), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_all_posts_by_artist(artist_id, service, reload=reload)
     else:
         posts = deserialize_posts(posts)
@@ -122,6 +128,7 @@ def get_artist_posts(artist_id, service, offset, limit, sort='id', reload=False)
             redis.set(key, serialize_posts(posts), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_artist_posts(artist_id, service, offset, limit, sort=sort, reload=reload)
     else:
         posts = deserialize_posts(posts)
@@ -142,6 +149,7 @@ def is_post_flagged(service, artist_id, post_id, reload=False):
             redis.set(key, str(flagged), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return is_post_flagged(service, artist_id, post_id, reload=reload)
     else:
         flagged = flagged.decode('utf-8') == 'True'
@@ -183,6 +191,7 @@ def get_next_post_id(post_id, artist_id, service, reload=False):
             redis.set(key, str(next_post), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_next_post_id(post_id, artist_id, service, reload=reload)
     else:
         next_post = next_post.decode('utf-8')
@@ -228,6 +237,7 @@ def get_previous_post_id(post_id, artist_id, service, reload=False):
             redis.set(key, str(prev_post), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_previous_post_id(post_id, artist_id, service, reload=reload)
     else:
         prev_post = prev_post.decode('utf-8')

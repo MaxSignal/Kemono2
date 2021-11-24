@@ -7,6 +7,7 @@ import dateutil
 import copy
 import datetime
 import redis_lock
+import time
 
 
 def count_all_posts(reload=False):
@@ -24,6 +25,7 @@ def count_all_posts(reload=False):
             count = int(count['count'])
             lock.release()
         else:
+            time.sleep(0.1)
             return count_all_posts(reload=reload)
     else:
         count = int(count)
@@ -46,6 +48,7 @@ def count_all_posts_for_query(q: str, reload=False):
             count = int(count['count'])
             lock.release()
         else:
+            time.sleep(0.1)
             return count_all_posts_for_query(q, reload=reload)
     else:
         count = int(count)
@@ -66,6 +69,7 @@ def get_all_posts(offset: int, reload=False):
             redis.set(key, serialize_dict_list(all_posts), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_all_posts(offset, reload=reload)
     else:
         all_posts = deserialize_dict_list(all_posts)
@@ -89,6 +93,7 @@ def get_all_posts_for_query(q: str, offset: int, reload=False):
             redis.set(key, serialize_dict_list(results), ex=600)
             lock.release()
         else:
+            time.sleep(0.1)
             return get_all_posts_for_query(q, offset, reload=reload)
     else:
         results = deserialize_dict_list(results)
