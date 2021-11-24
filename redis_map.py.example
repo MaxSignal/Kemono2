@@ -71,6 +71,8 @@ keyspaces = {
     "all_posts_for_query": 0,
     "global_post_count": 0,
     "global_post_count_for_query": 0,
+    "lock": 0,
+    "lock-signal": 0,
     # Kitsune Pubsub
     "imports": 0,
     "running_imports": 0
