@@ -22,31 +22,45 @@ export async function postPage(section) {
   meta.service = document.head.querySelector("[name='service']").content;
   meta.user = document.head.querySelector("[name='user']").content;
   meta.postID = document.head.querySelector("[name='id']").content;
-  const content = section.querySelector(".post__body");
+  const postBody = section.querySelector(".post__body");
 
   section.addEventListener('click', Expander);
 
-  cleanupBody(content);
+  cleanupBody(postBody);
   await initButtons(buttonPanel);
 }
 
 /**
  * Apply some fixes to the content of the post.
- * @param {HTMLElement} contentElement
+ * @param {HTMLElement} postBody
  */
-function cleanupBody(contentElement) {
+function cleanupBody(postBody) {
+  const postContent = postBody.querySelector(".post__content");
+  const isNoPostContent = !postContent || (!postContent.childElementCount && !postContent.childNodes.length);
+
   // content is empty
-  if (!contentElement.childElementCount && !contentElement.childNodes.length) {
+  if (isNoPostContent) {
     return;
   }
 
-  // pixiv post and its contents is a text node
-  if (meta.service === "fanbox" && !contentElement.childElementCount && contentElement.childNodes.length == 1) {
-    // wrap the text node into `<pre>`
-    const [textNode] = Array.from(contentElement.childNodes);
-    const pre = document.createElement("pre");
-    textNode.after(pre);
-    pre.appendChild(textNode);
+  // pixiv post
+  if (meta.service === "fanbox") {
+    // its contents is a text node
+    if (!postContent.childElementCount && postContent.childNodes.length === 1) {
+      // wrap the text node into `<pre>`
+      const [textNode] = Array.from(postContent.childNodes);
+      const pre = document.createElement("pre");
+      textNode.after(pre);
+      pre.appendChild(textNode);
+    }
+
+    // remove paragraphs with only `<br>` in them
+    const paragraphs = postContent.querySelectorAll("p");
+    paragraphs.forEach((para) => {
+      if (para.childElementCount === 1 && para.firstElementChild.tagName === "BR" ) {
+        para.remove();
+      }
+    });
   }
 
   Array.from(document.links).forEach((link) => {
@@ -54,14 +68,13 @@ function cleanupBody(contentElement) {
     if (link.href.startsWith("https://downloads.fanbox.cc")) {
       link.remove();
     }
-
   });
 
   // Remove needless spaces and empty paragraphs.
   /**
    * @type {NodeListOf<HTMLParagraphElement}
    */
-  const paragraphs = contentElement.querySelectorAll("p:empty");
+  const paragraphs = postContent.querySelectorAll("p:empty");
   Array.from(paragraphs).forEach((paragraph) => {
     if (paragraph.nextElementSibling && paragraph.nextElementSibling.tagName === "BR") {
       paragraph.nextElementSibling.remove();
@@ -188,7 +201,7 @@ function handleFavouriting(service, user, postID) {
     button.insertBefore(loadingIcon, text);
 
     try {
-      if ( button.classList.contains("post__fav--unfav") ) {
+      if (button.classList.contains("post__fav--unfav")) {
         const isUnfavorited = await removeFavouritePost(service, user, postID);
 
         if (isUnfavorited) {
