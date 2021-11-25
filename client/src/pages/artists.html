@@ -55,29 +55,6 @@
         </select>
       </div>
     </form>
-    {% if results|length %}
-      <div class="ad-container">
-        <script
-          id="SCPlayerScript"
-          type="text/javascript"
-          src="https://creative.xxxjmp.com/widgets/Player/lib.js"
-        ></script>
-        <div id="player-container-1" style="width:300px;height:250px"></div>
-        <script type="text/javascript">
-          const player1 = new StripchatPlayer({
-          //modelName: '',
-            userId: '264cbbb50205e9a9821f9f5de3203d265034cb1e5b6453a81fd33706d8a579ca',
-            sourceId: 'kemono',
-            campaignId: 'streaming',
-            strict: 1,
-            tag:'girls/cosplay',
-            showModal: 'signup',
-            autoplay: 'all',
-          });
-          player1.mount(document.getElementById('player-container-1')).then((app) => {});
-        </script>
-      </div>
-    {% endif %}
     {% if props.display %}
       <div style="text-align: center;">
         <h3 id="display-status" class="subtitle">
