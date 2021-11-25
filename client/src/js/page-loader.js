@@ -6,7 +6,7 @@ import { initComponentFactory } from "./component-factory";
  * @param {Map<string, (section: HTMLElement) => void>} pages The map of page names and their callbacks.
  */
 export function initSections(pages) {
-  const header = document.querySelector(".global-header");
+  const sidebar = document.querySelector(".global-sidebar");
   const main = document.querySelector("main");
   /**
    * @type {HTMLElement}
@@ -18,7 +18,7 @@ export function initSections(pages) {
   const sections = main.querySelectorAll("main > .site-section");
 
   initComponentFactory(footer);
-  initShell(header);
+  initShell(sidebar);
   sections.forEach(section => {
     const sectionName = /site-section--([a-z\-]+)/i.exec(section.className)[1];
 

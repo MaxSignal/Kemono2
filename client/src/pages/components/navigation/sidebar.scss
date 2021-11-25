@@ -1,0 +1,91 @@
+@use "../../../css/variables" as *;
+
+.global-sidebar {
+  display: flex;
+  width: 12rem;
+  min-width: 160px;
+  flex-direction: column;
+  overflow: auto;
+  background: rgb(40 42 46);
+  padding: 0.5em 0;
+
+  @media (max-width: $sidebar-min-width) {
+    position: absolute;
+    height: 100%;
+    width: 15rem;
+    margin-left: -15rem;
+    transition: margin-left 150ms ease-in-out 0s;
+    z-index: 3;
+
+    &.expanded {
+      margin-left: 0;
+    }
+    &.sidebar-hidden {
+      opacity: 0;
+    }
+  }
+
+  &-entry {
+    display: flex;
+    flex-direction: column;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+
+    a {
+      color: unset;
+      border: 0;
+      transition-property: unset;
+      transition-duration: unset;
+    }
+
+    &.stuck-bottom {
+      margin-top: auto;
+    }
+
+    &.main-header-entry {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+    }
+
+    .close-sidebar {
+      display: none;
+      height: 1.8rem;
+
+      & > img {
+        height: 100%;
+      }
+
+      @media (max-width: $sidebar-min-width) {
+        display: block;
+      }
+    }
+
+    &-item {
+      padding-bottom: 0.3rem;
+      padding-left: 0.5rem;
+
+      @media (max-width: $sidebar-min-width) {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+
+      &.main-header {
+        cursor: pointer;
+        width: 100%;
+      }
+
+      &:not(.header):not(&.main-header) {
+        padding-left: 1.5rem;
+        padding-top: 0.3rem;
+        cursor: pointer;
+      }
+
+      &:not(.header):hover, &.main-header:hover,
+      &:not(.header):focus, &.main-header:focus {
+        background: rgb(255 255 255 / 10%);
+      }
+    }
+  }
+}

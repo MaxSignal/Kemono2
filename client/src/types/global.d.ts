@@ -30,7 +30,7 @@ namespace KemonoAPI {
     updated: string
     faved_seq?: number
   }
-  
+
   interface Favorites {
     retrieveFavoriteArtists: () => Promise<string>,
     favoriteArtist: (service: string, id: string) => Promise<boolean>,
@@ -73,52 +73,6 @@ namespace KemonoAPI {
     }
 
     interface LogItem {}
-  }
-}
-
-namespace Component {
-  interface Callback {
-    (props: Props): HTMLElement
-  }
-
-  /**
-   * Init the element off the DOM element.
-   */
-  interface InitFromElement {
-    (props: Props): HTMLElement
-  }
-
-  /**
-   * Create element through component factory.
-   */
-  interface InitFromScratch {
-    (props: Props): HTMLElement
-  }
-
-  interface Props {
-    /**
-     * Element to initiate the component from.
-     */
-    element?: HTMLElement 
-    className?: string
-  }
-
-  namespace GlobalNavigation {
-    namespace Item {
-      interface Callback {
-        (props: Props): HTMLLIElement
-      }
-    
-      interface Props extends Component.Props {
-        element?: HTMLLIElement
-        link: string
-        text?: string
-      }
-
-      interface InitFromScratch {
-        (props: Props): HTMLElement
-      }
-    }
   }
 }
 

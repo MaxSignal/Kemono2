@@ -1,5 +1,6 @@
 {# TODO: figure out nested macro calls #}
 {% import 'components/navigation/global.html' as global %}
+{% from 'components/navigation/sidebar.html' import nav_list, nav_item, nav_header, nav_entry %}
 {% from 'components/loading_icon.html' import loading_icon %}
 {% from 'components/timestamp.html' import timestamp %}
 {% from 'components/tooltip.html' import tooltip %}
@@ -86,59 +87,88 @@
     {% block scripts_extra %}
     {% endblock scripts_extra %}
   </head>
-  <body>
-    <header class="global-header">
-      <ul class="header">
-        <li><a href="/">[Home]</a></li>
-        <li><a href="/artists">[Artists]</a></li>
-        <li><a href="/artists/updated">[Recently Updated Artists]</a></li>
-        <li><a href="/posts">[Recent Posts]</a></li>
-        <li><a href="/dms">[Recent DMs]</a></li>
-        <li><a href="/importer">[Import]</a></li>
-        <div id="account-buttons" style="display: inline-block;">
-          {% if g.new_notifications_count and request.path != '/account/notifications' %}
-            <li><a href="/account/notifications">New Notifications</a></li>
-          {% endif %}
+  <body class="transition-preload">
+    <div class="global-sidebar sidebar-hidden">
+      {% call nav_entry(class_name='main-header-entry') %}
+        {{ nav_item('/', 'Home', 'main-header') }}
+        <div class='close-sidebar' >
+          <img src="/static/close.svg" />
         </div>
-      </ul>
-      {% if props.currentPage == 'artists' %}
-        <ul class="subheader">
-          <li><a href="/artists">[Artist List]</a></li>
-          <li><a href="/artists/random">[Random Artist]</a></li>
-        </ul>
+      {% endcall %}
+      {{ nav_list([
+        [
+          { 'header': true, 'text': 'Artists' },
+          { 'text': 'Search', 'link': '/artists' },
+          { 'text': 'Recent', 'link': '/artists/updated' },
+          { 'text': 'Random', 'link': '/artists/random' }
+        ],
+        [
+          { 'header': true, 'text': 'Posts' },
+          { 'text': 'Search', 'link': '/posts' },
+          { 'text': 'DMs', 'link': '/dms' },
+          { 'text': 'Random', 'link': '/posts/random' }
+        ],
+        [
+          { 'header': true, 'text': 'Importer' },
+          { 'text': 'Import', 'link': '/importer' },
+          { 'text': 'FAQ', 'link': '/importer/tutorial' }
+        ]
+      ]) }}
+      {% if is_logged_in() %}
+        {{ nav_entry([
+          { 'header': true, 'text': 'Account' },
+          { 'text': 'Logout', 'link': '/account/logout', 'class_name': 'logout' },
+          { 'text': 'Keys', 'link': '/account/keys' },
+          { 'text': 'Favorites', 'link': '/favorites', 'class_name': 'favorites' }
+        ], 'account') }}
+      {% else %}
+        {{ nav_entry([
+          { 'header': true, 'text': 'Account' },
+          { 'text': 'Login', 'link': '/account/login', 'class_name': 'login' },
+          { 'text': 'Register', 'link': '/account/register', 'class_name': 'register' }
+        ], 'account') }}
       {% endif %}
-      {% if props.currentPage == 'help' %}
-        <ul class="subheader">
-          <li><a href="/help/faq">[FAQ]</a></li>
-          {# <li><a href="/help/about">[About]</a></li>
-          <li><a href="/help/posts">[Posts]</a></li>
-          <li><a href="/help/rules">[Rules]</a></li>
-          <li><a href="/help/license">[Open Source]</a></li>
-          <li><a href="/help/bans">[Bans]</a></li> #}
-        </ul>
-      {% endif %}
-      {% include 'components/flash_messages.html' %}
-    </header>
+      {#
+        {% call nav_entry(class_name='stuck-bottom') %}
+          {{ nav_header('Community') }}
+          {{ nav_item('/support', 'Donate') }}
+          {{ nav_item('https://chan.kemono.party/', 'Chan', is_external=true) }}
+          {{ nav_item('https://t.me/kemonowelcome', 'Telegram', is_external=true) }}
+          {{ nav_item('https://theporndude.com/', 'ThePornDude', is_external=true) }}
+        {% endcall %}
+      #}
+    </div>
 
-    <main class="main" id="main">
-      {% block content %}
-      {% endblock content %}
-    </main>
-
-    <footer class="global-footer">
-      <div
-        id="component-container"
-        class="component-container"
-        hidden
-      >
-        {{ fancy_link("") }}
-        {{ register_message("") }}
-        {{ timestamp("") }}
-        {{ loading_icon() }}
-        {% block components %}
-        {% endblock components %}
+    <div class="content-wrapper">
+      <div class="backdrop backdrop-hidden">
       </div>
-    </footer>
+      <div class="header">
+        <div id="burgor">
+          <img src="/static/menu.svg" />
+        </div>
+      </div>
+      {% include 'components/flash_messages.html' %}
+
+      <main class="main" id="main">
+        {% block content %}
+        {% endblock content %}
+      </main>
+
+      <footer class="global-footer">
+        <div
+          id="component-container"
+          class="component-container"
+          hidden
+        >
+          {{ fancy_link("") }}
+          {{ register_message("") }}
+          {{ timestamp("") }}
+          {{ loading_icon() }}
+          {% block components %}
+          {% endblock components %}
+        </div>
+      </footer>
+    </div>
     {# <div class="global-overlay">
     </div> #}
     {% call tooltip() %}

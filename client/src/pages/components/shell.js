@@ -1,74 +1,46 @@
 import { isLoggedIn } from "@wp/js/account";
-import { createComponent } from "@wp/js/component-factory";
 
 /**
- * @param {HTMLElement} header
+ * @param {HTMLElement} sidebar
  */
-export function initShell(header) {
-  /**
-   * @type {HTMLDivElement}
-   */
-  const accountNavList = document.getElementById("account-buttons");
-
-  if (isLoggedIn) {
-    const items = [
-      GlobalNavigationItem({ link: "/account", text: "[Account]" }),
-      GlobalNavigationItem({ link: "/favorites", text: "[Favorites]" }),
-      (() => {
-        const item = GlobalNavigationItem({ link: "/account/logout", text: "[Logout]"});
-        item.addEventListener("click", (event) => {
-          event.preventDefault();
-          localStorage.removeItem('logged_in');
-          localStorage.removeItem('favs');
-          localStorage.removeItem('post_favs');
-          location.href = '/account/logout';
-        })
-
-        return item;
-      })(),
-    ];
-
-    accountNavList.append(...items);
-
-  } else {
-    const items = [
-      GlobalNavigationItem({ link: "/account/login", text: "[Login]" }),
-      GlobalNavigationItem({ link: "/account/register", text: "[Register]" }),
-    ];
-
-    accountNavList.append(...items);
-  }
-
-}
-
-/**
- * @type {Component.GlobalNavigation.Item.Callback}
- */
-function GlobalNavigationItem({ element, ...props }) {
-  const component = element
-    ? element
-    : initFromScratch(props)
-  ;
-
-  return component;
-}
-
-/**
- * TODO: rewrite init as a proper component
- * @type {Component.GlobalNavigation.Item.InitFromScratch}
- */
-function initFromScratch({ link, text = link, className }) {
-  const component = document.createElement('li');
-  const anchour = document.createElement('a');
-
-  if (className) {
-    component.classList.add(className);
-  }
-
-  anchour.href = link;
-  anchour.textContent = text;
-
-  component.appendChild(anchour);
-
-  return component;
+export function initShell(sidebar) {
+  document.body.classList.remove('transition-preload');
+  setTimeout(() => {
+    sidebar.classList.remove('sidebar-hidden');
+  }, 250);
+  const burgor = document.getElementById('burgor');
+  const backdrop = document.querySelector('.backdrop');
+  const closeButton = sidebar.querySelector('.close-sidebar');
+  const closeSidebar = () => {
+    sidebar.classList.toggle('expanded');
+    backdrop.classList.toggle('backdrop-hidden');
+  };
+  burgor.addEventListener('click', closeSidebar);
+  backdrop.addEventListener('click', closeSidebar);
+  closeButton.addEventListener('click', closeSidebar);
+  // questionable? close sidebar on tap of an item,
+  // delay loading of page until animation is done
+  // uncomment to close on tap
+  // uncomment the items commented with // to add a delay so it finishes animating
+  /* sidebar.querySelectorAll('.global-sidebar-entry-item').forEach(e => {
+    e.addEventListener('click', ev => {
+      //ev.preventDefault();
+      sidebar.classList.remove('expanded');
+      backdrop.classList.add('backdrop-hidden');
+      // setTimeout(() => {
+      //   location.href = e.href;
+      // }, 250);
+    })
+  }) */
+  if (!isLoggedIn) return;
+  const accountList = sidebar.querySelector('.account');
+  const logout = accountList.querySelector('.logout');
+  if (!logout) return;
+  logout.addEventListener('click', e => {
+    e.preventDefault();
+    localStorage.removeItem('logged_in');
+    localStorage.removeItem('favs');
+    localStorage.removeItem('post_favs');
+    location.href = '/account/logout';
+  });
 }
