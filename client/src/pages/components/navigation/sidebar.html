@@ -1,0 +1,47 @@
+{% macro nav_list(items, class_name=none) %}
+  {% for item in items %}
+    {{ nav_entry(item, class_name) }}
+  {% endfor %}
+{% endmacro %}
+
+{% macro nav_entry(items, class_name=none) %}
+  <div class="global-sidebar-entry {{ class_name if class_name }}">
+    {% if not caller %}
+      {% for item in items %}
+        {% if item.header %}
+          {{ nav_header(item.text, item.class_name) }}
+        {% else %}
+          {{ nav_item(item.link, item.text, item.class_name) }}
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      {{ caller() }}
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro nav_header(text, class_name=none) %}
+  <div class="global-sidebar-entry-item header {{ class_name if class_name }}">
+    {% if not caller %}
+      {{ text }}
+    {% else %}
+      {{ caller() }}
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro nav_item(link, text=link, class_name=none, is_external=false) %}
+  <a
+  class="global-sidebar-entry-item {{ class_name if class_name }}"
+  href="{{ link }}"
+  {% if is_external %}
+  target="_blank"
+  {% endif %}
+  >
+    {% if not caller %}
+      {{ text }}
+    {% else %}
+      {{ caller() }}
+    {% endif %}
+  </a>
+{% endmacro %}
