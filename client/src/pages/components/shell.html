@@ -88,9 +88,9 @@
     {% endblock scripts_extra %}
   </head>
   <body class="transition-preload">
-    <div class="global-sidebar sidebar-hidden">
-      {% call nav_entry(class_name='main-header-entry') %}
-        {{ nav_item('/', 'Home', 'main-header') }}
+    <div class="global-sidebar">
+      {% call nav_entry(class_name='clickable-header-entry') %}
+        {{ nav_item('/', 'Home', 'clickable-header') }}
         <div class='close-sidebar' >
           <img src="/static/close.svg" />
         </div>
@@ -114,21 +114,19 @@
           { 'text': 'FAQ', 'link': '/importer/tutorial' }
         ]
       ]) }}
-      {% if is_logged_in() %}
-        {{ nav_entry([
-          { 'header': true, 'text': 'Account' },
-          { 'text': 'My Account', 'link': '/account/logout' },
-          { 'text': 'Logout', 'link': '/account/logout', 'class_name': 'logout' },
-          { 'text': 'Keys', 'link': '/account/keys' },
-          { 'text': 'Favorites', 'link': '/favorites', 'class_name': 'favorites' }
-        ], 'account') }}
-      {% else %}
-        {{ nav_entry([
-          { 'header': true, 'text': 'Account' },
-          { 'text': 'Login', 'link': '/account/login', 'class_name': 'login' },
-          { 'text': 'Register', 'link': '/account/register', 'class_name': 'register' }
-        ], 'account') }}
-      {% endif %}
+      {{ nav_entry([
+        { 'header': true, 'text': 'Account', 'link': '/account', 'class_name': 'account-header' },
+        { 'text': 'Login', 'link': '/account/login', 'class_name': 'login' },
+        { 'text': 'Register', 'link': '/account/register', 'class_name': 'register' },
+        { 'text': 'Favorites', 'link': '/favorites', 'class_name': 'favorites hidden' }
+      ], 'account') }}
+      {% call nav_entry(class_name='stuck-bottom') %}
+        {{ nav_header('Community') }}
+        {{ nav_item('/support', 'Donate') }}
+        {{ nav_item('https://chan.kemono.party/', 'Chan', is_external=true) }}
+        {{ nav_item('https://t.me/kemonowelcome', 'Telegram', is_external=true) }}
+        {{ nav_item('https://theporndude.com/', 'ThePornDude', is_external=true) }}
+      {% endcall %}
     </div>
 
     <div class="content-wrapper">

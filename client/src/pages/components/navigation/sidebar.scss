@@ -20,9 +20,6 @@
     &.expanded {
       margin-left: 0;
     }
-    &.sidebar-hidden {
-      opacity: 0;
-    }
   }
 
   &-entry {
@@ -43,7 +40,7 @@
       margin-top: auto;
     }
 
-    &.main-header-entry {
+    &.clickable-header-entry {
       display: flex;
       justify-content: space-between;
       flex-direction: row;
@@ -71,24 +68,27 @@
         padding-bottom: 0.5rem;
       }
 
-      &.main-header {
+      &.clickable-header {
         cursor: pointer;
         width: 100%;
       }
 
-      &.header {
+      &.header, &.clickable-header {
         font-weight: bold;
       }
 
-      &:not(.header):not(&.main-header) {
+      &:not(.header):not(&.clickable-header) {
         padding-left: 1.5rem;
         padding-top: 0.3rem;
         cursor: pointer;
       }
 
-      &:not(.header):hover, &.main-header:hover,
-      &:not(.header):focus, &.main-header:focus {
+      &:not(.header):hover, &.clickable-header:hover,
+      &:not(.header):focus, &.clickable-header:focus {
         background: rgb(255 255 255 / 10%);
+      }
+      &.clickable-header {
+          padding-top: 0;
       }
     }
   }
