@@ -117,6 +117,7 @@
       {% if is_logged_in() %}
         {{ nav_entry([
           { 'header': true, 'text': 'Account' },
+          { 'text': 'My Account', 'link': '/account/logout' },
           { 'text': 'Logout', 'link': '/account/logout', 'class_name': 'logout' },
           { 'text': 'Keys', 'link': '/account/keys' },
           { 'text': 'Favorites', 'link': '/favorites', 'class_name': 'favorites' }
@@ -128,13 +129,6 @@
           { 'text': 'Register', 'link': '/account/register', 'class_name': 'register' }
         ], 'account') }}
       {% endif %}
-      {% call nav_entry(class_name='stuck-bottom') %}
-        {{ nav_header('Community') }}
-        {{ nav_item('/support', 'Donate') }}
-        {{ nav_item('https://chan.kemono.party/', 'Chan', is_external=true) }}
-        {{ nav_item('https://t.me/kemonowelcome', 'Telegram', is_external=true) }}
-        {{ nav_item('https://theporndude.com/', 'ThePornDude', is_external=true) }}
-      {% endcall %}
     </div>
 
     <div class="content-wrapper">
