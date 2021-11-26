@@ -9,7 +9,11 @@
     {% if not caller %}
       {% for item in items %}
         {% if item.header %}
-          {{ nav_header(item.text, item.class_name) }}
+          {% if item.link %}
+            {{ nav_item(item.link, item.text, "clickable-header " ~ (item.class_name if item.class_name)) }}
+          {% else %}
+            {{ nav_header(item.text, item.class_name) }}
+          {% endif %}
         {% else %}
           {{ nav_item(item.link, item.text, item.class_name) }}
         {% endif %}

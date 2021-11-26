@@ -1,13 +1,14 @@
+import { createComponent } from "@wp/js/component-factory";
 import { isLoggedIn } from "@wp/js/account";
+
+window.addEventListener('load', () => {
+  document.body.classList.remove('transition-preload');
+});
 
 /**
  * @param {HTMLElement} sidebar
  */
 export function initShell(sidebar) {
-  document.body.classList.remove('transition-preload');
-  setTimeout(() => {
-    sidebar.classList.remove('sidebar-hidden');
-  }, 250);
   const burgor = document.getElementById('burgor');
   const backdrop = document.querySelector('.backdrop');
   const closeButton = sidebar.querySelector('.close-sidebar');
@@ -18,6 +19,32 @@ export function initShell(sidebar) {
   burgor.addEventListener('click', closeSidebar);
   backdrop.addEventListener('click', closeSidebar);
   closeButton.addEventListener('click', closeSidebar);
+  if (isLoggedIn) {
+    const accountList = sidebar.querySelector('.account');
+    const login = accountList.querySelector('.login');
+    const register = accountList.querySelector('.register');
+    const favorites = accountList.querySelector('.favorites');
+    login.classList.remove('login');
+    register.classList.remove('register');
+    favorites.classList.remove('hidden');
+    login.innerText = 'Logout';
+    login.href = '/account/logout';
+    register.innerText = 'Keys';
+    register.href = '/account/keys';
+    login.addEventListener('click', e => {
+      e.preventDefault();
+      localStorage.removeItem('logged_in');
+      localStorage.removeItem('favs');
+      localStorage.removeItem('post_favs');
+      location.href = '/account/logout';
+    })
+  } else {
+    const accountHeader = sidebar.querySelector('.account-header');
+    const newHeader = document.createElement('div');
+    newHeader.className = 'global-sidebar-entry-item header';
+    newHeader.innerText = 'Account';
+    accountHeader.parentElement.replaceChild(newHeader, accountHeader);
+  }
   // questionable? close sidebar on tap of an item,
   // delay loading of page until animation is done
   // uncomment to close on tap
@@ -32,15 +59,4 @@ export function initShell(sidebar) {
       // }, 250);
     })
   }) */
-  if (!isLoggedIn) return;
-  const accountList = sidebar.querySelector('.account');
-  const logout = accountList.querySelector('.logout');
-  if (!logout) return;
-  logout.addEventListener('click', e => {
-    e.preventDefault();
-    localStorage.removeItem('logged_in');
-    localStorage.removeItem('favs');
-    localStorage.removeItem('post_favs');
-    location.href = '/account/logout';
-  });
 }
