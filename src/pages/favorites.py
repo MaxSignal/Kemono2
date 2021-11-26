@@ -17,9 +17,9 @@ def api_list():
     favorites = []
     fave_type = get_value(request.args, 'type', 'artist')
     if fave_type == 'post':
-        favorites = get_favorite_posts(account['id'], reload=True)
+        favorites = get_favorite_posts(account['id'])
     else:
-        favorites = get_favorite_artists(account['id'], reload=True)
+        favorites = get_favorite_artists(account['id'])
 
     results = favorites
     response = make_response(jsonify(results), 200)
