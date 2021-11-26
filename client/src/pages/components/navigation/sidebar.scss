@@ -76,6 +76,10 @@
         width: 100%;
       }
 
+      &.header {
+        font-weight: bold;
+      }
+
       &:not(.header):not(&.main-header) {
         padding-left: 1.5rem;
         padding-top: 0.3rem;
