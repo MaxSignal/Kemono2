@@ -25,6 +25,8 @@ def count_all_posts(reload=False):
 
 
 def count_all_posts_for_query(q: str, reload=False):
+    if q.strip() == '':
+        return count_all_posts()
     redis = get_conn()
     key = 'global_post_count_for_query:' + q
     count = redis.get(key)
@@ -56,6 +58,8 @@ def get_all_posts(offset: int, reload=False):
 
 
 def get_all_posts_for_query(q: str, offset: int, reload=False):
+    if q.strip() == '':
+        return get_all_posts(offset)
     redis = get_conn()
     key = 'all_posts_for_query:' + q + ':' + str(offset)
     results = redis.get(key)
