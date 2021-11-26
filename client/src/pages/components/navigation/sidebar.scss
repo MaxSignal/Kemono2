@@ -90,6 +90,22 @@
       &.clickable-header {
           padding-top: 0;
       }
+        
+      &.donate {
+        color: hsl(3, 100%, 70%);
+      }
+
+      &.chan {
+        color: hsl(224, 27%, 49%);
+      }
+
+      &.tg {
+        color: hsl(200, 100%, 50%);
+      }
+
+      &.tpd {
+        color: hsl(35, 100%, 50%);
+      }
     }
   }
 }
