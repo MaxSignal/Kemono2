@@ -165,7 +165,11 @@ def importer_submit():
         # @REVIEW: Timestamp is obviously a separate variable too.
         # In regards to logs, all it does is adding a value into redis key,
         # which can be done in Kitsune at the moment when the `import_id` is added to queue.
-        msg = f'[{import_id}]@{datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")}: '
+        # @RESPONSE: Problem is that nothing in Kitsune is directly listening for additions to the queue.
+        # The closest thing is the key watcher, which doesn't know anything about the state of a key besides whether
+        # it is running or not. It makes more sense to me to simply add the log entry while the key has Kemono's attention.
+        current_time = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+        msg = f'[{import_id}]@{current_time}: '
         msg += 'Successfully added your import to the queue. Waiting...'
         redis.rpush(f'importer_logs:{import_id}', msg)
 
