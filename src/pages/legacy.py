@@ -512,41 +512,41 @@ def flag_api(service, user, post):
     results = cursor.fetchall()
     return "", 200 if len(results) else 404
 
-# @legacy.route('/api/<service>/user/<user>/post/<post>/flag', methods=["POST"])
-# def new_flag_api(service, user, post):
-#     cursor = get_cursor()
-#     query = "SELECT * FROM posts WHERE id = %s AND \"user\" = %s AND service = %s"
-#     params = (post, user, service)
-#     cursor.execute(query, params)
-#     results = cursor.fetchall()
-#     if len(results) == 0:
-#         return "", 404
+@legacy.route('/api/<service>/user/<user>/post/<post>/flag', methods=["POST"])
+def new_flag_api(service, user, post):
+    cursor = get_cursor()
+    query = "SELECT * FROM posts WHERE id = %s AND \"user\" = %s AND service = %s"
+    params = (post, user, service)
+    cursor.execute(query, params)
+    results = cursor.fetchall()
+    if len(results) == 0:
+        return "", 404
 
-#     cursor2 = get_cursor()
-#     query2 = "SELECT * FROM booru_flags WHERE id = %s AND \"user\" = %s AND service = %s"
-#     params2 = (post, user, service)
-#     cursor2.execute(query2, params2)
-#     results2 = cursor.fetchall()
-#     if len(results2) > 0:
-#         # conflict; flag already exists
-#         return "", 409
+    cursor2 = get_cursor()
+    query2 = "SELECT * FROM booru_flags WHERE id = %s AND \"user\" = %s AND service = %s"
+    params2 = (post, user, service)
+    cursor2.execute(query2, params2)
+    results2 = cursor.fetchall()
+    if len(results2) > 0:
+        # conflict; flag already exists
+        return "", 409
 
-#     scrub = Cleaner(tags = [])
-#     columns = ['id','"user"','service']
-#     params = (
-#         scrub.clean(post),
-#         scrub.clean(user),
-#         scrub.clean(service)
-#     )
-#     data = ['%s'] * len(params)
-#     query = "INSERT INTO booru_flags ({fields}) VALUES ({values})".format(
-#         fields = ','.join(columns),
-#         values = ','.join(data)
-#     )
-#     cursor3 = get_cursor()
-#     cursor3.execute(query, params)
+    scrub = Cleaner(tags = [])
+    columns = ['id','"user"','service']
+    params = (
+        scrub.clean(post),
+        scrub.clean(user),
+        scrub.clean(service)
+    )
+    data = ['%s'] * len(params)
+    query = "INSERT INTO booru_flags ({fields}) VALUES ({values})".format(
+        fields = ','.join(columns),
+        values = ','.join(data)
+    )
+    cursor3 = get_cursor()
+    cursor3.execute(query, params)
 
-#     return "", 200
+    return "", 200
 
 @legacy.route('/api/<service>/user/<id>')
 @cache.cached(key_prefix=make_cache_key)

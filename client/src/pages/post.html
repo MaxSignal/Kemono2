@@ -102,12 +102,22 @@
           </div>
         {% endif %}
         <div class="post__actions">
-          <span 
-            class="post__flag post__flag--flagged" 
-          >
-            <span class="post__flag-icon">⚑</span>
-            <span>Disabled.</span>
-          </span>
+          {% if props.flagged %}
+            <span 
+              class="post__flag post__flag--flagged" 
+            >
+              <span class="post__flag-icon">⚑</span>
+              <span>Flagged</span>
+            </span>
+          {% else %}
+            <button
+              class="post__flag"
+              type="button"
+            >
+              <span class="post__flag-icon">⚑</span>
+              <span>Flag</span>
+            </button>
+          {% endif %}
         </div>
       </div>
     </header>
