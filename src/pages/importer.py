@@ -168,6 +168,13 @@ def importer_submit():
         # @RESPONSE: Problem is that nothing in Kitsune is directly listening for additions to the queue.
         # The closest thing is the key watcher, which doesn't know anything about the state of a key besides whether
         # it is running or not. It makes more sense to me to simply add the log entry while the key has Kemono's attention.
+        # @REVIEW: It is "easy" in context of this PR, but will also make any rework to the logs harder,
+        # since random parts of Kemono code will also contribute log entries,
+        # complete with their own formatting.
+        # Surely there is a way to guess the state of the import in Redis
+        # by checking the length of logs and appending the starting one in case there is nothing.
+        # It will still be bad, but at least it's going to be contained to Kitsune still.
+        # Basically keep the import log stuff to Kitsune.
         current_time = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
         msg = f'[{import_id}]@{current_time}: '
         msg += 'Successfully added your import to the queue. Waiting...'
