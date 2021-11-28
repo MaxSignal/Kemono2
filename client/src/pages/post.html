@@ -221,14 +221,14 @@
   {% if post.content %}
     <h2>Content</h2>
     <div class="post__content">
-      {% if props.service == "subscribestar" and after_kitsune %}
+      {% if props.service == "subscribestar" and after_kitsune -%}
         <div>
-      {% endif %}
-      {% if props.service == 'fantia' %}
+      {%- endif %}
+      {% if props.service == 'fantia' -%}
         <pre>{{ post.content|safe }}</pre>
-      {% else %}
+      {% else -%}
         {{ post.content|safe }}
-      {% endif %}
+      {%- endif %}
     </div>
   {% endif %}
   
