@@ -14,5 +14,8 @@
     "--verbose"
   ],
   "python.formatting.autopep8Args": [],
-  "python.pythonPath": "venv/bin/python",
+  "python.sortImports.args": [
+    "--multi-line",
+    "3"
+  ],
 }

@@ -1,13 +1,11 @@
-import string
 import json
 import os
-
+import string
 from random import Random
-
-from configs.constants import test_path
-from src.lib.account import create_account
-
 from typing import List
+
+from configs.env_vars import CONSTANTS
+from src.lib.account import create_account
 
 
 class Account_Creds:
@@ -39,9 +37,9 @@ def register_test_accounts() -> List[Account_Creds]:
 
 
 def write_test_accounts_data(account_data: List[Account_Creds]) -> bool:
-    output_file = str(test_path) + "/accounts.json"
-    if os.path.isdir(test_path) is False:
-        os.mkdir(test_path)
+    output_file = CONSTANTS.TEST_PATH.joinpath('accounts.json')
+    if not CONSTANTS.TEST_PATH.is_dir():
+        os.mkdir(CONSTANTS.TEST_PATH)
 
     with open(output_file, 'wt') as f:
         f.write(create_accounts_json(account_data))

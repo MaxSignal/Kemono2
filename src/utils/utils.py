@@ -4,7 +4,7 @@ from flask import request, g
 import json
 import random
 import hashlib
-from configs.derived_vars import is_development
+from configs.env_vars import DERIVED_VARS
 from src.types.paysites import Paysites
 
 freesites = {
@@ -163,7 +163,7 @@ def get_import_id(data):
 
 
 # doing it in the end to avoid circular import error
-if is_development:
+if DERIVED_VARS.IS_DEVELOPMENT:
     from development import kemono_dev
     paysite_list.append(kemono_dev.name)
     setattr(paysites, kemono_dev.name, kemono_dev)

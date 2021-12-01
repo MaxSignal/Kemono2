@@ -1,30 +1,36 @@
-import re
+import json
 import random
 import string
-import json
-import pytz
-from feedgen.feed import FeedGenerator
-from urllib.parse import urlencode
-from datetime import datetime, timedelta
-from os import getenv, stat, rename, makedirs
-from os.path import join, dirname, isfile, splitext, basename
-from shutil import move
-
-from PIL import Image
-from python_resumable import UploaderFlask
-from flask import Flask, jsonify, render_template, render_template_string, request, redirect, url_for, send_from_directory, make_response, g, abort, session, Blueprint
-from werkzeug.utils import secure_filename
-from slugify import slugify_filename
-import requests
-from markupsafe import Markup
-from bleach.sanitizer import Cleaner
+from datetime import datetime
 from hashlib import sha256
+from os import makedirs, stat
+from os.path import basename, join
 
-from ..internals.database.database import get_cursor
-from ..internals.cache.flask_cache import cache
-from ..utils.utils import make_cache_key, relative_time, delta_key, allowed_file, limit_int
+import requests
+from bleach.sanitizer import Cleaner
+from flask import (
+    Blueprint,
+    abort,
+    jsonify,
+    make_response,
+    render_template,
+    render_template_string,
+    request,
+)
+from python_resumable import UploaderFlask
+from slugify import slugify_filename
+from werkzeug.utils import secure_filename
+
+from configs.env_vars import ENV_VARS
+from src.internals.cache.flask_cache import cache
+from src.internals.database.database import get_cursor
+from src.utils.utils import (
+    allowed_file,
+    make_cache_key,
+)
 
 legacy = Blueprint('legacy', __name__)
+
 
 @legacy.route('/posts/upload')
 def upload_post():
@@ -214,15 +220,15 @@ def request_submit():
             props=props
         ), 400)
 
-    if getenv('TELEGRAMTOKEN'):
+    if ENV_VARS.TELEGRAMTOKEN:
         snippet = ''
         with open('views/requests_new.html', 'r') as file:
             snippet = file.read()
 
         requests.post(
-            'https://api.telegram.org/bot' + getenv('TELEGRAMTOKEN') + '/sendMessage',
+            f'https://api.telegram.org/bot{ENV_VARS.TELEGRAMTOKEN}/sendMessage',
             params={
-                'chat_id': '-' + getenv('TELEGRAMCHANNEL'),
+                'chat_id': f'-{ENV_VARS.TELEGRAMCHANNEL}',
                 'parse_mode': 'HTML',
                 'text': render_template_string(snippet)
             }
@@ -236,12 +242,12 @@ def request_submit():
                 filename = slugify_filename(secure_filename(image.filename))
                 tmp = join('/tmp', filename)
                 image.save(tmp)
-                limit = int(getenv('REQUESTS_IMAGES')) if getenv('REQUESTS_IMAGES') else 1048576
+                limit = int(ENV_VARS.REQUEST_IMAGES)
                 if stat(tmp).st_size > limit:
                     abort(413)
                 try:
-                    host = getenv('ARCHIVERHOST')
-                    port = getenv('ARCHIVERPORT') if getenv('ARCHIVERPORT') else '8000'
+                    host = ENV_VARS.ARCHIVER_HOST
+                    port = ENV_VARS.ARCHIVER_PORT
                     r = requests.post(
                         f'http://{host}:{port}/api/upload/requests/images',
                         files={'file': open(tmp, 'rb')}
@@ -302,8 +308,8 @@ def upload():
         'resumableChunkNumber': request.form.get('resumableChunkNumber')
     }
 
-    if int(request.form.get('resumableTotalSize')) > int(getenv('UPLOAD_LIMIT')):
-        return "File too large.", 415
+    if int(request.form.get('resumableTotalSize')) > int(ENV_VARS.UPLOAD_LIMIT):
+        return ("File too large.", 415)
 
     makedirs('/tmp/uploads', exist_ok=True)
     makedirs('/tmp/uploads/incomplete', exist_ok=True)
@@ -325,8 +331,8 @@ def upload():
             pass
 
         try:
-            host = getenv('ARCHIVERHOST')
-            port = getenv('ARCHIVERPORT') if getenv('ARCHIVERPORT') else '8000'
+            host = ENV_VARS.ARCHIVER_HOST
+            port = ENV_VARS.ARCHIVER_PORT
             r = requests.post(
                 f'http://{host}:{port}/api/upload/uploads',
                 files={'file': open(join('/tmp/uploads', request.form.get('resumableFilename')), 'rb')}

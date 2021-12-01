@@ -1,35 +1,34 @@
-from src.pages.importer import importer_page
-from src.pages.help import help_app
-from src.pages.favorites import favorites
-from src.pages.dms import dms
+import datetime
+import logging
+import re
+from datetime import timedelta
+from urllib.parse import urljoin
+
+
+from flask import Flask, g, render_template, request, session
+
+import src.internals.cache.redis as redis
+import src.internals.database.database as database
+from configs.env_vars import ENV_VARS, DERIVED_VARS
+from src.internals.cache.flask_cache import cache
+from src.lib.ab_test import get_all_variants
+from src.lib.account import is_logged_in, load_account
+from src.lib.notification import count_new_notifications
 from src.pages.account import account
+from src.pages.artists import artists
+from src.pages.dms import dms
+from src.pages.favorites import favorites
+from src.pages.help import help_app
+from src.pages.home import home
+from src.pages.importer import importer_page
+from src.pages.legacy import legacy
 from src.pages.post import post
 from src.pages.posts import posts
 from src.pages.random import random
-from src.pages.artists import artists
-from src.pages.legacy import legacy
-from src.pages.home import home
-from src.utils.utils import url_is_for_non_logged_file_extension, render_page_data, paysites, paysite_list, freesites
-from src.lib.notification import count_new_notifications
-from src.lib.account import is_logged_in, load_account
-from src.lib.ab_test import get_all_variants
 from src.types.account import Account
-from src.internals.cache.flask_cache import cache
-from configs.derived_vars import is_development
-import src.internals.cache.redis as redis
-import src.internals.database.database as database
-from flask import Flask, render_template, request, redirect, g, abort, session
-import re
-import datetime
-from datetime import timedelta
-from os import getenv
-from os.path import join, dirname
-from threading import Lock
-from urllib.parse import urljoin
-
-import logging
-from dotenv import load_dotenv
-load_dotenv(join(dirname(__file__), '.env'))
+from src.utils.utils import (freesites, paysite_list, paysites,
+                             render_page_data,
+                             url_is_for_non_logged_file_extension)
 
 
 app = Flask(
@@ -51,7 +50,7 @@ app.register_blueprint(favorites)
 app.register_blueprint(dms)
 app.register_blueprint(help_app, url_prefix='/help')
 app.register_blueprint(importer_page)
-if (is_development):
+if (DERIVED_VARS.IS_DEVELOPMENT):
     from development import development
     app.register_blueprint(development)
 
@@ -83,8 +82,8 @@ def do_init_stuff():
     g.freesites = freesites
     g.paysite_list = paysite_list
     g.paysites = paysites
-    g.origin = getenv("KEMONO_SITE")
-    g.canonical_url = urljoin(getenv("KEMONO_SITE"), request.path)
+    g.origin = ENV_VARS.KEMONO_SITE
+    g.canonical_url = urljoin(ENV_VARS.KEMONO_SITE, request.path)
     session.permanent = True
     app.permanent_session_lifetime = timedelta(days=30)
     session.modified = False
@@ -111,7 +110,7 @@ def upload_exceeded(error):
     props = {
         'redirect': request.headers.get('Referer') if request.headers.get('Referer') else '/'
     }
-    limit = int(getenv('REQUESTS_IMAGES')) if getenv('REQUESTS_IMAGES') else 1048576
+    limit = int(ENV_VARS.REQUEST_IMAGES)
     props['message'] = 'Submitted file exceeds the upload limit. {} MB for requests images.'.format(
         limit / 1024 / 1024
     )

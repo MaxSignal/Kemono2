@@ -1,34 +1,39 @@
-from os import getenv
-from flask import g, current_app
 from threading import Lock
-import psycopg2
-from psycopg2 import pool
-from psycopg2.pool import ThreadedConnectionPool
-from psycopg2.extras import RealDictCursor
-
 from typing import Optional
-from psycopg2.extensions import cursor
 
-pool: Optional[ThreadedConnectionPool] = None
+from flask import g
+from psycopg2 import pool
+from psycopg2.extensions import cursor
+from psycopg2.extras import RealDictCursor
+from psycopg2.pool import ThreadedConnectionPool
+
+from configs.env_vars import ENV_VARS
+
+pool: Optional[ThreadedConnectionPool] = None  # noqa F811
 connection_lock = Lock()
+
 
 def init():
     global pool
     try:
-        pool = ThreadedConnectionPool(1, 2000,
-            host = getenv('PGHOST'),
-            dbname = getenv('PGDATABASE'),
-            user = getenv('PGUSER'),
-            password = getenv('PGPASSWORD'),
-            port = getenv('PGPORT', '5432'),
-            cursor_factory = RealDictCursor
+        pool = ThreadedConnectionPool(
+            minconn=1,
+            maxconn=2000,
+            host=ENV_VARS.PGHOST,
+            dbname=ENV_VARS.PGDATABASE,
+            user=ENV_VARS.PGUSER,
+            password=ENV_VARS.PGPASSWORD,
+            port=ENV_VARS.PGPORT,
+            cursor_factory=RealDictCursor
         )
     except Exception as error:
         print("Failed to connect to the database: ", error)
     return pool
 
+
 def get_pool():
     return pool
+
 
 def get_cursor() -> cursor:
     if 'cursor' not in g:

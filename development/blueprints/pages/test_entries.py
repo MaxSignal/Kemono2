@@ -1,7 +1,7 @@
 import requests
-from flask import Blueprint, g, redirect, url_for, make_response, render_template, current_app
+from flask import Blueprint, current_app, g, make_response, render_template
 
-from configs.derived_vars import archiver_origin
+from configs.env_vars import DERIVED_VARS
 from src.types.account import Account
 from src.types.props import SuccessProps
 
@@ -26,7 +26,7 @@ def generate_seeded_db():
     account: Account = g.account
     try:
         response = requests.post(
-            f'{archiver_origin}/development/test-entries/seeded',
+            f'{DERIVED_VARS.ARCHIVER_ORIGIN}/development/test-entries/seeded',
             data=dict(
                 account_id=str(account.id)
             )
@@ -53,7 +53,7 @@ def generate_random_db():
     account: Account = g.account
     try:
         response = requests.post(
-            f'{archiver_origin}/development/test-entries/random',
+            f'{DERIVED_VARS.ARCHIVER_ORIGIN}/development/test-entries/random',
             data=dict(
                 account_id=str(account.id)
             )

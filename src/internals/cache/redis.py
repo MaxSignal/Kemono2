@@ -1,12 +1,12 @@
-from flask import current_app
-from os import getenv
-import dateutil
-import datetime
 import copy
-import ujson
+import datetime
+
+import dateutil
 import rb
-import redis_map
 import redis_lock
+import ujson
+
+import redis_map
 
 cluster: rb.Cluster = None
 

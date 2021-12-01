@@ -1,17 +1,39 @@
-from flask import Blueprint, request, make_response, render_template, session, redirect, url_for
+from flask import (
+    Blueprint,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for
+)
 
-import re
+from configs.env_vars import DERIVED_VARS
+from src.lib.account import load_account
+from src.lib.artist import (
+    get_all_non_discord_artists,
+    get_artist,
+    get_artist_post_count,
+    get_artists_by_service,
+    get_artists_by_update_time,
+    get_count_of_artists_faved,
+    get_top_artists_by_faves
+)
+from src.lib.dms import count_user_dms, get_artist_dms
+from src.lib.favorites import is_artist_favorited
+from src.lib.post import (
+    get_all_posts_by_artist,
+    get_artist_posts,
+    get_render_data_for_posts
+)
+from src.utils.utils import (
+    limit_int,
+    offset,
+    parse_int,
+    sort_dict_list_by,
+    take
+)
 
-from configs.derived_vars import is_development
-from ..types.kemono import User
-from ..utils.utils import sort_dict_list_by, offset, take, limit_int, parse_int
-from ..internals.cache.flask_cache import cache
-from ..internals.database.database import get_cursor
-from ..lib.artist import get_all_non_discord_artists, get_artist, get_artist_post_count, get_artists_by_service, get_top_artists_by_faves, get_count_of_artists_faved, get_artists_by_update_time
-from ..lib.post import get_artist_posts, get_all_posts_by_artist, is_post_flagged, get_render_data_for_posts
-from ..lib.favorites import is_artist_favorited
-from ..lib.account import load_account
-from ..lib.dms import count_user_dms, get_artist_dms
 from .artists_types import ArtistDMsProps, ArtistPageProps
 
 artists = Blueprint('artists', __name__)
@@ -242,7 +264,7 @@ def make_artist_display_data(artist: dict):
         },
     }
 
-    if is_development:
+    if DERIVED_VARS.IS_DEVELOPMENT:
         from development import kemono_dev
         data_by_service_name[kemono_dev.name] = dict(
             service=kemono_dev.title,
