@@ -5,6 +5,12 @@ from dotenv import load_dotenv
 
 from .constants import CONSTANTS
 
+# TODO: use it later
+env_filename = dict(
+    development='.env.dev',
+    production='.env.prod'
+)
+
 load_dotenv(CONSTANTS.PROJECT_PATH.joinpath('.env'))
 
 
@@ -22,6 +28,9 @@ class ENV_VARS:
     TELEGRAMTOKEN = os.getenv('TELEGRAMTOKEN')
     TELEGRAMCHANNEL = os.getenv('TELEGRAMCHANNEL')
     UPLOAD_LIMIT = os.getenv('UPLOAD_LIMIT')
+    REDIS_HOST = os.getenv('REDIS_HOST', 'kemono-redis')
+    REDIS_PORT = os.getenv('REDIS_PORT', '6379')
+    REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
 
 
 def validate_vars(var_list: List[Optional[str]]):

@@ -3,7 +3,6 @@
 ## Table of contents
 - [General Description](#general-description)
 - [Technical Description](#technical-description)
-- [Process](#process)
 - [Issues](#issues)
 
 ## General Description

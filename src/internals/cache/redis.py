@@ -3,52 +3,20 @@ import datetime
 
 import dateutil
 import rb
-import redis_lock
 import ujson
 
-import redis_map
+from .types import nodes, node_options, KemonoRouter
 
 cluster: rb.Cluster = None
 
 
-class KemonoRouter(rb.BaseRouter):
-    def get_host_for_key(self, key):
-        top_level_prefix_of_key = key.split(':')[0]
-        if (redis_map.keyspaces.get(top_level_prefix_of_key) is not None):
-            return redis_map.keyspaces[top_level_prefix_of_key]
-        else:
-            raise rb.UnroutableCommand()
-
-
-class KemonoRedisLock(redis_lock.Lock):
-    def release(self):
-        if self._lock_renewal_thread is not None:
-            self._stop_lock_renewer()
-        # soft reimplementation of UNLOCK_SCRIPT in Python
-        self._client.delete(self._signal)
-        self._client.lpush(self._signal, 1)
-        self._client.pexpire(self._signal, self._signal_expire)
-        self._client.delete(self._name)
-
-    def extend(self, expire=None):
-        if expire:
-            expire = int(expire)
-            if expire < 0:
-                raise ValueError("A negative expire is not acceptable.")
-        elif self._expire is not None:
-            expire = self._expire
-        else:
-            raise TypeError(
-                "To extend a lock 'expire' must be provided as an "
-                "argument to extend() method or at initialization time."
-            )
-        # soft reimplementation of EXTEND_SCRIPT in Python
-        self._client.expire(self._name, expire)
-
-
 def init():
     global cluster
-    cluster = rb.Cluster(hosts=redis_map.nodes, host_defaults=redis_map.node_options, router_cls=KemonoRouter)
+    cluster = rb.Cluster(
+        hosts=nodes,
+        host_defaults=node_options,
+        router_cls=KemonoRouter
+    )
     return cluster
 
 # def get_pool():

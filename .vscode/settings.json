@@ -18,4 +18,8 @@
     "--multi-line",
     "3"
   ],
+  "python.analysis.diagnosticSeverityOverrides":{
+    // flake8 already covers it
+    "reportUndefinedVariable": "none"
+  }
 }
