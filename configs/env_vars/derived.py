@@ -1,0 +1,6 @@
+from .vars import ENV_VARS
+
+
+class DERIVED_VARS:
+    IS_DEVELOPMENT = ENV_VARS.FLASK_ENV == 'development'
+    ARCHIVER_ORIGIN = f'http://{ENV_VARS.ARCHIVER_HOST}:{ENV_VARS.ARCHIVER_PORT}'
