@@ -55,39 +55,40 @@ The variables exported from these modules follow the snake pascal casing, with `
 ## Technical Description
 
 ### All variables
+Format is `current_name - new_name`
 - FLASK_ENV
-- PGHOST
-- PGUSER
-- PGPASSWORD
-- PGDATABASE
-- TELEGRAMTOKEN
-- TELEGRAMCHANNEL
-- KEMONO_SITE
-- REQUESTS_IMAGES
+- PGHOST - KEMONO_DATABASE_HOST
+- PGUSER - KEMONO_DATABASE_USER
+- PGPASSWORD - KEMONO_DATABASE_PASSWORD
+- PGDATABASE - KEMONO_DATABASE_NAME
+- TELEGRAMTOKEN - KEMONO_TELEGRAM_TOKEN
+- TELEGRAMCHANNEL - KEMONO_TELEGRAM_CHANNEL
+- KEMONO_SITE - KEMONO_SITE_ORIGIN
+- REQUESTS_IMAGES - KEMONO_REQUESTS_IMAGES
 - CACHE_TYPE
 - CACHE_DEFAULT_TIMEOUT
+- SECRET_KEY
 - ENABLE_PASSWORD_VALIDATOR
 - ENABLE_LOGIN_RATE_LIMITING
-- SECRET_KEY
-- download_path
-- database_host
-- database_dbname
-- database_user
-- database_password
-- redis_host
-- redis_port
-- redis_password
-- proxies
-- ban_url
-- pubkey
-- salt
-- pubsub
-- pubsub_queue_limit
-- nodes
-- node_options
-- keyspaces
-- ARCHIVERHOST
-- ARCHIVERPORT
+- download_path - KEMONO_ARCHIVER_DOWNLOAD_PATH
+- database_host - KEMONO_DATABASE_HOST
+- database_dbname - KEMONO_DATABASE_NAME
+- database_user - KEMONO_DATABASE_USER
+- database_password - KEMONO_DATABASE_PASSWORD
+- redis_host - REDIS_HOST
+- redis_port - REDIS_PORT
+- redis_password - REDIS_PASSWORD
+- proxies - KEMONO_PROXIES
+- ban_url - KEMONO_BAN_URL
+- pubkey - KEMONO_PUBKEY
+- salt - KEMONO_SALT
+- pubsub - KEMONO_PUBSUB
+- pubsub_queue_limit - KEMONO_PUBSUB_QUEUE_LIMIT
+- nodes - removed
+- node_options - removed
+- keyspaces - removed
+- ARCHIVERHOST - KEMONO_ARCHIVER_HOST
+- ARCHIVERPORT - KEMONO_ARCHIVER_PORT
 
 ### Server
 - `.env`
