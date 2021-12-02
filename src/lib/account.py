@@ -1,22 +1,29 @@
-import ujson
-import copy
-import bcrypt
 import base64
+import copy
 import hashlib
-import dateutil
-import redis_lock
 import time
-from flask import session, current_app, flash
 from threading import Lock
-from bleach.sanitizer import Cleaner
-from ..internals.database.database import get_cursor
-from ..utils.utils import get_value
-from ..internals.cache.redis import get_conn, serialize_dict_list, deserialize_dict_list, KemonoRedisLock
-from ..lib.favorites import add_favorite_artist
-from ..lib.artist import get_artist
-from ..lib.security import is_login_rate_limited
-from src.types.account import Account, Service_Key
 from typing import Dict, List, Optional
+
+import bcrypt
+import dateutil
+import ujson
+from bleach.sanitizer import Cleaner
+from flask import current_app, flash, session
+
+from configs.env_vars import DERIVED_VARS
+from src.internals.cache.redis import (
+    deserialize_dict_list,
+    get_conn,
+    serialize_dict_list
+)
+from src.internals.cache.types import KemonoRedisLock
+from src.internals.database.database import get_cursor
+from src.lib.artist import get_artist
+from src.lib.favorites import add_favorite_artist
+from src.lib.security import is_login_rate_limited
+from src.types.account import Account, Service_Key
+from src.utils.utils import get_value
 
 account_create_lock = Lock()
 
@@ -206,7 +213,7 @@ def attempt_login(username, password):
         flash('Username or password is incorrect')
         return False
 
-    if get_value(current_app.config, 'ENABLE_LOGIN_RATE_LIMITING') and is_login_rate_limited(account_info['id']):
+    if DERIVED_VARS.IS_LOGIN_RATE_LIMITED and is_login_rate_limited(account_info['id']):
         flash('You\'re doing that too much. Try again in a little bit.')
         return False
 

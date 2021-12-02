@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 
 from .constants import CONSTANTS
 
+kemono_env_values = ['production', 'development']
+
 # TODO: use it later
 env_filename = dict(
     development='.env.dev',
@@ -16,6 +18,11 @@ load_dotenv(CONSTANTS.PROJECT_PATH.joinpath('.env'))
 
 class ENV_VARS:
     FLASK_ENV = os.getenv('FLASK_ENV', 'development')
+    FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
+    FLASK_CACHE_TYPE = os.getenv('FLASK_CACHE_TYPE', 'simple')
+    FLASK_CACHE_DEFAULT_TIMEOUT = os.getenv('FLASK_CACHE_DEFAULT_TIMEOUT', '60')
+    KEMONO_ENABLE_PASSWORD_VALIDATOR = os.getenv('KEMONO_ENABLE_PASSWORD_VALIDATOR', 'true')
+    KEMONO_ENABLE_LOGIN_RATE_LIMITING = os.getenv('KEMONO_ENABLE_LOGIN_RATE_LIMITING', 'true')
     ARCHIVER_HOST = os.getenv('ARCHIVERHOST')
     ARCHIVER_PORT = os.getenv('ARCHIVERPORT', '8000')
     KEMONO_SITE = os.getenv('KEMONO_SITE')

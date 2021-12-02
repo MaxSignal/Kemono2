@@ -3,13 +3,13 @@ import logging
 import re
 from datetime import timedelta
 from urllib.parse import urljoin
-
+from distutils.util import strtobool
 
 from flask import Flask, g, render_template, request, session
 
 import src.internals.cache.redis as redis
 import src.internals.database.database as database
-from configs.env_vars import ENV_VARS, DERIVED_VARS
+from configs.env_vars import DERIVED_VARS, ENV_VARS
 from src.internals.cache.flask_cache import cache
 from src.lib.ab_test import get_all_variants
 from src.lib.account import is_logged_in, load_account
@@ -26,10 +26,13 @@ from src.pages.post import post
 from src.pages.posts import posts
 from src.pages.random import random
 from src.types.account import Account
-from src.utils.utils import (freesites, paysite_list, paysites,
-                             render_page_data,
-                             url_is_for_non_logged_file_extension)
-
+from src.utils.utils import (
+    freesites,
+    paysite_list,
+    paysites,
+    render_page_data,
+    url_is_for_non_logged_file_extension
+)
 
 app = Flask(
     __name__,
@@ -54,8 +57,11 @@ if (DERIVED_VARS.IS_DEVELOPMENT):
     from development import development
     app.register_blueprint(development)
 
-
-app.config.from_pyfile('flask.cfg')
+app.config.update(
+    CACHE_TYPE=ENV_VARS.FLASK_CACHE_TYPE,
+    CACHE_DEFAULT_TIMEOUT=int(ENV_VARS.FLASK_CACHE_DEFAULT_TIMEOUT),
+    SECRET_KEY=ENV_VARS.FLASK_SECRET_KEY
+)
 app.jinja_options = dict(
     trim_blocks=True,
     lstrip_blocks=True

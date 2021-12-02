@@ -95,6 +95,7 @@ Format is `current_name - new_name`
 - `flask.cfg`
 
   Look up how to refer to it from `.env` file.
+  https://flask.palletsprojects.com/en/2.0.x/config/#builtin-configuration-values
 
 - `config.py`/`kitsune.py`
 - `redis_map.py`/`redis_map.py`
