@@ -1,10 +1,13 @@
 const path = require("path");
 const { DefinePlugin } = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const { buildHTMLWebpackPluginsRecursive } = require("./configs/build-templates");
-const { kemonoSite, nodeEnv } = require("./configs/vars");
+const { buildHTMLWebpackPluginsRecursive } = require("./configs/build-templates.js");
+const { ENV_VARS, CONSTANTS } = require("./configs/env-vars/_index.js");
 
-const projectPath = path.resolve(__dirname, "src");
+/**
+ * This one is for frontend project.
+ */
+const projectPath = path.join(CONSTANTS.PROJECT_ROOT, "src");
 const pagesPath = path.join(projectPath, "pages");
 const pagePlugins = buildHTMLWebpackPluginsRecursive(pagesPath, {
   fileExtension: "html",
@@ -27,8 +30,8 @@ const webpackConfig = {
   plugins: [
     ...pagePlugins,
     new DefinePlugin({
-      "BUNDLER_ENV_KEMONO_SITE": JSON.stringify(kemonoSite),
-      "BUNDLER_ENV_NODE_ENV": JSON.stringify(nodeEnv),
+      "BUNDLER_ENV_KEMONO_SITE": JSON.stringify(ENV_VARS.KEMONO_SITE),
+      "BUNDLER_ENV_NODE_ENV": JSON.stringify(ENV_VARS.NODE_ENV),
     }),
     new CopyWebpackPlugin({
       patterns: [

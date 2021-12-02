@@ -5,7 +5,7 @@ const MiniCSSExtractPlugin = require("mini-css-extract-plugin");
 const { merge } = require("webpack-merge");
 
 const baseConfig = require("./webpack.config");
-const { kemonoSite } = require("./configs/vars");
+const { ENV_VARS } = require("./configs/env-vars/_index.js");
 /**
  * @type import("webpack").Configuration
  */
@@ -33,7 +33,7 @@ const webpackConfigProd = {
           options: {
             presets: [
               [
-                '@babel/preset-env', 
+                '@babel/preset-env',
                 { targets: "defaults" }
               ],
             ],
@@ -53,8 +53,8 @@ const webpackConfigProd = {
             // options: {
             //   sourceMap: true,
             // }
-          }, 
-          
+          },
+
           {
             loader: "postcss-loader",
             options: {
@@ -69,10 +69,10 @@ const webpackConfigProd = {
             loader: "sass-loader",
             options: {
               // sourceMap: true,
-              additionalData: `$kemono-site: '${kemonoSite}';`
+              additionalData: `$kemono-site: '${ENV_VARS.KEMONO_SITE}';`
             }
           }
-          
+
         ],
       },
 
