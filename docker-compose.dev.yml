@@ -1,41 +1,31 @@
 version: '2.3'
 services:
-  kemono-nginx:
+  nginx:
     image: nginx
-    container_name: kemono-nginx
+    container_name: nginx
     depends_on:
-      kemono-app-dev:
+      backend:
         condition: service_healthy
-      kemono-archiver:
+      archiver:
         condition: service_started
     ports:
       - 5000:80
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx.conf.dev:/etc/nginx/nginx.conf
       - data-dev:/storage
-  kemono-app-dev:
+  backend:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: kemono
+    container_name: backend
     restart: unless-stopped
     depends_on:
-      kemono-db:
+      database:
         condition: service_healthy
     env_file:
-      - .env
-    environment:
-      - FLASK_ENV=development
-      - KEMONO_SITE=http://localhost:5000
-      - PGUSER=nano
-      - PGPASSWORD=shinonome
-      - PGDATABASE=kemonodb
-      - PGHOST=kemono-db
-      - ARCHIVERHOST=kemono-archiver
-      - ARCHIVERPORT=80
+      - .env.dev
     volumes:
       - .:/app
-      - ./redis_map.py:/app/redis_map.py
       - frontend-assets-dev:/app/dist:ro
       - data-dev:/storage
     sysctls:
@@ -46,14 +36,13 @@ services:
       timeout: 2m
       retries: 3
       start_period: 30s
-  kemono-frontend-dev:
+  frontend:
     build:
       context: ./client
       dockerfile: Dockerfile.dev
-    container_name: kemono-frontend-dev
-    environment:
-      - NODE_ENV=development
-      - KEMONO_SITE=http://localhost:5000
+    container_name: frontend
+    env_file:
+      - .env.dev
     volumes:
       # quick hack to allow webpack config updates between reups
       - ./client/webpack.config.js:/app/webpack.config.js
@@ -64,33 +53,20 @@ services:
       - ./client/configs:/app/configs
       - frontend-assets-dev:/app/dev
     stdin_open: true
-  kemono-db:
-    image: healthcheck/postgres
-    container_name: kemono-db
-    environment:
-      - POSTGRES_USER=nano
-      - POSTGRES_PASSWORD=shinonome
-      - POSTGRES_DB=kemonodb
-    volumes:
-      - db-data-dev:/var/lib/postgresql/data/
-    restart: unless-stopped
-    # ports:
-    #  - 5432:5432
-  kemono-archiver:
+  archiver:
     build:
       context: ./archiver
       dockerfile: Dockerfile.dev
-    container_name: kemono-archiver
+    container_name: archiver
+    env_file:
+      - .env.dev
     restart: unless-stopped
     depends_on:
-      kemono-db:
+      database:
         condition: service_healthy
-    environment:
-      - FLASK_ENV=development
+    # environment:
     volumes:
       - ./archiver:/app
-      - ./kitsune.py:/app/config.py
-      - ./redis_map.py:/app/redis_map.py
       - data-dev:/storage
     sysctls:
       net.core.somaxconn: 40000
@@ -100,9 +76,21 @@ services:
       timeout: 2m
       retries: 3
       start_period: 30s
-  kemono-redis:
+  redis:
     image: redis:6.2.0
-    container_name: kemono-redis
+    container_name: redis
+  database:
+    image: healthcheck/postgres
+    container_name: database
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    volumes:
+      - db-data-dev:/var/lib/postgresql/data/
+    restart: unless-stopped
+    # ports:
+    #  - 5432:5432
   autoheal:
     restart: always
     container_name: kemono-autoheal

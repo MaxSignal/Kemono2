@@ -14,10 +14,7 @@
 
 2. Set up configs:
     ```sh
-    cp kitsune.py.example kitsune.py # archiver config
-    cp .env.example .env # open .env and configure
-    cp redis_map.py.example redis_map.py # open redis_map.py and configure
-    cp flask.cfg.example flask.cfg # open flask.cfg and set 'SECRET_KEY' value
+    cp .env.example .env # open .env and configure missing values
     ```
 
 ## Develop
@@ -57,8 +54,8 @@ And install recommended extensions.
 
 ### Docker
 ```sh
-docker-compose --file docker-compose.dev.yml build
-docker-compose --file docker-compose.dev.yml up
+docker-compose --env-file .env.dev build
+docker-compose --env-file .env.dev up
 ```
 Open `http://localhost:5000/` in the browser.
 
@@ -73,8 +70,8 @@ TBD
 
 #### Build
 ```sh
-docker-compose build
-docker-compose up --detach
+docker-compose --env-file .env.prod build
+docker-compose --env-file .env.prod up --detach
 ```
 
 Open `http://localhost:8000/` in the browser.

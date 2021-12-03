@@ -19,11 +19,11 @@ def init():
         pool = ThreadedConnectionPool(
             minconn=1,
             maxconn=2000,
-            host=ENV_VARS.PGHOST,
-            dbname=ENV_VARS.PGDATABASE,
-            user=ENV_VARS.PGUSER,
-            password=ENV_VARS.PGPASSWORD,
-            port=ENV_VARS.PGPORT,
+            host=ENV_VARS.DATABASE_HOST,
+            dbname=ENV_VARS.DATABASE_NAME,
+            user=ENV_VARS.DATABASE_USER,
+            password=ENV_VARS.DATABASE_PASSWORD,
+            port=ENV_VARS.DATABASE_PORT,
             cursor_factory=RealDictCursor
         )
     except Exception as error:

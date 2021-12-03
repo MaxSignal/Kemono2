@@ -1,14 +1,15 @@
-from ..internals.cache.redis import get_conn, KemonoRedisLock
-from ..internals.database.database import get_cursor
-from ..utils.utils import get_value
-from ..types.kemono import User
-from threading import Lock
-import redis_lock
-import ujson
-import dateutil
 import copy
 import datetime
 import time
+
+import dateutil
+import ujson
+
+from src.internals.cache.redis import get_conn
+from src.internals.cache.types import KemonoRedisLock
+from src.internals.database.database import get_cursor
+from src.types.kemono import User
+from src.utils.utils import get_value
 
 
 def get_top_artists_by_faves(offset, count, reload=False):

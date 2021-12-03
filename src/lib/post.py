@@ -1,12 +1,14 @@
-from ..internals.cache.redis import get_conn, KemonoRedisLock
-from ..internals.database.database import get_cursor
-import ujson
-import redis_lock
-import dateutil
-import datetime
 import copy
+import datetime
 import re
 import time
+
+import dateutil
+import ujson
+
+from src.internals.cache.redis import get_conn
+from src.internals.cache.types import KemonoRedisLock
+from src.internals.database.database import get_cursor
 
 
 def get_random_posts_keys(count, reload=False):

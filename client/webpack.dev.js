@@ -4,7 +4,7 @@ const path = require("path");
 const { merge } = require("webpack-merge");
 
 const baseConfig = require("./webpack.config");
-const { kemonoSite } = require("./configs/vars");
+const { ENV_VARS } = require("./configs/env-vars/_index.js");
 
 const projectPath = path.resolve(__dirname, "src");
 
@@ -65,7 +65,7 @@ const webpackConfigDev = {
             options: {
               sourceMap: true,
               // TODO: find how to prepend data properly
-              additionalData: `$kemono-site: '${kemonoSite}';`
+              additionalData: `$kemono-site: '${ENV_VARS.KEMONO_SITE}';`
             }
           }
 

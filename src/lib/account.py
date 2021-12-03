@@ -6,8 +6,8 @@ from threading import Lock
 from typing import Dict, List, Optional
 
 import bcrypt
-import dateutil
 import ujson
+from dateutil import parser as date_parser
 from bleach.sanitizer import Cleaner
 from flask import current_app, flash, session
 
@@ -246,5 +246,5 @@ def prepare_account_fields(account):
 
 
 def rebuild_account_fields(account):
-    account['created_at'] = dateutil.parser.parse(account['created_at'])
+    account['created_at'] = date_parser.parse(account['created_at'])
     return account
