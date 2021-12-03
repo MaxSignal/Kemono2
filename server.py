@@ -3,7 +3,6 @@ import logging
 import re
 from datetime import timedelta
 from urllib.parse import urljoin
-from distutils.util import strtobool
 
 from flask import Flask, g, render_template, request, session
 

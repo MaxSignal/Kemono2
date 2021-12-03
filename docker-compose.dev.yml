@@ -2,7 +2,7 @@ version: '2.3'
 services:
   nginx:
     image: nginx
-    container_name: nginx
+    container_name: ${COMPOSE_PROJECT_NAME}_nginx
     depends_on:
       backend:
         condition: service_healthy
@@ -11,13 +11,13 @@ services:
     ports:
       - 5000:80
     volumes:
-      - ./nginx.conf.dev:/etc/nginx/nginx.conf
-      - data-dev:/storage
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf
+      - data:/storage
   backend:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: backend
+    container_name: ${COMPOSE_PROJECT_NAME}_backend
     restart: unless-stopped
     depends_on:
       database:
@@ -26,8 +26,8 @@ services:
       - .env.dev
     volumes:
       - .:/app
-      - frontend-assets-dev:/app/dist:ro
-      - data-dev:/storage
+      - frontend-assets:/app/dist:ro
+      - data:/storage
     sysctls:
       net.core.somaxconn: 500
     healthcheck:
@@ -40,7 +40,7 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile.dev
-    container_name: frontend
+    container_name: ${COMPOSE_PROJECT_NAME}_frontend
     env_file:
       - .env.dev
     volumes:
@@ -51,13 +51,13 @@ services:
       - ./client/static:/app/static
       # and another one for misc configs
       - ./client/configs:/app/configs
-      - frontend-assets-dev:/app/dev
+      - frontend-assets:/app/dev
     stdin_open: true
   archiver:
     build:
       context: ./archiver
       dockerfile: Dockerfile.dev
-    container_name: archiver
+    container_name: ${COMPOSE_PROJECT_NAME}_archiver
     env_file:
       - .env.dev
     restart: unless-stopped
@@ -67,7 +67,7 @@ services:
     # environment:
     volumes:
       - ./archiver:/app
-      - data-dev:/storage
+      - data:/storage
     sysctls:
       net.core.somaxconn: 40000
     healthcheck:
@@ -78,44 +78,45 @@ services:
       start_period: 30s
   redis:
     image: redis:6.2.0
-    container_name: redis
+    container_name: ${COMPOSE_PROJECT_NAME}_redis
   database:
     image: healthcheck/postgres
-    container_name: database
+    container_name: ${COMPOSE_PROJECT_NAME}_database
     environment:
       - POSTGRES_DB=${DATABASE_NAME}
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
     volumes:
-      - db-data-dev:/var/lib/postgresql/data/
+      - db-data:/var/lib/postgresql/data/
     restart: unless-stopped
     # ports:
     #  - 5432:5432
   autoheal:
     restart: always
-    container_name: kemono-autoheal
+    container_name: ${COMPOSE_PROJECT_NAME}_autoheal
     image: willfarrell/autoheal
     environment:
       - AUTOHEAL_CONTAINER_LABEL=all
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
 volumes:
   # If you need to store your volumes manually, uncomment the "driver_opts" lines and specify your "device" location.
-  db-data-dev:
+  db-data:
     driver: local
     # driver_opts:
     #   type: 'none'
     #   o: 'bind'
-    #   device: "/mnt/slab1/kemono-db-dev"
-  data-dev:
+    #   device: "/mnt/slab1/kemono-db-"
+  data:
     driver: local
     # driver_opts:
     #   type: 'none'
     #   o: 'bind'
-    #   device: "/mnt/slab1/kemono-dev"
-  frontend-assets-dev:
+    #   device: "/mnt/slab1/kemono"
+  frontend-assets:
     driver: local
     # driver_opts:
     #   type: 'none'
     #   o: 'bind'
-    #   device: "/mnt/slab1/kemono-assets-dev"
+    #   device: "/mnt/slab1/kemono-assets"

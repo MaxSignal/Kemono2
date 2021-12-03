@@ -1,36 +1,27 @@
 version: '2.3'
 services:
-  kemono-nginx:
+  nginx:
     image: nginx
-    container_name: kemono-nginx
+    container_name: ${COMPOSE_PROJECT_NAME}_nginx
     depends_on:
-      kemono-app:
+      backend:
         condition: service_healthy
-      kemono-archiver:
+      archiver:
         condition: service_started
     ports:
       - 8000:80
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - data:/storage
-  kemono-app:
+  backend:
     build: .
-    container_name: kemono
+    container_name: ${COMPOSE_PROJECT_NAME}_backend
     restart: unless-stopped
     depends_on:
-      kemono-db:
+      database:
         condition: service_healthy
     env_file:
-      - .env
-    environment:
-      - FLASK_ENV=production
-      - KEMONO_SITE=http://localhost:8000
-      - PGUSER=nano
-      - PGPASSWORD=shinonome
-      - PGDATABASE=kemonodb
-      - PGHOST=kemono-db
-      - ARCHIVERHOST=kemono-archiver
-      - ARCHIVERPORT=80
+      - .env.prod
     volumes:
       - frontend-assets:/app/dist:ro
     sysctls:
@@ -41,40 +32,39 @@ services:
       timeout: 2m
       retries: 3
       start_period: 30s
-  kemono-frontend:
+  frontend:
     build:
       context: ./client
-    container_name: kemono-frontend
-    environment:
-      - NODE_ENV=production
+    container_name: ${COMPOSE_PROJECT_NAME}_frontend
+    env_file:
+      - .env.prod
     volumes:
       - frontend-assets:/app/dist
-  kemono-archiver:
+  archiver:
     build:
       context: ./archiver
       dockerfile: Dockerfile
-    container_name: kemono-archiver
+    container_name: ${COMPOSE_PROJECT_NAME}_archiver
+    env_file:
+      - .env.prod
     restart: unless-stopped
     depends_on:
-      kemono-db:
+      database:
         condition: service_healthy
-    environment:
-      - FLASK_ENV=production
     volumes:
-      - ./kitsune.py:/app/config.py
       - data:/storage
     sysctls:
       net.core.somaxconn: 40000
-  kemono-redis:
+  redis:
     image: redis:6.2.0
-    container_name: kemono-redis
-  kemono-db:
+    container_name: ${COMPOSE_PROJECT_NAME}_redis
+  database:
     image: healthcheck/postgres
-    container_name: kemono-db
+    container_name: ${COMPOSE_PROJECT_NAME}_database
     environment:
-      - POSTGRES_USER=nano
-      - POSTGRES_PASSWORD=shinonome
-      - POSTGRES_DB=kemonodb
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
     volumes:
       - db-data:/var/lib/postgresql/data/
     restart: unless-stopped
@@ -82,7 +72,7 @@ services:
     #  - 5432:5432
   autoheal:
     restart: always
-    container_name: kemono-autoheal
+    container_name: ${COMPOSE_PROJECT_NAME}_autoheal
     image: willfarrell/autoheal
     environment:
       - AUTOHEAL_CONTAINER_LABEL=all

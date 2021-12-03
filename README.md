@@ -12,11 +12,6 @@
     cd kemono-2
     ```
 
-2. Set up configs:
-    ```sh
-    cp .env.example .env # open .env and configure missing values
-    ```
-
 ## Develop
 For now Docker is a primary way of working on the repo.
 
@@ -53,6 +48,11 @@ cp configs/workspace.code-workspace.example kemono-2.code-workspace
 And install recommended extensions.
 
 ### Docker
+Copy `.env.dev.example` file and set `FLASK_SECRET_KEY` value in `.env.dev`:
+```sh
+cp .env.dev.example .env.dev
+```
+Rev up the stack:
 ```sh
 docker-compose --env-file .env.dev build
 docker-compose --env-file .env.dev up
@@ -69,6 +69,8 @@ Open `http://localhost:5000/` in the browser.
 TBD
 
 #### Build
+Refer to `.env.prod.example` on available environment variables and set the needed ones in the shell.
+Then rev up the stack:
 ```sh
 docker-compose --env-file .env.prod build
 docker-compose --env-file .env.prod up --detach
