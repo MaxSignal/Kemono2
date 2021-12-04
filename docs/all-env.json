@@ -1,0 +1,23 @@
+{
+  "KEMONO_ENV": {
+    "comment": "not used atm"
+  },
+  "FLASK_ENV" : {},
+  "NODE_ENV": {},
+  "FLASK_SECRET_KEY": {
+    "is_required": true
+  },
+  "KEMONO_ARCHIVER_PROXIES": {
+    "pattern": "string \nstring",
+    "comment": "socks5://user:pass@host:port"
+  },
+  "KEMONO_ARCHIVER_BAN_URL": {
+    "comment": "BAN url prefix (for varnish purging and the like) - http://10.0.0.1:8313"
+  },
+  "KEMONO_ARCHIVER_PUBKEY": {
+    "comment": "Public encryption key for key contribution and autoimport. Generate one with `openssl genrsa -out privatekey.txt 4096 && openssl rsa -in privatekey.txt -pubout -out publickey && cat publickey` as seen above, it is highly recommended you use 4096bit keys... session tokens can get too long for 2048 quite easily."
+  },
+  "KEMONO_ARCHIVER_SALT": {
+    "comment": "(static) salt for autoimport key hashing. you should change this once and keep it safe."
+  }
+}

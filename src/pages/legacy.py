@@ -220,15 +220,15 @@ def request_submit():
             props=props
         ), 400)
 
-    if ENV_VARS.TELEGRAMTOKEN:
+    if ENV_VARS.TELEGRAM_TOKEN:
         snippet = ''
         with open('views/requests_new.html', 'r') as file:
             snippet = file.read()
 
         requests.post(
-            f'https://api.telegram.org/bot{ENV_VARS.TELEGRAMTOKEN}/sendMessage',
+            f'https://api.telegram.org/bot{ENV_VARS.TELEGRAM_TOKEN}/sendMessage',
             params={
-                'chat_id': f'-{ENV_VARS.TELEGRAMCHANNEL}',
+                'chat_id': f'-{ENV_VARS.TELEGRAM_CHANNEL}',
                 'parse_mode': 'HTML',
                 'text': render_template_string(snippet)
             }

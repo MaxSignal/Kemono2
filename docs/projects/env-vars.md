@@ -57,38 +57,41 @@ The variables exported from these modules follow the snake pascal casing, with `
 ### All variables
 Format is `current_name - new_name`
 - FLASK_ENV
+- NODE_ENV
 - PGHOST - KEMONO_DATABASE_HOST
 - PGUSER - KEMONO_DATABASE_USER
 - PGPASSWORD - KEMONO_DATABASE_PASSWORD
 - PGDATABASE - KEMONO_DATABASE_NAME
 - TELEGRAMTOKEN - KEMONO_TELEGRAM_TOKEN
 - TELEGRAMCHANNEL - KEMONO_TELEGRAM_CHANNEL
-- KEMONO_SITE - KEMONO_SITE_ORIGIN
-- REQUESTS_IMAGES - KEMONO_REQUESTS_IMAGES
-- CACHE_TYPE
-- CACHE_DEFAULT_TIMEOUT
-- SECRET_KEY
-- ENABLE_PASSWORD_VALIDATOR
-- ENABLE_LOGIN_RATE_LIMITING
-- download_path - KEMONO_ARCHIVER_DOWNLOAD_PATH
-- database_host - KEMONO_DATABASE_HOST
-- database_dbname - KEMONO_DATABASE_NAME
-- database_user - KEMONO_DATABASE_USER
-- database_password - KEMONO_DATABASE_PASSWORD
-- redis_host - REDIS_HOST
-- redis_port - REDIS_PORT
-- redis_password - REDIS_PASSWORD
-- proxies - KEMONO_PROXIES
-- ban_url - KEMONO_BAN_URL
-- pubkey - KEMONO_PUBKEY
-- salt - KEMONO_SALT
-- pubsub - KEMONO_PUBSUB
-- pubsub_queue_limit - KEMONO_PUBSUB_QUEUE_LIMIT
-- nodes - removed
-- node_options - removed
-- keyspaces - removed
+- KEMONO_SITE - KEMONO_BACKEND_SITE_ORIGIN
+- REQUESTS_IMAGES - KEMONO_BACKEND_REQUESTS_IMAGES
+- CACHE_TYPE - FLASK_CACHE_TYPE
+- CACHE_DEFAULT_TIMEOUT - FLASK_CACHE_DEFAULT_TIMEOUT
+- SECRET_KEY - FLASK_SECRET_KEY
+- ENABLE_PASSWORD_VALIDATOR - KEMONO_BACKEND_ENABLE_PASSWORD_VALIDATOR
+- ENABLE_LOGIN_RATE_LIMITING - KEMONO_BACKEND_ENABLE_LOGIN_RATE_LIMITING
+- UPLOAD_LIMIT - KEMONO_BACKEND_UPLOAD_LIMIT
 - ARCHIVERHOST - KEMONO_ARCHIVER_HOST
 - ARCHIVERPORT - KEMONO_ARCHIVER_PORT
+- config.download_path - KEMONO_ARCHIVER_DOWNLOAD_PATH
+- config.database_host - KEMONO_DATABASE_HOST
+- config.database_dbname - KEMONO_DATABASE_NAME
+- config.database_user - KEMONO_DATABASE_USER
+- config.database_password - KEMONO_DATABASE_PASSWORD
+- config.proxies - KEMONO_ARCHIVER_PROXIES
+- config.ban_url - KEMONO_ARCHIVER_BAN_URL
+- config.pubkey - KEMONO_ARCHIVER_PUBKEY
+- config.salt - KEMONO_ARCHIVER_SALT
+- config.pubsub - KEMONO_ARCHIVER_PUBSUB
+- config.pubsub_queue_limit - KEMONO_ARCHIVER_PUBSUB_QUEUE_LIMIT
+- redis_map.redis_host - REDIS_HOST
+- redis_map.redis_port - REDIS_PORT
+- redis_map.redis_password - REDIS_PASSWORD
+- redis_map.nodes - removed
+- redis_map.node_options - removed
+- redis_map.keyspaces - removed
+
 
 ### Server
 - `.env`

@@ -19,7 +19,6 @@ For now Docker is a primary way of working on the repo.
 1. Create a virtual environment:
     ```sh
     pip install virtualenv # install the package if it's not installed
-    virtualenv --upgrade-embed-wheels # makes it easier to manage python versions
     virtualenv --python 3.8 venv
     ```
 

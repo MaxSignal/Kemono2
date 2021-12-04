@@ -30,7 +30,7 @@ const webpackConfig = {
   plugins: [
     ...pagePlugins,
     new DefinePlugin({
-      "BUNDLER_ENV_KEMONO_SITE": JSON.stringify(ENV_VARS.KEMONO_SITE),
+      "BUNDLER_ENV_KEMONO_SITE": JSON.stringify(ENV_VARS.SITE_ORIGIN),
       "BUNDLER_ENV_NODE_ENV": JSON.stringify(ENV_VARS.NODE_ENV),
     }),
     new CopyWebpackPlugin({

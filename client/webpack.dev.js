@@ -65,7 +65,7 @@ const webpackConfigDev = {
             options: {
               sourceMap: true,
               // TODO: find how to prepend data properly
-              additionalData: `$kemono-site: '${ENV_VARS.KEMONO_SITE}';`
+              additionalData: `$kemono-site: '${ENV_VARS.SITE_ORIGIN}';`
             }
           }
 

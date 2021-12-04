@@ -14,7 +14,7 @@ const envFilename = {
 
 class ENV_VARS {
   static NODE_ENV = process.env.NODE_ENV || "development"
-  static KEMONO_SITE = process.env.KEMONO_SITE || "http://localhost:5000"
+  static SITE_ORIGIN = process.env.KEMONO_BACKEND_SITE_ORIGIN || "http://localhost:5000"
 }
 
 const criticalVars = [];
