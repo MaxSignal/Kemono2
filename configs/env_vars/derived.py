@@ -11,3 +11,8 @@ class DERIVED_VARS:
     IS_LOGIN_RATE_LIMITED = strtobool(
         str(ENV_VARS.ENABLE_LOGIN_RATE_LIMITING)
     )
+    REDIS_NODE_OPTIONS = dict(
+        host=ENV_VARS.REDIS_HOST,
+        port=ENV_VARS.REDIS_PORT,
+        password=ENV_VARS.REDIS_PASSWORD
+    )

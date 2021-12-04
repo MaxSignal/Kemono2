@@ -1,7 +1,6 @@
-import datetime
 import logging
 import re
-from datetime import timedelta
+from datetime import datetime, timedelta
 from urllib.parse import urljoin
 
 from flask import Flask, g, render_template, request, session
@@ -83,12 +82,12 @@ redis.init()
 @app.before_request
 def do_init_stuff():
     g.page_data = {}
-    g.request_start_time = datetime.datetime.now()
+    g.request_start_time = datetime.now()
     g.freesites = freesites
     g.paysite_list = paysite_list
     g.paysites = paysites
-    g.origin = ENV_VARS.KEMONO_SITE
-    g.canonical_url = urljoin(ENV_VARS.KEMONO_SITE, request.path)
+    g.origin = ENV_VARS.SITE_ORIGIN
+    g.canonical_url = urljoin(ENV_VARS.SITE_ORIGIN, request.path)
     session.permanent = True
     app.permanent_session_lifetime = timedelta(days=30)
     session.modified = False
@@ -101,8 +100,8 @@ def do_init_stuff():
 @app.after_request
 def do_finish_stuff(response):
     if not url_is_for_non_logged_file_extension(request.path):
-        start_time = g.request_start_time
-        end_time = datetime.datetime.now()
+        start_time: datetime = g.request_start_time
+        end_time = datetime.now()
         elapsed = end_time - start_time
         app.logger.debug('[{4}] Completed {0} request to {1} in {2}ms with ab test variants: {3}'.format(
             request.method, request.url, elapsed.microseconds / 1000, get_all_variants(), end_time.strftime("%Y-%m-%d %X")))

@@ -5,6 +5,7 @@ import dateutil
 import rb
 import ujson
 
+from configs.env_vars import DERIVED_VARS
 from .types import nodes, node_options, KemonoRouter
 
 cluster: rb.Cluster = None
@@ -14,7 +15,7 @@ def init():
     global cluster
     cluster = rb.Cluster(
         hosts=nodes,
-        host_defaults=node_options,
+        host_defaults=DERIVED_VARS.REDIS_NODE_OPTIONS,
         router_cls=KemonoRouter
     )
     return cluster
