@@ -104,7 +104,7 @@
   <body class="transition-preload">
     <div class="global-sidebar">
       {% call nav_entry(class_name='clickable-header-entry') %}
-        {{ nav_item('/', 'Home', 'clickable-header') }}
+        {{ nav_item('/', 'Home', 'clickable-header home-button') }}
         <div class='close-sidebar' >
           <img src="/static/close.svg" />
         </div>
@@ -130,9 +130,9 @@
       ]) }}
       {{ nav_entry([
         { 'header': true, 'text': 'Account', 'link': '/account', 'class_name': 'account-header' },
-        { 'text': 'Login', 'link': '/account/login', 'class_name': 'login' },
         { 'text': 'Register', 'link': '/account/register', 'class_name': 'register' },
-        { 'text': 'Favorites', 'link': '/favorites', 'class_name': 'favorites hidden' }
+        { 'text': 'Favorites', 'link': '/favorites', 'class_name': 'favorites hidden' },
+        { 'text': 'Login', 'link': '/account/login', 'class_name': 'login' }
       ], 'account') }}
       {% call nav_entry(class_name='stuck-bottom') %}
         {{ nav_header('Community') }}

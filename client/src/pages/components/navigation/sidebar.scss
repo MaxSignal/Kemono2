@@ -8,13 +8,13 @@
   overflow: auto;
   background: rgb(40 42 46);
   padding: 0.5em 0;
+  transition: margin-left 250ms ease-in-out 0s;
 
   @media (max-width: $sidebar-min-width) {
     position: absolute;
     height: 100%;
     width: 15rem;
     margin-left: -15rem;
-    transition: margin-left 150ms ease-in-out 0s;
     z-index: 3;
 
     &.expanded {
@@ -22,12 +22,18 @@
     }
   }
 
+  @media (min-width: #{$sidebar-min-width + 1}) {
+    &.retracted {
+      margin-left: -12rem;
+    }
+  }
+
   &-entry {
     display: flex;
     flex-direction: column;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 0.5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 0.5rem;
 
     a {
       color: unset;
@@ -44,28 +50,35 @@
       display: flex;
       justify-content: space-between;
       flex-direction: row;
+      align-items: center;
     }
 
     .close-sidebar {
-      display: none;
-      height: 1.8rem;
+      cursor: pointer;
+      height: 28px;
+      margin-left: 10px;
+
+      @media (max-width: $sidebar-min-width) {
+        height: 34px;
+        margin-left: 20px;
+      }
 
       & > img {
         height: 100%;
       }
-
-      @media (max-width: $sidebar-min-width) {
-        display: block;
+      &:hover, &:focus {
+        background: rgb(255 255 255 / 10%);
       }
     }
 
     &-item {
-      padding-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
       padding-left: 0.5rem;
+      height: 28px;
 
       @media (max-width: $sidebar-min-width) {
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
+        height: 34px;
       }
 
       &.clickable-header {
@@ -77,9 +90,12 @@
         font-weight: bold;
       }
 
+      &.home-button {
+        flex: 1;
+      }
+
       &:not(.header):not(&.clickable-header) {
         padding-left: 1.5rem;
-        padding-top: 0.3rem;
         cursor: pointer;
       }
 
