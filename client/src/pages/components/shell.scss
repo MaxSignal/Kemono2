@@ -80,18 +80,30 @@
   .header {
     width: 100%;
     background: hsl(220deg 7% 17%);
-    display: none;
-    padding: 10px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px 0 5px;
+    margin-top: calc(-1.2rem - 20px);
+    transition: margin-top 250ms ease-in-out 0s;
 
-    #burgor {
-      cursor: pointer;
-      & > img {
-        height: 1.5rem;
+    @media (max-width: $sidebar-min-width) {
+      margin-top: 0;
+    }
+
+    @media (min-width: #{$sidebar-min-width + 1}) {
+      &.sidebar-retracted {
+        margin-top: 0;
       }
     }
 
-    @media (max-width: $sidebar-min-width) {
-      display: flex;
+    #burgor {
+      cursor: pointer;
+      height: 2rem;
+      padding: 5px;
+      
+      & > img {
+        height: 100%;
+      }
     }
   }
 
@@ -107,6 +119,10 @@
     &.backdrop-hidden {
       opacity: 0;
       pointer-events: none;
+    }
+
+    @media (min-width: #{$sidebar-min-width + 1}) {
+      display: none;
     }
   }
 }
