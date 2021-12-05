@@ -6,7 +6,7 @@ import rb
 import ujson
 
 from configs.env_vars import DERIVED_VARS
-from .types import nodes, node_options, KemonoRouter
+from .types import nodes, KemonoRouter
 
 cluster: rb.Cluster = None
 

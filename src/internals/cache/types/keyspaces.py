@@ -1,5 +1,11 @@
 from .redis_keys import REDIS_KEYS
 
+# Available Redis nodes.
+# Passed directly to `Cluster.hosts`.
+nodes = {
+    0: {'db': 0}
+}
+
 # NOTE: New keyspaces in the source code require configuration here.
 keyspaces = {
     REDIS_KEYS.ACCOUNT: 0,

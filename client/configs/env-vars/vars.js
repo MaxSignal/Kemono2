@@ -4,20 +4,12 @@ require('dotenv').config({
   path: CONSTANTS.PROJECT_ROOT
 });
 
-const kemonoEnvValues = ['production', 'development']
-
-//  TODO: use it later
-const envFilename = {
-  development: '.env.dev',
-  production: '.env.prod'
-}
-
 class ENV_VARS {
-  static NODE_ENV = process.env.NODE_ENV || "development"
-  static SITE_ORIGIN = process.env.KEMONO_BACKEND_SITE_ORIGIN || "http://localhost:5000"
+  static NODE_ENV = process.env.NODE_ENV
+  static SITE_ORIGIN = process.env.KEMONO_BACKEND_SITE_ORIGIN
 }
 
-const criticalVars = [];
+const criticalVars = ["SITE_ORIGIN"];
 validateVars(criticalVars);
 
 /**

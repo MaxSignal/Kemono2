@@ -1,12 +1,37 @@
 {
+  "COMPOSE_PROJECT_NAME": {
+    "comment": "docker-specific settings https://docs.docker.com/compose/env-file/#compose-file-and-cli-variables"
+  },
+  "COMPOSE_FILE": {},
+  "COMPOSE_HTTP_TIMEOUT": {},
   "KEMONO_ENV": {
     "comment": "not used atm"
   },
-  "FLASK_ENV" : {},
   "NODE_ENV": {},
+  "FLASK_ENV" : {},
   "FLASK_SECRET_KEY": {
     "is_required": true
   },
+  "FLASK_CACHE_TYPE": {},
+  "FLASK_CACHE_DEFAULT_TIMEOUT": {},
+  "DATABASE_HOST": {},
+  "DATABASE_NAME": {},
+  "DATABASE_USER": {},
+  "DATABASE_PASSWORD": {},
+  "DATABASE_PORT": {},
+  "REDIS_HOST": {},
+  "REDIS_PORT": {},
+  "REDIS_PASSWORD": {},
+  "KEMONO_BACKEND_SITE_ORIGIN": {},
+  "KEMONO_BACKEND_ENABLE_PASSWORD_VALIDATOR": {},
+  "KEMONO_BACKEND_ENABLE_LOGIN_RATE_LIMITING": {},
+  "KEMONO_BACKEND_UPLOAD_LIMIT": {},
+  "KEMONO_BACKEND_REQUESTS_IMAGES": {
+    "comment": "1 MB upload limit"
+  },
+  "KEMONO_ARCHIVER_HOST": {},
+  "KEMONO_ARCHIVER_PORT": {},
+  "KEMONO_ARCHIVER_DOWNLOAD_PATH": {},
   "KEMONO_ARCHIVER_PROXIES": {
     "pattern": "string \nstring",
     "comment": "socks5://user:pass@host:port"
@@ -19,5 +44,9 @@
   },
   "KEMONO_ARCHIVER_SALT": {
     "comment": "(static) salt for autoimport key hashing. you should change this once and keep it safe."
-  }
+  },
+  "KEMONO_PUBSUB": {},
+  "KEMONO_PUBSUB_QUEUE_LIMIT": {},
+  "KEMONO_TELEGRAM_TOKEN" : {},
+  "KEMONO_TELEGRAM_CHANNEL" : {}
 }

@@ -88,9 +88,9 @@ Format is `current_name - new_name`
 - redis_map.redis_host - REDIS_HOST
 - redis_map.redis_port - REDIS_PORT
 - redis_map.redis_password - REDIS_PASSWORD
-- redis_map.nodes - removed
-- redis_map.node_options - removed
-- redis_map.keyspaces - removed
+- redis_map.nodes - moved to `src.internals.cache.redis.types.keyspaces`/`src.internals.cache.types.keyspaces`
+- redis_map.node_options - turned into a derived var
+- redis_map.keyspaces - moved to `src.internals.cache.redis.types.keyspaces`/`src.internals.cache.types.keyspaces`
 
 
 ### Server
