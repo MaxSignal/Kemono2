@@ -4,7 +4,7 @@
 {% from 'components/tooltip.html' import register_message %}
 
 {% block title %}
-  <title>Import paywall posts/comments/DMs to Kemono.</title>
+  <title>Import paywall posts/comments/DMs to Coomer.</title>
 {% endblock title %}
 
 {% block content %}
@@ -33,15 +33,17 @@
       </select>
     </div>
 
-    <div class="form__section">
-      <label class="form__label" for="session-key" >
-        Session key:
-      </label>
+    <div id="of-section" class="form__section">
+      <!-- <small class="form__subtitle">
+        <a href="/importer/tutorial">Learn how to get your session key.</a>
+      </small> -->
+      
       <input 
         id="session-key"
         class="form__input"
         type="text"
         name="session_key"
+        placeholder="Session key"
         autocomplete="off" 
         autocorrect="off" 
         autocapitalize="off" 
@@ -49,9 +51,52 @@
         maxlength="1024"
         required
       >
-      <small class="form__subtitle">
-        <a href="/importer/tutorial">Learn how to get your session key.</a>
-      </small>
+      <small class="form__subtitle">Session key. Can be found in Cookies -> sess.</small>
+      <input 
+        id="auth-id"
+        class="form__input"
+        type="text"
+        name="auth_id"
+        placeholder="User ID"
+        autocomplete="off" 
+        autocorrect="off" 
+        autocapitalize="off" 
+        spellcheck="false"
+        maxlength="1024"
+        required
+      >
+      <small class="form__subtitle">Your user ID. Can be found in Cookies -> auth_id.</small>
+      <input 
+        id="x-bc"
+        class="form__input"
+        type="text"
+        name="x-bc"
+        placeholder="BC Token"
+        autocomplete="off" 
+        autocorrect="off" 
+        autocapitalize="off" 
+        spellcheck="false"
+        maxlength="1024"
+        required
+      >
+      <small class="form__subtitle">BC token. Can be found in Local Storage -> bcTokenSha, or the headers of an XHR request -> x-bc.</small>
+      <br>
+      <label for="service" class="form__label">User Agent:</label>
+      <input 
+        id="user-agent"
+        class="form__input"
+        type="text"
+        value="{{ request.headers.get('user-agent') }}"
+        name="user_agent"
+        placeholder="User Agent"
+        autocomplete="off" 
+        autocorrect="off" 
+        autocapitalize="off" 
+        spellcheck="false"
+        maxlength="1024"
+        required
+      >
+      <small class="form__subtitle">This needs to be set to the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent" target="_blank">User-Agent</a> of the last device that logged into your OnlyFans account; leave it as the default value if you are on it right now.</small>
     </div>
 
     <div id="discord-section" class="form__section form__section--hidden">
@@ -109,7 +154,7 @@
       </label>
     </div>
 
-    <div id="dm-consent" class="form__section form__section--checkbox">
+    <!-- <div id="dm-consent" class="form__section form__section--checkbox">
       <input 
         class="form__input"
         type="checkbox"
@@ -124,7 +169,7 @@
           You will be able to manually approve or discard messages before they are publicly displayed.
         </small>
       </label>
-    </div>
+    </div> -->
     
     <div class="form__section">
       <button 
@@ -140,15 +185,16 @@
   <p>
     Your session key is used to scrape paid posts from your feed. After downloading missing posts, the key is immediately discarded and never stored without permission.
   </p>
-  <h3>Fantia</h3>
+  <!-- <h3>Fantia</h3>
   <ul>
     <li>At least one paid content must be unlocked for the post to be imported. <i>Free posts cannot be archived at this time.</i></li>
     <li>In order to download post contents accurately, the importer will automatically enable adult-viewing mode for duration of the import if you have it turned off. <b>Do not change back to general-viewing during imports.</b></li>
   </ul>
+  -->
   <h3>Auto-import</h3>
   <p>
-    The auto-import feature allows users to give Kemono permission to automatically detect and retrieve new posts and creators by storing session keys long-term, without need for manual key submission. All keys are encrypted using a strong RSA 4096 key. Every 24 hours, a computer outside of Kemono's infrastucture sends the private key to the backend, allowing it to decrypt all working keys and start import tasks. Even if Kemono's private database were to somehow be compromised, your tokens would remain anonymous and secure.<br>
-    If you are logged into Kemono, any key you submit with autoimport enabled can be managed under the <b>Keys</b> section of your <b>[Account]</b> tab in the header. There, you will be able to view import logs or revoke access. <i>Please note that anonymously-submitted keys cannot be managed.</i>
+    The auto-import feature allows users to give Coomer permission to automatically detect and retrieve new posts and creators by storing session keys long-term, without need for manual key submission. All keys are encrypted using a strong RSA 4096 key. Every 24 hours, a computer outside of Coomer's infrastucture sends the private key to the backend, allowing it to decrypt all working keys and start import tasks. Even if Coomer's private database were to somehow be compromised, your tokens would remain anonymous and secure.<br>
+    If you are logged into Coomer, any key you submit with autoimport enabled can be managed under the <b>Keys</b> section of your <b>[Account]</b> tab in the header. There, you will be able to view import logs or revoke access. <i>Please note that anonymously-submitted keys cannot be managed.</i>
   </p>
 </section>
 {% endblock content %}

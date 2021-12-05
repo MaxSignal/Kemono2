@@ -41,30 +41,30 @@ function switchDiscordSection(discordSection) {
   
 }
 
-/**
- * @param {HTMLElement} dmConsentSection
- * @returns {(event: Event) => void}
- */
-function switchConsentSection(dmConsentSection) {
-  return (event) => {
-    if (event.target.id === "service") {
-      event.stopPropagation();
+// /**
+//  * @param {HTMLElement} dmConsentSection
+//  * @returns {(event: Event) => void}
+//  */
+// function switchConsentSection(dmConsentSection) {
+//   return (event) => {
+//     if (event.target.id === "service") {
+//       event.stopPropagation();
   
-      /**
-       * @type {HTMLSelectElement}
-       */
-      const select = event.target;
+//       /**
+//        * @type {HTMLSelectElement}
+//        */
+//       const select = event.target;
   
-      // the dm importer is currently patreon only
-      if (select.value === "patreon") {
-        dmConsentSection.classList.remove("form__section--hidden");
-      } else {
-        dmConsentSection.classList.add("form__section--hidden");
-      }
-    }
-  }
+//       // the dm importer is currently patreon only
+//       if (select.value === "patreon") {
+//         dmConsentSection.classList.remove("form__section--hidden");
+//       } else {
+//         dmConsentSection.classList.add("form__section--hidden");
+//       }
+//     }
+//   }
   
-}
+// }
 
 /**
  * @param {boolean} isLoggedIn

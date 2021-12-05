@@ -22,13 +22,7 @@ freesites = {
 }
 
 paysite_list = [
-    "patreon",
-    "fanbox",
-    "gumroad",
-    "subscribestar",
-    "dlsite",
-    "discord",
-    "fantia",
+    "onlyfans"
 ]
 
 paysites = Paysites()

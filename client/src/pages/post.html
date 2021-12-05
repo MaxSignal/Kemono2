@@ -8,7 +8,7 @@
 {% set paysite = g.paysites[props.service] %}
 {% set post_title = post.title if post.title else 'Untitled' %}
 {% set artist_name = props.artist.name if props.artist.name else props.user %}
-{% set page_title = "\"" ~ post_title ~ "\" by " ~ props.artist.name ~ " from " ~ paysite.title ~ " | Kemono" if props.artist else post_title ~ " | Kemono" %}
+{% set page_title = "\"" ~ post_title ~ "\" by " ~ props.artist.name ~ " from " ~ paysite.title ~ " | Coomer" if props.artist else post_title ~ " | Coomer" %}
 {% set user_link = g.freesites.kemono.user.profile(post.service, post.user) %}
 {% set user_icon = g.freesites.kemono.user.icon(post.service, post.user) %}
 {% set user_banner = g.freesites.kemono.user.banner(post.service, post.user) %}
@@ -33,7 +33,7 @@
 {% block opengraph %}
   <meta property="og:title" content="{{ page_title }}">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Kemono">
+  <meta property="og:site_name" content="Coomer">
   <meta property="og:image" content="/icons/{{ post.service }}/{{ post.user }}">
   <meta property="og:url" content="{{ g.canonical_url }}">
 {% endblock opengraph %}

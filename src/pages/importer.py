@@ -2,7 +2,7 @@ import json
 from src.internals.cache.redis import get_conn, serialize_dict_list, deserialize_dict_list
 from src.utils.utils import get_import_id
 from flask import Blueprint, request, make_response, render_template, current_app, g, session
-
+from base64 import b64encode
 from src.lib.dms import get_unapproved_dms, approve_dm, cleanup_unapproved_dms
 
 from src.types.props import SuccessProps
@@ -132,20 +132,31 @@ def get_importer_logs(import_id):
 # API
 @importer_page.post('/api/import')
 def importer_submit():
+    session_key = request.form.get("session_key")
+
     if not session.get('account_id') and request.form.get("save_dms"):
         return 'You must be logged in to import direct messages.', 401
 
-    if not request.form.get("session_key"):
+    if not session_key:
         return "Session key missing.", 401
 
-    if request.form.get('session_key') and len(request.form.get('session_key').encode('utf-8')) > 1024:
-        return "The length of the session key you sent is too large. You should let the administrator know about this.", 400
+    if request.form.get("service") not in g.paysite_list:
+        return "Service unsupported.", 400
+
+    if request.form.get("service") == 'onlyfans':
+        session_key = b64encode(json.dumps({
+            'sess': request.form.get("session_key"),
+            'auth_id': request.form.get("auth_id"),
+            'auth_uid_': None,  # TODO: support 2fa accounts
+            'x-bc': request.form.get("x-bc"),
+            'user_agent': request.form.get("user_agent")
+        }).encode('utf-8')).decode()
 
     try:
         redis = get_conn()
         import_id = get_import_id(request.form.get("session_key"))
         data = dict(
-            key=request.form.get("session_key"),
+            key=session_key,
             service=request.form.get("service"),
             channel_ids=request.form.get("channel_ids"),
             auto_import=request.form.get("auto_import"),

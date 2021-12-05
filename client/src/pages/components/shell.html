@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% block title %}
       <title>
-        {{ props.name ~ " | Kemono" if props.name else "Kemono" }}
+        {{ props.name ~ " | Coomer" if props.name else "Coomer" }}
       </title>
     {% endblock title %}
     <link rel="shortcut icon" href="/static/favicon.ico">
@@ -43,9 +43,9 @@
     {% endblock meta %}
 
     {% block opengraph %}
-      <meta property="og:title" content="{{ props.name ~ ' | Kemono' if props.name else 'Kemono' }}">
+      <meta property="og:title" content="{{ props.name ~ ' | Coomer' if props.name else 'Coomer' }}">
       <meta property="og:type" content="website">
-      <meta property="og:site_name" content="Kemono">
+      <meta property="og:site_name" content="Coomer">
       <meta property="og:image" content="{{ g.origin }}/static/kemono-logo.svg">
       <meta property="og:image:width" content="150" />
       <meta property="og:image:height" content="150" />
@@ -93,7 +93,7 @@
         <li><a href="/artists">[Artists]</a></li>
         <li><a href="/artists/updated">[Recently Updated Artists]</a></li>
         <li><a href="/posts">[Recent Posts]</a></li>
-        <li><a href="/dms">[Recent DMs]</a></li>
+        {# <li><a href="/dms">[Recent DMs]</a></li> #}
         <li><a href="/importer">[Import]</a></li>
         <div id="account-buttons" style="display: inline-block;">
           {% if g.new_notifications_count and request.path != '/account/notifications' %}

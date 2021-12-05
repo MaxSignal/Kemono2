@@ -5,7 +5,7 @@
 {% from 'components/cards/dm.html' import dm_card %}
 
 {% set paysite = g.paysites[props.service] %}
-{% set page_title = 'DMs of ' ~ props.artist.name ~ ' from ' ~ paysite.title ~ ' | Kemono' %}
+{% set page_title = 'DMs of ' ~ props.artist.name ~ ' from ' ~ paysite.title ~ ' | Coomer' %}
 
 {% block title %}
   <title>
@@ -23,7 +23,7 @@
 {% block opengraph %}
   <meta property="og:title" content="{{ page_title }}">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Kemono">
+  <meta property="og:site_name" content="Coomer">
   <meta property="og:image" content="{{ g.origin }}/icons/{{ props.service }}/{{ props.id }}">
   <meta property="og:url" content="{{ g.canonical_url }}">
 {% endblock opengraph %}

@@ -6,6 +6,7 @@ from .fantia import Fantia
 from .gumroad import Gumroad
 from .patreon import Patreon
 from .subscribestar import Subscribestar
+from .onlyfans import OnlyFans
 
 # from typing import List
 
@@ -18,3 +19,4 @@ class Paysites:
     gumroad = Gumroad()
     patreon = Patreon()
     subscribestar = Subscribestar()
+    onlyfans = OnlyFans()
