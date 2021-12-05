@@ -10,12 +10,38 @@ window.addEventListener('load', () => {
  */
 export function initShell(sidebar) {
   const burgor = document.getElementById('burgor');
+  const header = burgor.parentElement;
   const backdrop = document.querySelector('.backdrop');
   const closeButton = sidebar.querySelector('.close-sidebar');
-  const closeSidebar = () => {
+  const closeSidebar = (_, setState = true) => {
     sidebar.classList.toggle('expanded');
+    sidebar.classList.toggle('retracted');
     backdrop.classList.toggle('backdrop-hidden');
+    const retracted = header.classList.toggle('sidebar-retracted');
+    if (setState && window.innerWidth > 1020) localStorage.setItem('sidebar_state', retracted);
   };
+  if (typeof localStorage.getItem('sidebar_state') === 'string') {
+    const sidebarState = localStorage.getItem('sidebar_state') === 'true';
+    if (window.innerWidth > 1020 && sidebarState) closeSidebar();
+  }
+  window.addEventListener('resize', () => {
+    if (typeof localStorage.getItem('sidebar_state') !== 'string') return;
+    const sidebarState = localStorage.getItem('sidebar_state') === 'true';
+    const realState = header.classList.contains('sidebar-retracted');
+    const killAnimations = () => {
+      document.body.classList.add('transition-preload');
+      requestAnimationFrame(() => setInterval(() => document.body.classList.remove('transition-preload')));
+    }
+    if (window.innerWidth <= 1020) {
+      if (sidebarState && realState) {
+        killAnimations();
+        closeSidebar(null, false);
+      }
+    } else if (sidebarState && !realState) {
+      killAnimations();
+      closeSidebar();
+    }
+  });
   burgor.addEventListener('click', closeSidebar);
   backdrop.addEventListener('click', closeSidebar);
   closeButton.addEventListener('click', closeSidebar);
