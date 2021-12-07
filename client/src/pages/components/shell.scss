@@ -80,6 +80,13 @@
           --local-colour2-primary: hsl(35, 100%, 20%);
           --local-colour2-secondary: hsl(35, 70%, 20%);
         }
+
+        &--beta {
+          --local-colour1-primary: hsl(126, 77%, 50%);
+          --local-colour1-secondary: hsl(126, 77%, 50%);
+          --local-colour2-primary: hsl(126, 77%, 20%);
+          --local-colour2-secondary: hsl(126, 77%, 20%);
+        }
       }
     }
     & li {
