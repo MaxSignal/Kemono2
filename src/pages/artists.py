@@ -240,6 +240,10 @@ def make_artist_display_data(artist: dict):
             'service': 'Fantia',
             'href': f"https://fantia.jp/fanclubs/{artist_id}",
         },
+        'onlyfans': {
+            'service': 'OnlyFans',
+            'href': f"https://onlyfans.com/{artist_id}",
+        },
     }
 
     if is_development:
