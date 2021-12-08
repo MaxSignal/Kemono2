@@ -77,6 +77,15 @@ body {
   font-family: Helvetica;
 }
 
+.load-more-button {
+  cursor: pointer;
+}
+
+.message__body {
+  white-space: pre-line;
+  margin: 0.5em 0;
+}
+
 .user-post-image {
   border-radius: 4px;
 }

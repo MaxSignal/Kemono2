@@ -17,7 +17,11 @@ const loadMessages = async (channelId, skip = 0) => {
     let avatarurl = '';
     let embeds = '';
     if (msg.content) {
-      msg.content = msg.content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+      msg.content = msg.content
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/"/g, '&quot;')
+        .replace(/<br \/>/g, "");
       let emojis = msg.content.match(/<:.+?:\d+>/g);
       if (emojis) {
         emojis.forEach(emoji => {
@@ -55,7 +59,7 @@ const loadMessages = async (channelId, skip = 0) => {
             <b><p>${msg.author.username.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')}</p></b>
             <p style="color:#757575">${msg.published}</p>
           </div>
-          <p>${msg.content}</p>
+          <p><pre class="message__body">${msg.content}</pre></p>
           ${dls}
           ${embeds}
         </div>
