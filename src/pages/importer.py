@@ -125,6 +125,7 @@ def get_importer_logs(import_id):
     messages = []
     if llen > 0:
         messages = redis.lrange(key, 0, llen)
+        redis.expire(key, 60 * 60 * 48)
 
     return json.dumps(list(map(lambda msg: msg.decode('utf-8'), messages))), 200
 
