@@ -140,6 +140,13 @@ export const paysites = {
     },
     post: {}
   },
+  onlyfans: {
+    title: "OnlyFans",
+    user: {
+      profile: (userID) => `user_id: f"https://onlyfans.com/${userID}`
+    },
+    post: {}
+  },
 };
 
 export const freesites = {
