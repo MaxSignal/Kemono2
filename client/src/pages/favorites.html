@@ -11,7 +11,7 @@
 {% block content %}
 <section class="page site-section site-section--favorites" id="page">
   <header class="site-section__header">
-    <h1 class="site-section__heading">Favorite {{ 'Artists' if props.fave_type == 'artist' else 'Posts' }}</h1>
+    <h1 class="site-section__heading">Favorite {{ 'Creators' if props.fave_type == 'artist' else 'Posts' }}</h1>
   </header>
 
   {% if source == 'session' %}
@@ -38,7 +38,7 @@
     <div class="dropdowns">
       <label>Type</label>
       <select autocomplete="off" onchange="on_change_favorite_type(this)">
-        <option value="artist" {% if props.fave_type == "artist" %}selected="selected"{% endif %}>Artists</option>
+        <option value="artist" {% if props.fave_type == "artist" %}selected="selected"{% endif %}>Creators</option>
         <option value="post" {% if props.fave_type == "post" %}selected="selected"{% endif %}>Posts</option>
       </select>
 
