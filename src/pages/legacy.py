@@ -292,90 +292,90 @@ def request_submit():
     ), 200)
 
 
-@legacy.route('/api/upload', methods=['POST'])
-def upload():
-    resumable_dict = {
-        'resumableIdentifier': request.form.get('resumableIdentifier'),
-        'resumableFilename': request.form.get('resumableFilename'),
-        'resumableTotalSize': request.form.get('resumableTotalSize'),
-        'resumableTotalChunks': request.form.get('resumableTotalChunks'),
-        'resumableChunkNumber': request.form.get('resumableChunkNumber')
-    }
+# @legacy.route('/api/upload', methods=['POST'])
+# def upload():
+#     resumable_dict = {
+#         'resumableIdentifier': request.form.get('resumableIdentifier'),
+#         'resumableFilename': request.form.get('resumableFilename'),
+#         'resumableTotalSize': request.form.get('resumableTotalSize'),
+#         'resumableTotalChunks': request.form.get('resumableTotalChunks'),
+#         'resumableChunkNumber': request.form.get('resumableChunkNumber')
+#     }
 
-    if int(request.form.get('resumableTotalSize')) > int(getenv('UPLOAD_LIMIT')):
-        return "File too large.", 415
+#     if int(request.form.get('resumableTotalSize')) > int(getenv('UPLOAD_LIMIT')):
+#         return "File too large.", 415
 
-    makedirs('/tmp/uploads', exist_ok=True)
-    makedirs('/tmp/uploads/incomplete', exist_ok=True)
+#     makedirs('/tmp/uploads', exist_ok=True)
+#     makedirs('/tmp/uploads/incomplete', exist_ok=True)
 
-    resumable = UploaderFlask(
-        resumable_dict,
-        '/tmp/uploads',
-        '/tmp/uploads/incomplete',
-        request.files['file']
-    )
+#     resumable = UploaderFlask(
+#         resumable_dict,
+#         '/tmp/uploads',
+#         '/tmp/uploads/incomplete',
+#         request.files['file']
+#     )
 
-    resumable.upload_chunk()
+#     resumable.upload_chunk()
 
-    if resumable.check_status() is True:
-        resumable.assemble_chunks()
-        try:
-            resumable.cleanup()
-        except:
-            pass
+#     if resumable.check_status() is True:
+#         resumable.assemble_chunks()
+#         try:
+#             resumable.cleanup()
+#         except:
+#             pass
 
-        try:
-            host = getenv('ARCHIVERHOST')
-            port = getenv('ARCHIVERPORT') if getenv('ARCHIVERPORT') else '8000'
-            r = requests.post(
-                f'http://{host}:{port}/api/upload/uploads',
-                files={'file': open(join('/tmp/uploads', request.form.get('resumableFilename')), 'rb')}
-            )
-            final_path = r.text
-            r.raise_for_status()
-        except Exception:
-            return 'Error while connecting to archiver.', 500
+#         try:
+#             host = getenv('ARCHIVERHOST')
+#             port = getenv('ARCHIVERPORT') if getenv('ARCHIVERPORT') else '8000'
+#             r = requests.post(
+#                 f'http://{host}:{port}/api/upload/uploads',
+#                 files={'file': open(join('/tmp/uploads', request.form.get('resumableFilename')), 'rb')}
+#             )
+#             final_path = r.text
+#             r.raise_for_status()
+#         except Exception:
+#             return 'Error while connecting to archiver.', 500
 
-        post_model = {
-            'id': ''.join(random.choice(string.ascii_letters) for x in range(8)),
-            '"user"': request.form.get('user'),
-            'service': request.form.get('service'),
-            'title': request.form.get('title'),
-            'content': request.form.get('content') or "",
-            'embed': {},
-            'shared_file': True,
-            'added': datetime.now(),
-            'published': datetime.now(),
-            'edited': None,
-            'file': {
-                "name": basename(final_path),
-                "path": final_path
-            },
-            'attachments': []
-        }
+#         post_model = {
+#             'id': ''.join(random.choice(string.ascii_letters) for x in range(8)),
+#             '"user"': request.form.get('user'),
+#             'service': request.form.get('service'),
+#             'title': request.form.get('title'),
+#             'content': request.form.get('content') or "",
+#             'embed': {},
+#             'shared_file': True,
+#             'added': datetime.now(),
+#             'published': datetime.now(),
+#             'edited': None,
+#             'file': {
+#                 "name": basename(final_path),
+#                 "path": final_path
+#             },
+#             'attachments': []
+#         }
 
-        post_model['embed'] = json.dumps(post_model['embed'])
-        post_model['file'] = json.dumps(post_model['file'])
+#         post_model['embed'] = json.dumps(post_model['embed'])
+#         post_model['file'] = json.dumps(post_model['file'])
 
-        columns = post_model.keys()
-        data = ['%s'] * len(post_model.values())
-        data[-1] = '%s::jsonb[]'  # attachments
-        query = "INSERT INTO posts ({fields}) VALUES ({values})".format(
-            fields=','.join(columns),
-            values=','.join(data)
-        )
-        cursor = get_cursor()
-        cursor.execute(query, list(post_model.values()))
+#         columns = post_model.keys()
+#         data = ['%s'] * len(post_model.values())
+#         data[-1] = '%s::jsonb[]'  # attachments
+#         query = "INSERT INTO posts ({fields}) VALUES ({values})".format(
+#             fields=','.join(columns),
+#             values=','.join(data)
+#         )
+#         cursor = get_cursor()
+#         cursor.execute(query, list(post_model.values()))
 
-        return jsonify({
-            "fileUploadStatus": True,
-            "resumableIdentifier": resumable.repo.file_id
-        })
+#         return jsonify({
+#             "fileUploadStatus": True,
+#             "resumableIdentifier": resumable.repo.file_id
+#         })
 
-    return jsonify({
-        "chunkUploadStatus": True,
-        "resumableIdentifier": resumable.repo.file_id
-    })
+#     return jsonify({
+#         "chunkUploadStatus": True,
+#         "resumableIdentifier": resumable.repo.file_id
+#     })
 
 
 @legacy.route('/api/creators')
