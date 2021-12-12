@@ -24,7 +24,7 @@
   class_name=none
 ) %}
   {% set user_link = g.freesites.kemono.user.profile(user.service, user.id) %}
-  {% set user_icon = g.freesites.kemono.user.icon(user.service, user.id) %}
+  {% set user_icon = '/thumbnail' ~ g.freesites.kemono.user.icon(user.service, user.id) %}
   <article 
     class="user-card {{ class_name if class_name }}"
     data-id="{{ user.id }}"
