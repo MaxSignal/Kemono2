@@ -42,8 +42,9 @@ def count_all_posts_for_query(q: str, reload=False):
         lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
         if lock.acquire(blocking=False):
             cursor = get_cursor()
-            query = "SELECT COUNT(*) FROM posts WHERE to_tsvector('english', content || ' ' || title) @@ websearch_to_tsquery(%s)"
-            cursor.execute(query, (q,))
+            query = "SET random_page_cost = 0.0001; SET LOCAL statement_timeout = 10000; "
+            query += "SELECT COUNT(*) FROM ( SELECT * FROM posts WHERE content &@~ %s UNION SELECT * FROM posts WHERE title &@~ %s ) as UnionSearch;"
+            cursor.execute(query, (q, q))
             count = cursor.fetchone()
             redis.set(key, str(count['count']), ex=600)
             count = int(count['count'])
@@ -87,9 +88,9 @@ def get_all_posts_for_query(q: str, offset: int, reload=False):
         lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
         if lock.acquire(blocking=False):
             cursor = get_cursor()
-            query = "SET LOCAL enable_indexscan = off; "
-            query += "SELECT * FROM posts WHERE to_tsvector('english', content || ' ' || title) @@ websearch_to_tsquery(%s) ORDER BY added desc LIMIT 25 OFFSET %s"
-            params = (q, offset)
+            query = "SET random_page_cost = 0.0001; SET LOCAL statement_timeout = 10000; "
+            query += "(SELECT * FROM posts WHERE content &@~ %s) UNION (SELECT * FROM posts WHERE title &@~ %s) ORDER BY added desc LIMIT 25 OFFSET %s;"
+            params = (q, q, offset)
 
             cursor.execute(query, params)
             results = cursor.fetchall()
