@@ -26,6 +26,7 @@
             class="form__option"
             value="{{ entry }}"
             {{ "selected" if loop.first }}
+            {{ "disabled" if entry == 'subscribestar' }}
           >
             {{ paysite.title }}
           </option>
