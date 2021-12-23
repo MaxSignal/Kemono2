@@ -143,6 +143,7 @@ def importer_submit():
         redis = get_conn()
 
         for _import in scan_keys('imports:*'):
+            _import = _import.decode('utf8')
             existing_import = redis.get(_import)
             existing_import_data = json.loads(existing_import)
             if existing_import_data['key'] == request.form.get("session_key"):
