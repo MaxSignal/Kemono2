@@ -9,6 +9,7 @@ from src.pages.random import random
 from src.pages.artists import artists
 from src.pages.legacy import legacy
 from src.pages.home import home
+from src.pages.dmca import dmca
 from src.utils.utils import url_is_for_non_logged_file_extension, render_page_data, paysites, paysite_list, freesites
 from src.lib.notification import count_new_notifications
 from src.lib.account import is_logged_in, load_account
@@ -51,6 +52,8 @@ app.register_blueprint(favorites)
 app.register_blueprint(dms)
 app.register_blueprint(help_app, url_prefix='/help')
 app.register_blueprint(importer_page)
+app.register_blueprint(dmca)
+
 if (is_development):
     from development import development
     app.register_blueprint(development)
