@@ -1,6 +1,6 @@
 import json
 import datetime
-from src.internals.cache.redis import get_conn, serialize_dict_list, deserialize_dict_list
+from src.internals.cache.redis import get_conn, serialize_dict_list, deserialize_dict_list, scan_keys
 from src.utils.utils import get_import_id
 from flask import Blueprint, request, make_response, render_template, current_app, g, session
 from os import getenv
@@ -141,6 +141,22 @@ def importer_submit():
     
     try:
         redis = get_conn()
+
+        for _import in scan_keys('imports:*'):
+            existing_import = redis.get(_import)
+            existing_import_data = json.loads(existing_import)
+            if existing_import_data['key'] == request.form.get("session_key"):
+                props = SuccessProps(
+                    message='This key is already being used for an import. Redirecting to logs...',
+                    currentPage='import',
+                    redirect=f"/importer/status/{_import.split(':')[1]}{ '?dms=1' if request.form.get('save_dms') else '' }"
+                )
+
+                return make_response(render_template(
+                    'success.html',
+                    props=props
+                ), 200)
+        
         import_id = get_import_id(request.form.get("session_key"))
         data = {
             'key': request.form.get("session_key"),
