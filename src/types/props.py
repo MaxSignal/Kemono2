@@ -6,6 +6,6 @@ from src.internals.types import PageProps
 @dataclass
 class SuccessProps(PageProps):
     """Props for `success` template."""
-    message: str = 'Success!'
     currentPage: str
     redirect: str
+    message: str = 'Success!'
