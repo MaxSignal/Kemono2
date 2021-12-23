@@ -1,5 +1,33 @@
 @use "../../css/variables" as *;
 
+.global-footer {
+  padding: 5px 20px;
+  margin: 0;
+  font-weight: normal;
+  font-size: 14px;
+  text-align: center;
+
+  .footer {
+    list-style-type: none;
+    font-size: 14px;
+    text-align: center;
+    padding: 0;
+
+    & li {
+      color: var(--colour0-primary);
+      display: inline;
+      margin: 0 0.5em 0 0;
+
+      & a {
+        --local-colour1-primary: var(--colour0-primary);
+        --local-colour1-secondary: var(--colour0-primary);
+        --local-colour2-primary: var(--colour1-tertiary);
+        --local-colour2-secondary: var(--colour1-secondary);
+      }
+    }
+  }
+}
+
 // TODO: split logic properly
 .global-header {
   // border-bottom: $size-thin solid var(--colour0-secondary);
