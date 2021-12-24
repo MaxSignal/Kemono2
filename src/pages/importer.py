@@ -150,7 +150,7 @@ def importer_submit():
                 props = {
                     'message': 'This key is already being used for an import. Redirecting to logs...',
                     'currentPage': 'import',
-                    'redirect': f'/importer/status/{import_id}{ "?dms=1" if request.form.get("save_dms") else "" }'
+                    'redirect': f'/importer/status/{_import.split(':')[1]}{ "?dms=1" if request.form.get("save_dms") else "" }'
                 }
 
                 return make_response(render_template(
