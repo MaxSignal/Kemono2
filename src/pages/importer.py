@@ -147,11 +147,11 @@ def importer_submit():
             existing_import = redis.get(_import)
             existing_import_data = json.loads(existing_import)
             if existing_import_data['key'] == request.form.get("session_key"):
-                props = SuccessProps(
-                    message='This key is already being used for an import. Redirecting to logs...',
-                    currentPage='import',
-                    redirect=f"/importer/status/{_import.split(':')[1]}{ '?dms=1' if request.form.get('save_dms') else '' }"
-                )
+                props = {
+                    'message': 'This key is already being used for an import. Redirecting to logs...',
+                    'currentPage': 'import',
+                    'redirect': f'/importer/status/{import_id}{ "?dms=1" if request.form.get("save_dms") else "" }'
+                }
 
                 return make_response(render_template(
                     'success.html',
@@ -181,7 +181,7 @@ def importer_submit():
 
         return make_response(render_template(
             'success.html',
-            props = props
+            props=props
         ), 200)
     except Exception as e:
         current_app.logger.exception('Error connecting to archiver')
