@@ -1,77 +1,69 @@
 {% set skip = request.args.get('o')|int if request.args.get('o') else 0 %}
 {% set currentCeilingOfRange = skip + props.limit if (skip + props.limit) < props.count else props.count %}
+
+{% set TOTAL_BUTTONS = 5 %}
+{% set OPTIONAL_BUTTONS = TOTAL_BUTTONS - 2 %}
+{% set MANDATORY_BUTTONS = TOTAL_BUTTONS - OPTIONAL_BUTTONS %}
+{% set currPageNum = ((skip + props.limit) / props.limit)|round(0, 'ceil')|int %}
+{% set totalPages = (props.count / props.limit)|round(0, 'ceil')|int %}
+{% set numBeforeCurrPage = currPageNum - 1 if ((totalPages < TOTAL_BUTTONS) or (currPageNum < TOTAL_BUTTONS)) else ((TOTAL_BUTTONS - 1) + ((TOTAL_BUTTONS) - (totalPages - currPageNum)) if (totalPages - currPageNum) < TOTAL_BUTTONS else (TOTAL_BUTTONS - 1)) %}
+{% set basePageNum = [currPageNum - numBeforeCurrPage - 1, 1]|max %}
+{% set showFirstPostsButton = basePageNum > 1 %}
+{% set showLastPostsButton = totalPages - currPageNum > (TOTAL_BUTTONS + ((TOTAL_BUTTONS - (currPageNum - basePageNum)) if currPageNum - basePageNum < TOTAL_BUTTONS else 0)) %}
+{% set optionalBeforeButtons = currPageNum - MANDATORY_BUTTONS - ((MANDATORY_BUTTONS - (totalPages - currPageNum)) if totalPages - currPageNum < MANDATORY_BUTTONS else 0) %}
+{% set optionalAfterButtons = currPageNum + MANDATORY_BUTTONS + ((MANDATORY_BUTTONS - (currPageNum - basePageNum)) if currPageNum - basePageNum < MANDATORY_BUTTONS else 0) %}
+
+{% macro paginator_button(content, href=none, class_name=none) %}
+  {%if href %}
+    <a href="{{ href }}" {% if class_name %} class="{{ class_name }}" {% endif %}><b>{{ content }}</b></a>
+  {%else%}
+    <li {% if class_name %} class="{{ class_name }}" {% endif %}><b>{{ content }}</b></li>
+  {%endif%}
+{% endmacro %}
 <small>
   Showing {{ skip + 1 }} - {{ currentCeilingOfRange }} of {{ props.count }}
 </small>
+{% set rng = range(0, (TOTAL_BUTTONS * 2) + 1) %}
 <menu>
-  {% if skip >= props.limit %}
-    <li>
-      <a 
-        href="{{ url_for(request.endpoint, o = skip - props.limit, **base) }}" 
-        title="Previous page"
-      >
-        &lt;
-      </a>
-    </li>
-  {% else %}
-    <li class="subtitle">&lt;</li>
-  {% endif %}
-
-  {% if skip >= 100 %}
-    <li>
-      <a href="{{ url_for(request.endpoint, o = 0, **base) }}">
-        1
-      </a>
-    </li>
-    <li>...</li>
-  {% endif %}
-
-  {% if skip >= 100 %}
-    {% set rng = range((skip / props.limit)|round(0, 'ceil')|int - 2, (skip / props.limit)|round(0, 'ceil')|int + 3) %}
-  {% else %}
-    {% set rng = range(0, 7) %}
-  {% endif %}
-  
-  {% for page in rng %}
-    {% if props.count > page * props.limit %}
-      {% if page * props.limit == skip %}
-        <li>{{ page + 1 }}</li>
-      {% else %}
-        <li>
-          <a 
-            href="{{ url_for(request.endpoint, o = page * props.limit, **base) }}"
-          >
-            {{ page + 1 }}
-          </a>
-        </li>
-      {% endif %}
-    {% endif %}
+  {%if showFirstPostsButton or showLastPostsButton %}
+    {%if showFirstPostsButton %}
+      {{ paginator_button('<<', href=url_for(request.endpoint, o = 0, **base)) }}
+    {%else%}
+      {{ paginator_button('<<', class_name='pagination-button-disabled' ~ (' pagination-desktop' if currPageNum - MANDATORY_BUTTONS - 1 else '')) }}
+    {%endif%}
+  {%endif%}
+  {%if not showFirstPostsButton %}
+    {%if currPageNum - MANDATORY_BUTTONS - 1 %}
+      {{ paginator_button('<<', href=url_for(request.endpoint, o = 0, **base), class_name='pagination-mobile') }}
+    {%elif (totalPages - currPageNum > MANDATORY_BUTTONS) and not showLastPostsButton %}
+      {{ paginator_button('<<', class_name='pagination-button-disabled pagination-mobile') }}
+    {%endif%}
+  {%endif%}
+  {%if currPageNum > 1 %}
+    {{ paginator_button('<', href=url_for(request.endpoint, o = (currPageNum - 2) * props.limit, **base))}}
+  {%else%}
+    {{ paginator_button('<', class_name='pagination-button-disabled')}}
+  {%endif%}
+  {% for page in rng if (page + basePageNum) and ((page + basePageNum) <= totalPages) %}
+    {{ paginator_button((page + basePageNum), href=url_for(request.endpoint, o = (page + basePageNum - 1) * props.limit, **base) if (page + basePageNum) != currPageNum else none, class_name='pagination-button-optional' if ((page + basePageNum) < optionalBeforeButtons or (page + basePageNum) > optionalAfterButtons) and (page + basePageNum) != currPageNum else ('pagination-button-disabled pagination-button-current' if (page + basePageNum) == currPageNum else ('pagination-button-after-current' if (page + basePageNum) == (currPageNum + 1) else ''))) }}
   {% endfor %}
-
-  {% for page in range(0, (props.count / props.limit)|round(0, 'ceil')|int) %}
-    {% if loop.last and props.count - skip >= 100 and props.count > 175 %}
-      <li>...</li>
-      <li>
-        <a 
-          href="{{ url_for(request.endpoint, o = page * props.limit, **base) }}"
-        >
-          {{ (props.count / props.limit)|round(0, 'ceil')|int }}
-        </a>
-      </li>
-    {% endif %}
-  {% endfor %}
-  
-
-  {% if props.count - skip > props.limit %}
-    <li>
-      <a 
-        href="{{ url_for(request.endpoint, o = skip + props.limit, **base) }}" 
-        title="Next page"
-      >
-        &gt;
-      </a>
-    </li>
-  {% else %}
-    <li class="subtitle">&gt;</li>
-  {% endif %}
+  {%if currPageNum < totalPages %}
+    {{ paginator_button('>', href=url_for(request.endpoint, o = currPageNum * props.limit, **base)) }}
+  {%else%}
+    {{ paginator_button('>', class_name='pagination-button-disabled' ~(' pagination-button-after-current' if totalPages else '')) }}
+  {%endif%}
+  {%if showFirstPostsButton or showLastPostsButton %}
+    {%if showLastPostsButton %}
+      {{ paginator_button('>>', href=url_for(request.endpoint, o = (totalPages - 1) * props.limit, **base)) }}
+    {%else%}
+      {{ paginator_button('>>', class_name='pagination-button-disabled' ~ (' pagination-desktop' if totalPages - currPageNum > MANDATORY_BUTTONS else '')) }}
+    {%endif%}
+  {%endif%}
+  {%if not showLastPostsButton %}
+    {%if totalPages - currPageNum > MANDATORY_BUTTONS%}
+      {{ paginator_button('>>', href=url_for(request.endpoint, o = (totalPages - 1) * props.limit, **base), class_name='pagination-mobile') }}
+    {%elif (currPageNum > OPTIONAL_BUTTONS) and not showFirstPostsButton %}
+      {{ paginator_button('>>', class_name='pagination-button-disabled pagination-mobile') }}
+    {%endif%}
+  {%endif%}
 </menu>
