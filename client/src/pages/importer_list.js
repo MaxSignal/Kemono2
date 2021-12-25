@@ -13,7 +13,7 @@ export function importerPage(section) {
   const dmConsentSection = form.querySelector("#dm-consent");
 
   form.addEventListener("change", switchDiscordSection(discordSection));
-  form.addEventListener("change", switchConsentSection(dmConsentSection));
+  // form.addEventListener("change", switchConsentSection(dmConsentSection));
   form.addEventListener("submit", handleSubmit(isLoggedIn));
 
   document.getElementById('user-agent').value = navigator.userAgent;
