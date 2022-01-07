@@ -11,54 +11,57 @@
     data-service="{{ post.service }}"
     data-user="{{ post.user }}"
   >
-    {% if src %}
-      <div class="post-card__view">
-        {{ button('Info', 'post-card__button', false) }}
-      </div>
-      <div class="post-card__image-container">
-          {# TODO: move backup image logic to the script #}
-          <img
-            class="post-card__image"
-            src="/thumbnail/data{{ src|replace('https://kemono.party', '') }}"
-          >
+    <img class="post-card__partyhat" src="/static/partyhat.gif" loading="lazy">
+    <div class="post-card__not-partyhat">
+      {% if src %}
+        <div class="post-card__view">
+          {{ button('Info', 'post-card__button', false) }}
         </div>
-    {% endif %}
-    <header class="post-card__header">
-      <h2 class="post-card__heading">
-        <a
-          href="{{ post_link }}"
-        >
-          {{ post.title }}
-        </a>
-      </h2>
-      <p class="post-card__user">
-        By <span class="post-card__name">{{ post.user }}</span>
-      </p>
-    </header>
-
-    <section class="post-card__body">
-      {# {{ post.content|safe }} #}
-      {# {{ post.content|striptags }} #}
-      <div class="comment__aux">
-        <div class="post__service">
-          {{ g.paysites[post.service].title }}
-        </div>
-        {% if post.published %}
-          <div>
-            {{ timestamp(post.published) }}
+        <div class="post-card__image-container">
+            {# TODO: move backup image logic to the script #}
+            <img
+              class="post-card__image"
+              src="/thumbnail/data{{ src|replace('https://kemono.party', '') }}"
+            >
           </div>
-        {% endif %}
-        <div>
-          {% if post.attachments|length %}
-            {{ post.attachments|length }} {{ 'attachment' if post.attachments|length == 1 else 'attachments' }}
-          {% else %}
-            No attachments
+      {% endif %}
+      <header class="post-card__header">
+        <h2 class="post-card__heading">
+          <a
+            href="{{ post_link }}"
+          >
+            {{ post.title }}
+          </a>
+        </h2>
+        <p class="post-card__user">
+          By <span class="post-card__name">{{ post.user }}</span>
+        </p>
+      </header>
+
+      <section class="post-card__body">
+        {# {{ post.content|safe }} #}
+        {# {{ post.content|striptags }} #}
+        <div class="comment__aux">
+          <div class="post__service">
+            {{ g.paysites[post.service].title }}
+          </div>
+          {% if post.published %}
+            <div>
+              {{ timestamp(post.published) }}
+            </div>
           {% endif %}
+          <div>
+            {% if post.attachments|length %}
+              {{ post.attachments|length }} {{ 'attachment' if post.attachments|length == 1 else 'attachments' }}
+            {% else %}
+              No attachments
+            {% endif %}
+          </div>
+          <div class="post-card__link">
+            {{ fancy_link(post_link, 'Go to post') }}
+          </div>
         </div>
-        <div class="post-card__link">
-          {{ fancy_link(post_link, 'Go to post') }}
-        </div>
-      </div>
-    </section>
+      </section>
+    </div>
   </article>
 {% endmacro %}

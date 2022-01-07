@@ -9,7 +9,6 @@
   background-color: var(--colour1-tertiary);
   border-radius: 10px;
   border: $size-thin solid transparent;
-  overflow: hidden;
   transition-duration: var(--duration-global);
   transition-property: border-color, box-shadow;
 
@@ -46,6 +45,26 @@
     padding: $size-small;
   }
 
+  &__partyhat {
+    min-height: 99.9979px;
+    min-width: 99.9979px;
+    left: -45px;
+    margin-top: -115px;
+    pointer-events: none;
+    position: absolute;
+    width: 150px;
+    z-index: 99;
+  }
+  
+  &__not-partyhat {
+    overflow: hidden;
+  }
+
+  & > .post-card__not-partyhat {
+    flex: none;
+    padding: 0;
+  }
+
   // TODO: fix 
   &__view {
     position: absolute;
@@ -77,6 +96,9 @@
     transition-property: opacity, visibility;
     transition-duration: var(--duration-global);
     padding: 0;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    overflow: hidden;
   }
 
   &__image {
