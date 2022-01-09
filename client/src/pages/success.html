@@ -1,7 +1,7 @@
 {% extends 'components/shell.html' %}
 
 {% block content %}
-  <h1 class="subtitle no-posts">Success!</h1>
+  <h1 class="subtitle no-posts">{{ props.message or 'Success!' }}</h1>
   {% if props.redirect %}
     <meta http-equiv="Refresh" content="2; url='{{ props.redirect }}'">
   {% endif %}

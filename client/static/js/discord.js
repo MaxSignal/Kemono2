@@ -17,7 +17,11 @@ const loadMessages = async (channelId, skip = 0) => {
     let avatarurl = '';
     let embeds = '';
     if (msg.content) {
-      msg.content = msg.content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+      msg.content = msg.content
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/"/g, '&quot;')
+        .replace(/<br \/>/g, "");
       let emojis = msg.content.match(/<:.+?:\d+>/g);
       if (emojis) {
         emojis.forEach(emoji => {
@@ -28,9 +32,9 @@ const loadMessages = async (channelId, skip = 0) => {
     }
     msg.attachments.map(dl => {
       if (imageFormats.includes(dl.name.split('.').pop())) {
-        dls += `<a href="${dl.path}" target="_blank"><img class="user-post-image" style="max-width:300px" src="/thumbnail${dl.path}" onerror="this.src='${dl.path}'"></a><br>`;
+        dls += `<a href="${dl.path}?f=${dl.name}" target="_blank"><img class="user-post-image" style="max-width:300px" src="/thumbnail${dl.path}" onerror="this.src='${dl.path}?f=${dl.name}'"></a><br>`;
       } else {
-        dls += `<a href="${dl.path}">Download ${dl.name.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')}</a><br>`;
+        dls += `<a href="${dl.path}?f=${dl.name}">Download ${dl.name.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')}</a><br>`;
       }
     });
     msg.embeds.map(embed => {
@@ -55,7 +59,7 @@ const loadMessages = async (channelId, skip = 0) => {
             <b><p>${msg.author.username.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')}</p></b>
             <p style="color:#757575">${msg.published}</p>
           </div>
-          <p>${msg.content}</p>
+          <p><pre class="message__body">${msg.content}</pre></p>
           ${dls}
           ${embeds}
         </div>

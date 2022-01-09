@@ -80,7 +80,7 @@ def get_all_posts(offset: int, reload=False):
 
 def get_all_posts_for_query(q: str, offset: int, reload=False):
     if q.strip() == '':
-        return get_all_posts(offset)
+        return get_all_posts(0)
     redis = get_conn()
     key = 'all_posts_for_query:' + q + ':' + str(offset)
     results = redis.get(key)

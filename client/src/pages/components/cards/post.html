@@ -6,47 +6,26 @@
   {% set src = post.file.path if post.file.path and post.file.path|lower|regex_match("\.(gif|jpe?g|jpe|png|webp)$") %}
   {% set post_link = g.freesites.kemono.post.link(post.service, post.user, post.id) %}
   <article
-    class="post-card post-card--legacy {{ 'post-card--preview' if src }}"
+    class="post-card {{ 'post-card--preview' if src }}"
     data-id="{{ post.id }}"
     data-service="{{ post.service }}"
     data-user="{{ post.user }}"
   >
-    {% if src %}
-      <div class="post-card__view">
-        {{ button('Info', 'post-card__button', false) }}
-      </div>
-      <div class="post-card__image-container">
-          {# TODO: move backup image logic to the script #}
-          <img
-            class="post-card__image"
-            src="/thumbnail/data{{ src|replace('https://kemono.party', '') }}"
-          >
-        </div>
-    {% endif %}
-    <header class="post-card__header">
-      <h2 class="post-card__heading">
-        <a
-          href="{{ post_link }}"
-        >
-          {{ post.title }}
-        </a>
-      </h2>
-      <p class="post-card__user">
-        By <span class="post-card__name">{{ post.user }}</span>
-      </p>
-    </header>
-
-    <section class="post-card__body">
-      {# {{ post.content|safe }} #}
-      {# {{ post.content|striptags }} #}
-      <div class="comment__aux">
-        <div class="post__service">
-          {{ g.paysites[post.service].title }}
-        </div>
-        {% if post.published %}
-          <div>
-            {{ timestamp(post.published) }}
+    <a href="{{ post_link }}">
+      <header class="post-card__header">
+        {{ post.title }}
+      </header>
+      {% if src %}
+        <div class="post-card__image-container">
+            <img
+              class="post-card__image"
+              src="/thumbnail/data{{ src|replace('https://kemono.party', '') }}"
+            >
           </div>
+      {% endif %}
+      <footer class="post-card__footer">
+        {% if post.published %}
+            {{ timestamp(post.published) }}
         {% endif %}
         <div>
           {% if post.attachments|length %}
@@ -55,10 +34,7 @@
             No attachments
           {% endif %}
         </div>
-        <div class="post-card__link">
-          {{ fancy_link(post_link, 'Go to post') }}
-        </div>
-      </div>
-    </section>
+      </footer>
+    </a>
   </article>
 {% endmacro %}
