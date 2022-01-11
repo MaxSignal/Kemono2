@@ -4,6 +4,8 @@
     "paths": {
       "@wp/pages": ["./pages/_index.js"],
       "@wp/components": ["./pages/components/_index.js"],
+      "@wp/env/*": ["./env/*"],
+      "@wp/lib/*": ["./lib/*"],
       "@wp/js/*": ["./js/*"],
       "@wp/css/*": ["./css/*"],
       "@wp/assets/*": ["./assets/*"],
