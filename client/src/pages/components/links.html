@@ -10,6 +10,15 @@
   >{{ text if not caller else caller() }}</a>
 {%- endmacro -%}
 
+{%- macro antiscraper_link(url, text=url) -%}
+  <a
+    class="fancy-link fancy-link--antiscraper"
+    href="{{ url }}"
+    target="_blank"
+    rel="noopener noreferrer"
+  >{{ text if not caller else caller() }}</a>
+{%- endmacro -%}
+
 {% macro download_link(url, text=url, file_name=text, class_name=none) %}
   <a
     class="fancy-link fancy-link--download {{ class_name if class_name }}"

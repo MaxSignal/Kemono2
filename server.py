@@ -1,13 +1,42 @@
-import re
 import datetime
+import logging
+import re
 from datetime import timedelta
 from os import getenv
-from os.path import join, dirname
+from os.path import dirname, join
 from threading import Lock
 from urllib.parse import urljoin
 
-import logging
 from dotenv import load_dotenv
+from flask import Flask, abort, g, redirect, render_template, request, session
+
+import src.internals.cache.redis as redis
+import src.internals.database.database as database
+from configs.derived_vars import is_development
+from src.internals.cache.flask_cache import cache
+from src.lib.ab_test import get_all_variants
+from src.lib.account import is_logged_in, load_account
+from src.lib.notification import count_new_notifications
+from src.blueprints import api, pages
+from src.pages.account import account
+from src.pages.artists import artists
+from src.pages.dms import dms
+from src.pages.favorites import favorites
+from src.pages.help import help_app
+from src.pages.importer import importer_page
+from src.pages.legacy import legacy
+from src.pages.post import post
+from src.pages.posts import posts
+from src.pages.random import random
+from src.types.account import Account
+from src.utils.utils import (
+    freesites,
+    paysite_list,
+    paysites,
+    render_page_data,
+    url_is_for_non_logged_file_extension
+)
+
 load_dotenv(join(dirname(__file__), '.env'))
 from flask import Flask, render_template, request, redirect, g, abort, session
 
@@ -54,7 +83,8 @@ app = Flask(
 
 app.url_map.strict_slashes = False
 
-app.register_blueprint(home)
+# app.register_blueprint(api)
+app.register_blueprint(pages)
 app.register_blueprint(legacy)
 app.register_blueprint(artists)
 app.register_blueprint(random)

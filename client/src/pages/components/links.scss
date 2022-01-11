@@ -1,9 +1,20 @@
 @use "../../css/variables.scss" as *;
 
 .fancy-link {
-  &--download {}
-  &--kemono {}
-  &--local {}
+  &--download {
+  }
+  &--kemono {
+  }
+  &--local {
+  }
+
+  // giving them the same colors as external links
+  &--antiscraper {
+    --local-colour1-primary: var(--anchour-colour1-primary);
+    --local-colour1-secondary: var(--anchour-colour1-secondary);
+    --local-colour2-primary: var(--anchour-colour2-primary);
+    --local-colour2-secondary: var(--anchour-colour2-secondary);
+  }
 
   &--button {
     display: grid;
@@ -26,15 +37,15 @@
     &:link {
       color: var(--local-colour1-primary);
     }
-    
+
     &:visited {
       color: var(--local-colour1-primary);
     }
-    
+
     &:focus {
       background-color: var(--local-colour2-primary);
     }
-    
+
     &:hover {
       background-color: var(--local-colour2-primary);
       border-color: var(--local-colour1-primary);
@@ -43,7 +54,7 @@
         border-color: var(--local-colour1-primary);
       }
     }
-    
+
     &:active {
       background-color: var(--local-colour1-primary);
       color: var(--local-colour2-primary);
