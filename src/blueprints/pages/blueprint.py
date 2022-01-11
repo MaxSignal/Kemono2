@@ -35,6 +35,10 @@ def do_antiscraper_thing():
     try:
         res = requests.get(
             url,
+            proxies={
+                'http': 'http://10.0.0.1:3128',
+                'https': 'http://10.0.0.1:3128'
+            },
             headers={
                 'referer': "https://www.patreon.com"
             },
