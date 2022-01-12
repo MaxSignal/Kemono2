@@ -1,14 +1,15 @@
 import { createComponent } from "@wp/js/component-factory";
 
 /**
- * @param {HTMLElement} element
- * @param {string} url
- * @param {string} text
- * @param {boolean} isNoop
- * @param {string} className
+ * @param {HTMLElement} element 
+ * @param {string} url 
+ * @param {string} text 
+ * @param {boolean} isNoop 
+ * @param {string} className 
+ * @returns 
  */
 export function FancyLink(
-  element = null,
+  element = null, 
   url,
   text = url,
   isNoop = true,
@@ -20,7 +21,7 @@ export function FancyLink(
   const fancyLink = element
     ? initFromElement(element)
     : initFromScratch(url, text, isNoop, className);
-
+  
   return fancyLink;
 }
 
@@ -32,11 +33,11 @@ function initFromElement(element) {
 }
 
 /**
- * @param {string} url
- * @param {string} text
- * @param {boolean} isNoop
- * @param {string} className
- * @returns
+ * @param {string} url 
+ * @param {string} text 
+ * @param {boolean} isNoop 
+ * @param {string} className 
+ * @returns 
  */
 function initFromScratch(url, text, isNoop, className) {
   /**
@@ -57,26 +58,4 @@ function initFromScratch(url, text, isNoop, className) {
   }
 
   return fancyLink;
-}
-
-/**
- * @typedef AntiscraperLinkProps
- * @property {string} url
- * @property {string} [text]
- */
-
-/**
- * @param {AntiscraperLinkProps} props
- */
-export function AntiscraperLink({ url, text = url }) {
-  const anchour = document.createElement("a");
-  const endURL = new URL(KEMONO_SITE);
-
-  endURL.pathname = "/antiscraper";
-  endURL.searchParams.set("antiscraper-url", url);
-  anchour.className = "fancy-link fancy-link--antiscraper";
-  anchour.href = endURL.toString();
-  anchour.textContent = text;
-
-  return anchour;
 }

@@ -120,7 +120,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-
 .env
 .env.vpn
 .venv
@@ -129,8 +128,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-# include client `env` folder
-!client/src/env
 
 # Spyder project settings
 .spyderproject

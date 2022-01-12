@@ -1,6 +1,6 @@
 const path = require("path");
 
-require('dotenv').config({
+require('dotenv').config({ 
   path: path.resolve(__dirname, "..", "..")
 });
 
@@ -9,5 +9,5 @@ const nodeEnv = process.env.NODE_ENV || "production"
 
 module.exports = {
   kemonoSite,
-  nodeEnv,
+  nodeEnv
 }
