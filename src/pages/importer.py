@@ -1,5 +1,5 @@
 import json
-from src.internals.cache.redis import get_conn, serialize_dict_list, deserialize_dict_list
+from src.internals.cache.redis import get_conn, serialize_dict_list, deserialize_dict_list, scan_keys
 from src.utils.utils import get_import_id
 from flask import Blueprint, request, make_response, render_template, current_app, g, session
 from base64 import b64encode
@@ -153,8 +153,28 @@ def importer_submit():
             'user_agent': request.form.get("user_agent")
         }).encode('utf-8')).decode()
 
+    if request.form.get('session_key') and len(request.form.get('session_key').encode('utf-8')) > 1024:
+        return "The length of the session key you sent is too large. You should let the administrator know about this.", 400
+    
     try:
         redis = get_conn()
+
+        for _import in scan_keys('imports:*'):
+            _import = _import.decode('utf8')
+            existing_import = redis.get(_import)
+            existing_import_data = json.loads(existing_import)
+            if existing_import_data['key'] == request.form.get("session_key"):
+                props = SuccessProps(
+                    message='This key is already being used for an import. Redirecting to logs...',
+                    currentPage='import',
+                    redirect=f"/importer/status/{_import.split(':')[1]}{ '?dms=1' if request.form.get('save_dms') else '' }"
+                )
+
+                return make_response(render_template(
+                    'success.html',
+                    props=props
+                ), 200)
+        
         import_id = get_import_id(request.form.get("session_key"))
         data = dict(
             key=session_key,

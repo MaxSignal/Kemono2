@@ -13,7 +13,7 @@
   {% set artist_link = service.user.profile(dm.user) %}
   {% set user_link = g.freesites.kemono.user.profile(dm.service, dm.user) %}
 
-  <article 
+  <article
     class="dm-card {{ class_name if class_name }}"
     {% if is_private %}
       data-id="{{ dm.id }}"
@@ -52,22 +52,10 @@
         {% endcall %}
       </header>
     {% endif %}
-    
+
     <section class="dm-card__body" tabindex="0">
-      <div class="dm-card__content">
-        {{ dm.content }}
-      </div>
-      {# These values are not used for now. #}
-      {# {% if dm.file %}
-        <div class="dm-card__files">
-          {{ dm.file }}
-        </div>
-      {% endif %}
-      {% if dm.embed %}
-        <div class="dm-card__embeds">
-          {{ dm.embed }}
-        </div>
-      {% endif %} #}
+      {# writing it like this so there wouldn't be whitespaces/newlines in the output #}
+      <div class="dm-card__content"><pre>{{ dm.content }}</pre></div>
     </section>
 
     <footer class="dm-card__footer">

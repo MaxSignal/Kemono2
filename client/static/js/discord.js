@@ -32,9 +32,9 @@ const loadMessages = async (channelId, skip = 0) => {
     }
     msg.attachments.map(dl => {
       if (imageFormats.includes(dl.name.split('.').pop())) {
-        dls += `<a href="${dl.path}" target="_blank"><img class="user-post-image" style="max-width:300px" src="/thumbnail${dl.path}" onerror="this.src='${dl.path}'"></a><br>`;
+        dls += `<a href="${dl.path}?f=${dl.name}" target="_blank"><img class="user-post-image" style="max-width:300px" src="/thumbnail${dl.path}" onerror="this.src='${dl.path}?f=${dl.name}'"></a><br>`;
       } else {
-        dls += `<a href="${dl.path}">Download ${dl.name.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')}</a><br>`;
+        dls += `<a href="${dl.path}?f=${dl.name}">Download ${dl.name.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')}</a><br>`;
       }
     });
     msg.embeds.map(embed => {

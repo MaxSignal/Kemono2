@@ -182,8 +182,8 @@ def get_artist_post_count(service, artist_id, reload=False):
         lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
         if lock.acquire(blocking=False):
             cursor = get_cursor()
-            query = 'SELECT count(*) as count FROM posts WHERE \"user\" = %s'
-            cursor.execute(query, (artist_id,))
+            query = 'SELECT count(*) as count FROM posts WHERE \"user\" = %s AND service = %s'
+            cursor.execute(query, (artist_id, service,))
             count = cursor.fetchone()['count']
             redis.set(key, str(count), ex=600)
             lock.release()
