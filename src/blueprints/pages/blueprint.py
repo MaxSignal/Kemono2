@@ -1,4 +1,5 @@
 import requests
+from os import getenv
 from flask import (
     Blueprint,
     current_app,
@@ -35,6 +36,10 @@ def do_antiscraper_thing():
     try:
         res = requests.get(
             url,
+            proxies={
+                'http': getenv('ANTIANTISCRAPER_PROXY'),
+                'https': getenv('ANTIANTISCRAPER_PROXY')
+            } if getenv('ANTIANTISCRAPER_PROXY') else None,
             headers={
                 'referer': "https://www.patreon.com"
             },
