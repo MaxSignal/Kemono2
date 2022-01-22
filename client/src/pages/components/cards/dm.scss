@@ -1,26 +1,6 @@
 @use "../../../css/variables" as *;
 
 .dm-card {
-  position: relative;
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: stretch;
-  background-color: var(--colour1-tertiary);
-  border-radius: 10px;
-  border: $size-thin solid transparent;
-  overflow: hidden;
-  transition-duration: var(--duration-global);
-  transition-property: border-color, box-shadow;
-
-  & > * {
-    flex: 0 1 auto;
-    padding: $size-small;
-  }
-
-  &:hover,
-  &:focus-within {
-    box-shadow: 0px 0px 3px 5px var(--positive-colour1-secondary);
-  }
 
   &__icon {
     display: inline-block;
@@ -29,28 +9,4 @@
     width: 1em;
     height: 1em;
   }
-  
-  &__header {}
-
-  &__user {}
-
-  &__service {}
-
-  &__body {
-    flex: 1 1 auto;
-  }
-
-  &__content {
-    line-height: 1.5;
-  }
-
-  &__files {}
-
-  &__embeds {}
-
-  &__footer {}
-
-  &__published {}
-
-  &__added {}
 }

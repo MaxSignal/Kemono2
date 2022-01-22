@@ -4,7 +4,6 @@ import { registerPage } from "./account/_index.js";
 import { postPage } from "./post";
 import { importerPage } from "./importer_list";
 import { importerStatusPage } from "./importer_status";
-import { importerDMSPage } from "./importer_dms";
 import { postsPage } from "./posts";
 import { artistsPage } from "./artists";
 import { updatedPage } from "./updated";
@@ -22,7 +21,6 @@ export const globalPageScripts = new Map([
   ["importer", importerPage],
   ["bans", bansPage],
   ["importer-status", importerStatusPage],
-  ["importer-dms", importerDMSPage],
   ["posts", postsPage],
   ["artists", artistsPage],
   ["updated", updatedPage],

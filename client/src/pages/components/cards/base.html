@@ -1,26 +1,20 @@
+{% from 'components/meta/attributes.html' import attributes %}
 {# base parts of the card #}
 {# these macros can only be called #}
+{# TODO: remove references to `class_name` #}
 
-{% macro card(class_name=none) %}
-  <article class="card {{ class_name if class_name }}">
-    {{ caller() }}
-  </article>
+{% macro card() %}
+  <article {{ attributes('card', **kwargs) }}>{{ caller() }}</article>
 {% endmacro %}
 
-{% macro card_header(class_name=none) %}
-  <header class="card__header {{ class_name if class_name }}">
-    {{ caller() }}
-  </header>
+{% macro card_header() %}
+  <header {{ attributes('card__header', **kwargs) }}>{{ caller() }}</header>
 {% endmacro %}
 
-{% macro card_body(class_name=none) %}
-  <section class="card__body {{ class_name if class_name }}">
-    {{ caller() }}
-  </section>
+{% macro card_body() %}
+  <section {{ attributes('card__body', **kwargs) }}>{{ caller() }}</section>
 {% endmacro %}
 
-{% macro card_footer(class_name=none) %}
-  <footer class="card__footer {{ class_name if class_name }}">
-    {{ caller() }}
-  </footer>
+{% macro card_footer() %}
+  <footer {{ attributes('card__footer', **kwargs) }}>{{ caller() }}</footer>
 {% endmacro %}

@@ -1,48 +1,31 @@
+from dataclasses import dataclass
 from typing import Callable, Dict, List
 
-from ..types.kemono import DM, User, PageProps
+from src.types.kemono import Approved_DM
+from src.internals.types import PageProps
 
+
+@dataclass
 class ArtistPageProps(PageProps):
-    """
-    TODO: remove `name` property.
-    """
-    def __init__(self,
-        id: str,
-        service: str,
-        session: dict,
-        name: str,
-        count: int,
-        limit: int,
-        favorited: bool,
-        artist: dict,
-        display_data: Callable[[dict], Dict[str, str]],
-        dm_count: int
-    ) -> None:
-        super().__init__("posts")
-        self.id = id 
-        self.service = service 
-        self.session = session 
-        self.name = name 
-        self.count = count 
-        self.limit = limit 
-        self.favorited = favorited 
-        self.artist = artist 
-        self.display_data = display_data
-        self.dm_count = dm_count
+    currentPage = "posts"
+    id: str
+    service: str
+    session: Dict
+    name: str
+    count: int
+    limit: int
+    favorited: bool
+    artist: Dict
+    display_data: Callable[[Dict], Dict[str, str]]
+    dm_count: int
 
+
+@dataclass
 class ArtistDMsProps(PageProps):
-    def __init__(self,
-        id: str,
-        service: str,
-        session: dict,
-        artist: dict,
-        display_data: Callable[[dict], Dict[str, str]],
-        dms: List[DM]
-    ) -> None:
-        super().__init__("dms")
-        self.id = id 
-        self.service = service 
-        self.session = session 
-        self.artist = artist 
-        self.display_data = display_data
-        self.dms = dms
+    currentPage = "dms"
+    id: str
+    service: str
+    session: Dict
+    artist: Dict
+    display_data: Callable[[Dict], Dict[str, str]]
+    dms: List[Approved_DM]

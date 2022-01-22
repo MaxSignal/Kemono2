@@ -16,7 +16,7 @@
   <header class="site-section__header">
     <h1 class="site-section__heading">Importer logs for {{ props.import_id }}</h1>
   </header>
-  {% if props.dms %}
+  {% if props.is_dms %}
     <div class="jumbo no-posts">
       <strong>Hey!</strong>
       <p>
@@ -40,17 +40,16 @@
         {{ button('Reverse order', class_name='import__reverse') }}
       </div>
     </div>
-    
+
     <p class="loading-placeholder">
     {{ loading_icon() }} <span>Wait until logs load...</span>
     </p>
     <ol id="log-list" class="log-list">
     </ol>
-    
   </div>
 </section>
 {% endblock content %}
-  
+
 {% block components %}
   {{ log_item() }}
 {% endblock components %}

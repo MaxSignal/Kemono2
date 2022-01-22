@@ -3,6 +3,8 @@ import { addFavouritePost, removeFavouritePost, findFavouritePost } from "@wp/js
 import { LoadingIcon, registerMessage, showTooltip } from "@wp/components";
 import { createComponent } from "@wp/js/component-factory";
 import { isLoggedIn } from "@wp/js/account";
+import { isAntiscraperLink } from "@wp/lib/antiantiscraper.js";
+import { AntiscraperLink } from "@wp/components";
 
 const meta = {
   service: null,
@@ -57,16 +59,22 @@ function cleanupBody(postBody) {
     // remove paragraphs with only `<br>` in them
     const paragraphs = postContent.querySelectorAll("p");
     paragraphs.forEach((para) => {
-      if (para.childElementCount === 1 && para.firstElementChild.tagName === "BR" ) {
+      if (para.childElementCount === 1 && para.firstElementChild.tagName === "BR") {
         para.remove();
       }
     });
   }
 
-  Array.from(document.links).forEach((link) => {
+  Array.from(document.links).forEach((anchour) => {
     // remove links to fanbox from the post
-    if (link.href.startsWith("https://downloads.fanbox.cc")) {
-      link.remove();
+    if (anchour.hostname.includes("downloads.fanbox.cc")) {
+      anchour.remove();
+    }
+
+    // replace antiscraper links
+    if (isAntiscraperLink(anchour.href)) {
+      const antiscraperAnchour = AntiscraperLink({ url: anchour.href, text: anchour.textContent });
+      anchour.replaceWith(antiscraperAnchour);
     }
   });
 
@@ -171,7 +179,7 @@ function handleFlagging(service, user, postID) {
       button.disabled = false;
       button.classList.remove("post__flag--loading");
     }
-  }
+  };
 }
 
 /**
@@ -228,7 +236,7 @@ function handleFavouriting(service, user, postID) {
       button.disabled = false;
       button.classList.remove("post__fav--loading");
     }
-  }
+  };
 }
 
 // expander.js

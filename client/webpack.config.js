@@ -26,9 +26,10 @@ const webpackConfig = {
   },
   plugins: [
     ...pagePlugins,
+    // https://webpack.js.org/plugins/define-plugin/
     new DefinePlugin({
-      "BUNDLER_ENV_KEMONO_SITE": JSON.stringify(kemonoSite),
-      "BUNDLER_ENV_NODE_ENV": JSON.stringify(nodeEnv),
+      BUNDLER_ENV_KEMONO_SITE: JSON.stringify(kemonoSite),
+      BUNDLER_ENV_NODE_ENV: JSON.stringify(nodeEnv),
     }),
     new CopyWebpackPlugin({
       patterns: [
@@ -44,6 +45,8 @@ const webpackConfig = {
     alias: {
       ["@wp/pages"]: path.join(projectPath, "pages", "_index.js"),
       ["@wp/components"]: path.join(projectPath, "pages", "components", "_index.js"),
+      ["@wp/env"]: path.join(projectPath, "env"),
+      ["@wp/lib"]: path.join(projectPath, "lib"),
       ["@wp/js"]: path.join(projectPath, "js"),
       ["@wp/css"]: path.join(projectPath, "css"),
       ["@wp/assets"]: path.join(projectPath, "assets"),

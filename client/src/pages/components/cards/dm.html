@@ -1,72 +1,65 @@
+{% from 'components/cards/base.html' import card, card_header, card_body, card_footer %}
 {% from 'components/timestamp.html' import timestamp %}
 {% from 'components/links.html' import fancy_link %}
 {% from 'components/fancy_image.html' import fancy_image, background_image %}
 
-{% macro dm_card(
-  dm,
-  is_private=false,
-  is_global=false,
-  artist={},
-  class_name=none
+{% macro unapproved_dm_card(dm) %}
+{% call card(
+  class = "dm-card",
+  data_id= dm.id,
+  **kwargs
 ) %}
   {% set service = g.paysites[dm.service] %}
   {% set artist_link = service.user.profile(dm.user) %}
   {% set user_link = g.freesites.kemono.user.profile(dm.service, dm.user) %}
+  {% call card_header() %}
+    {% call fancy_link(
+      url=artist_link,
+      class_name='dms__user-link'
+    ) %}
+      <span>{{ dm.user }}</span> (<span>{{ service.title }}</span>)
+    {% endcall %}
+  {% endcall %}
 
-  <article
-    class="dm-card {{ class_name if class_name }}"
-    {% if is_private %}
-      data-id="{{ dm.id }}"
+  {# writing it like this so there wouldn't be whitespaces/newlines in the output #}
+  {% call card_body(tabindex="0") %}<pre>{{ dm.content }}</pre>{% endcall %}
+
+  {% call card_footer() %}
+    Published: {{ timestamp(dm.published) }}
+  {% endcall %}
+{% endcall %}
+{% endmacro %}
+
+{% macro approved_dm_card(dm, artist=none) %}
+{% call card(class="dm-card", **kwargs) %}
+  {% set service = g.paysites[dm.service] %}
+  {% set artist_link = service.user.profile(dm.user) %}
+  {% set user_link = g.freesites.kemono.user.profile(dm.service, dm.user) %}
+
+  {% call card_header() %}
+    {% if artist %}
+      {% call fancy_link(url=user_link, class_name="dm-card__icon") %}
+        {{ fancy_image('/icons/' ~ artist.service ~ '/' ~ artist.id) }}
+      {% endcall %}
+
+      {% call fancy_link(url=user_link) %}
+        <span class="dm-card__user">{{ artist.name }}</span>
+      {% endcall %}
+    {% else %}
+      {% call fancy_link(
+        url=user_link,
+        class_name='dms__user-link'
+      ) %}
+        <span class="dm-card__user">{{ dm.user }}</span> <span class="dm-card__service">({{ service.title }})</span>
+      {% endcall %}
     {% endif %}
-  >
-    {% if is_global %}
-      {% if artist %}
-        <header class="dm-card__header">
-          {% call fancy_link(url=user_link, class_name="dm-card__icon") %}
-            {{ fancy_image('/icons/' ~ artist.service ~ '/' ~ artist.id) }}
-          {% endcall %}
+  {% endcall %}
 
-          {% call fancy_link(url=user_link) %}
-            <span class="dm-card__user">{{ artist.name }}</span>
-          {% endcall %}
-        </header>
-      {% else %}
-        <header class="dm-card__header">
-          {% call fancy_link(
-            url=user_link,
-            class_name='dms__user-link'
-          ) %}
-            <span class="dm-card__user">{{ dm.user }}</span> <span class="dm-card__service">({{ service.title }})</span>
-          {% endcall %}
-        </header>
-      {% endif %}
-    {% endif %}
+  {# writing it like this so there wouldn't be whitespaces/newlines in the output #}
+  {% call card_body(tabindex="0") %}<pre>{{ dm.content }}</pre>{% endcall %}
 
-    {% if is_private %}
-      <header class="dm-card__header">
-        {% call fancy_link(
-          url=artist_link,
-          class_name='dms__user-link'
-        ) %}
-          <span class="dm-card__user">{{ dm.user }}</span> <span class="dm-card__service">({{ service.title }})</span>
-        {% endcall %}
-      </header>
-    {% endif %}
-
-    <section class="dm-card__body" tabindex="0">
-      {# writing it like this so there wouldn't be whitespaces/newlines in the output #}
-      <div class="dm-card__content"><pre>{{ dm.content }}</pre></div>
-    </section>
-
-    <footer class="dm-card__footer">
-      {% if is_private %}
-        <div class="dm-card__published">
-          Published: {{ timestamp(dm.published) }}
-        </div>
-      {% endif %}
-      <div class="dm-card__added">
-        Added: {{ timestamp(dm.added) }}
-      </div>
-    </footer>
-  </article>
+  {% call card_footer() %}
+    Added: {{ timestamp(dm.added) }}
+  {% endcall %}
+{% endcall %}
 {% endmacro %}

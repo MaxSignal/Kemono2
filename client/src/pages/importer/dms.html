@@ -1,6 +1,6 @@
 {% extends 'components/shell.html' %}
 
-{% from 'components/cards/dm.html' import dm_card %}
+{% from 'components/cards/dm.html' import unapproved_dm_card %}
 
 {% block title %}
   <title>Approve DMs for import to Kemono.</title>
@@ -11,7 +11,7 @@
 {% endblock meta %}
 
 {% block content %}
-<section 
+<section
   class="site-section site-section--importer-dms"
 >
   <header class="site-section__header">
@@ -25,23 +25,20 @@
   {% if props.dms %}
     <form
       id="dm-approval"
-      class="form form--bigger dms" 
+      class="form form--bigger dms"
       method="POST"
     >
       {% for dm in props.dms %}
         <div class="form__section dms__dm">
-          <input 
+          <input
             id="{{ dm.id }}"
             class="dms__check"
-            type="checkbox" 
+            type="checkbox"
             name="approved_ids"
             value="{{ dm.id }}"
           >
           <div class="dms__content">
-            {{ dm_card(dm,
-              is_private=true, 
-              class_name='dms__card'
-            ) }}
+            {{ unapproved_dm_card(dm, class='dms__card') }}
             <label class="dms__approve" for="{{ dm.id }}">
               Approve
             </label>
@@ -50,8 +47,8 @@
       {% endfor %}
 
       <div class="form__section">
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           class="form__button form__button--submit"
         >
           Submit approved DMs.

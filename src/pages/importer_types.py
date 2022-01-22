@@ -1,24 +1,23 @@
-from typing import Optional, List
-from ..types.kemono import DM
+from dataclasses import dataclass
+from typing import List
 
-class StatusPageProps:
-    def __init__(self, 
-        current_page: str,
-        import_id: str,
-        dms: Optional[List[DM]]
-    ) -> None:
-        self.current_page = current_page
-        self.import_id = import_id
-        self.dms = dms
+from src.internals.types import PageProps
+from src.types.kemono import Unapproved_DM
 
-class DMPageProps:
-    def __init__(self, 
-        current_page: str,
-        import_id: str,
-        account_id: str,
-        dms: Optional[List[DM]]
-    ) -> None:
-        self.current_page = current_page
-        self.import_id = import_id
-        self.dms = dms
-        self.account_id = account_id
+
+@dataclass
+class ImportProps(PageProps):
+    currentPage = "import"
+
+
+@dataclass
+class StatusPageProps(ImportProps):
+    import_id: str
+    is_dms: bool
+
+
+@dataclass
+class DMPageProps(ImportProps):
+    import_id: str
+    account_id: int
+    dms: List[Unapproved_DM]

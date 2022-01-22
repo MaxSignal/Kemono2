@@ -2,15 +2,13 @@
 
 {% from 'components/headers.html' import user_header %}
 {% from 'components/card_list.html' import card_list %}
-{% from 'components/cards/dm.html' import dm_card %}
+{% from 'components/cards/dm.html' import approved_dm_card %}
 
 {% set paysite = g.paysites[props.service] %}
 {% set page_title = 'DMs of ' ~ props.artist.name ~ ' from ' ~ paysite.title ~ ' | Kemono' %}
 
 {% block title %}
-  <title>
-    {{ page_title }}
-  </title>
+  <title>{{ page_title }}</title>
 {% endblock title %}
 
 {% block meta %}
@@ -34,7 +32,7 @@
 
   {% call card_list("phone") %}
     {% for dm in props.dms %}
-      {{ dm_card(dm) }}
+      {{ approved_dm_card(dm) }}
     {% else %}
       <div class="no-results">
         <h2 class="site-section__subheading">Nobody here but us chickens!</h1>
