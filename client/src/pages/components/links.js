@@ -1,3 +1,4 @@
+import { KEMONO_SITE } from "@wp/env/env-vars.js"
 import { createComponent } from "@wp/js/component-factory";
 
 /**
