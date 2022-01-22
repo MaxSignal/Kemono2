@@ -125,9 +125,6 @@ def get_importer_logs(import_id: str):
 ### API ###
 @importer_page.route('/api/import', methods=['POST'])
 def importer_submit():
-    host = getenv('ARCHIVERHOST')
-    port = getenv('ARCHIVERPORT') if getenv('ARCHIVERPORT') else '8000'
-
     if not session.get('account_id') and request.form.get("save_dms"):
         return 'You must be logged in to import direct messages.', 401
     
