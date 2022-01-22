@@ -14,7 +14,7 @@ from src.lib.post import (get_all_posts_by_artist, get_artist_posts,
                           get_render_data_for_posts, is_post_flagged)
 from src.utils.utils import (limit_int, offset, parse_int, sort_dict_list_by,
                              take)
-
+from src.internals.database.database import get_cursor
 from .artists_types import ArtistDMsProps, ArtistPageProps
 
 artists = Blueprint('artists', __name__)
