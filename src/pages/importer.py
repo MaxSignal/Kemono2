@@ -1,6 +1,5 @@
 import json
 from datetime import datetime
-from os import getenv
 
 from flask import (Blueprint, current_app, g, make_response, render_template,
                    request, session)
