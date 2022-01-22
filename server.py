@@ -4,11 +4,10 @@ import re
 from datetime import timedelta
 from os import getenv
 from os.path import dirname, join
-from threading import Lock
 from urllib.parse import urljoin
 
 from dotenv import load_dotenv
-from flask import Flask, abort, g, redirect, render_template, request, session
+from flask import Flask, g, render_template, request, session
 
 import src.internals.cache.redis as redis
 import src.internals.database.database as database
@@ -17,7 +16,7 @@ from src.internals.cache.flask_cache import cache
 from src.lib.ab_test import get_all_variants
 from src.lib.account import is_logged_in, load_account
 from src.lib.notification import count_new_notifications
-from src.blueprints import api, pages
+from src.blueprints import pages
 from src.pages.account import account
 from src.pages.artists import artists
 from src.pages.dms import dms
@@ -29,6 +28,8 @@ from src.pages.post import post
 from src.pages.posts import posts
 from src.pages.random import random
 from src.types.account import Account
+from src.pages.support import support
+from src.pages.dmca import dmca
 from src.utils.utils import (
     freesites,
     paysite_list,
@@ -38,32 +39,6 @@ from src.utils.utils import (
 )
 
 load_dotenv(join(dirname(__file__), '.env'))
-from flask import Flask, render_template, request, redirect, g, abort, session
-
-import src.internals.database.database as database
-import src.internals.cache.redis as redis
-from configs.derived_vars import is_development
-from src.internals.cache.flask_cache import cache
-from src.types.account import Account
-from src.lib.ab_test import get_all_variants
-from src.lib.account import is_logged_in, load_account
-from src.lib.notification import count_new_notifications
-from src.utils.utils import url_is_for_non_logged_file_extension, render_page_data, paysites, paysite_list, freesites
-
-from src.pages.home import home
-from src.pages.legacy import legacy
-from src.pages.artists import artists
-from src.pages.random import random
-from src.pages.post import post
-from src.pages.posts import posts
-from src.pages.account import account
-from src.pages.dms import dms
-from src.pages.favorites import favorites
-from src.pages.help import help_app
-from src.pages.proxy import proxy_app
-from src.pages.support import support
-from src.pages.importer import importer_page
-from src.pages.dmca import dmca
 
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -123,6 +98,7 @@ redis.init()
 
 app.config['ENABLE_PASSWORD_VALIDATOR'] = True
 app.config['ENABLE_LOGIN_RATE_LIMITING'] = True
+
 
 @app.before_request
 def do_init_stuff():
