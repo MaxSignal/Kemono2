@@ -40,6 +40,8 @@
 
     & > * {
       flex: 0 1 var(--card-size);
+      // fix for `<pre>` in grid cards not honoring the width limit       
+      grid-template-columns: var(--card-size);
     } 
   }
 

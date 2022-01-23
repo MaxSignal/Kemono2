@@ -175,10 +175,10 @@ def url_is_for_non_logged_file_extension(path):
             return True
     return False
 
-def sort_dict_list_by(l, key, reverse = False):
-    return sorted(l, key=lambda v: v[key], reverse=reverse)
+def sort_dict_list_by(list_var, key, reverse=False):
+    return sorted(list_var, key=lambda v: (v[key] is None, v[key]), reverse=reverse)
 
-def restrict_value(value, allowed, default = None):
+def restrict_value(value, allowed, default=None):
     if value not in allowed:
         return default
     return value

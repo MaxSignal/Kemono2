@@ -55,14 +55,14 @@
       </h1>
       
       <div class="user-header__actions">
-        {% if props.current_page == 'dms' %}
+        {% if props.currentPage == 'dms' %}
           {{ fancy_link(
             url= g.freesites.kemono.user.profile(props.service, props.id),
             text= 'Posts',
             is_noop= false,
             class_name= 'user-header__posts'
           ) }}
-        {% elif props.current_page == 'posts' and props.dm_count != 0 %}
+        {% elif props.currentPage == 'posts' and props.dm_count != 0 %}
           {{ fancy_link(
             url= request.path ~ "/dms",
             text= "DMs",

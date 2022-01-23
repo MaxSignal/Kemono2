@@ -56,7 +56,7 @@
   {% endcall %}
 
   {# writing it like this so there wouldn't be whitespaces/newlines in the output #}
-  {% call card_body(tabindex="0") %}<pre>{{ dm.content }}</pre>{% endcall %}
+  {% call card_body(class="dm-card__body", tabindex="0") %}<pre>{{ dm.content }}</pre>{% endcall %}
 
   {% call card_footer() %}
     Added: {{ timestamp(dm.added) }}

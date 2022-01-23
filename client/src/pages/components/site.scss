@@ -1,7 +1,7 @@
 @use "../../css/variables" as *;
 
 .site-section {
-  max-width: 1280px;
+  max-width: calc(1440px + 2em);
   margin: 0 auto;
 
   &__header {
