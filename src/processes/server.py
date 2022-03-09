@@ -42,8 +42,8 @@ load_dotenv(join(dirname(__file__), '.env'))
 
 app = Flask(
     __name__,
-    static_folder='dist/static',
-    template_folder='dist/pages'
+    static_folder='client/dev/static',
+    template_folder='client/dev/pages'
 )
 
 app.url_map.strict_slashes = False
@@ -65,7 +65,12 @@ if (is_development):
     app.register_blueprint(development)
 
 
-app.config.from_pyfile('flask.cfg')
+app.config.update(
+    CACHE_TYPE='simple',
+    CACHE_DEFAULT_TIMEOUT=60,
+    SECRET_KEY='lolololololololol',
+    SESSION_REFRESH_EACH_REQUEST=False
+)
 app.jinja_options = dict(
     trim_blocks=True,
     lstrip_blocks=True
