@@ -33,12 +33,14 @@ Key	Type	Description
 `enabled`	Boolean	If `true`, the webserver will be enabled.
 `secret_key`	String	The encryption key that will be used for session cookies. Make sure to make it random, secure, and reasonably long.
 `workers`	Integer	The number of threads the webserver will use.
+`port`	Integer	The port the frontend will run on.
 --->
 **Key**|**Type**|**Description**
 :-----:|:-----:|:-----:
 `enabled`|Boolean|If `true`, the webserver will be enabled.
 `secret_key`|String|The encryption key that will be used for session cookies. Make sure to make it random, secure, and reasonably long.
 `workers`|Integer|The number of threads the webserver will use.
+`port`|Integer|The port the frontend will run on.
 
 ## Archiver
 <!---
