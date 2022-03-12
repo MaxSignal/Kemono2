@@ -11,9 +11,9 @@
     "archiver": {
         "enabled": true,
         "proxies": [],
-        "ban_prefix": "",
-        "public_key": "",
-        "salt": "",
+        "ban_prefix": null,
+        "public_key": null,
+        "salt": null,
         "queue_limit": 200
     },
     "database": {
