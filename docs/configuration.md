@@ -48,7 +48,7 @@ Key	Type	Description
 `enabled`	Boolean	If `true`, the archiver will be enabled.
 `proxies`	Array of strings	If the array is not empty, the proxy URLs specified will be used at random for downloads and API calls. Tested to work with HTTP and SOCKS5 - other protocols might work, maybe?
 `ban_prefix`	String	If a prefix URL (example: `http://10.0.0.1:8313`) is specified, the archiver will send HTTP `BAN` requests towards it as needed to clear caches, ensuring updates are visible on the frontend. 
-`public_key`	String	Public RSA encryption key for auto-imports and debug contributions. Assuming you have OpenSSL installed, a new key can be generated with the command `openssl genrsa -out privatekey.txt 4096 && openssl rsa -in privatekey.txt -pubout -out publickey && cat publickey`. Using 4096-bit keys are recommended.
+`public_key`	String	Public RSA encryption key for auto-imports and debug contributions. Assuming you have OpenSSL installed, a new key can be generated with the command `openssl genrsa -out privatekey.txt 4096 && openssl rsa -in privatekey.txt -pubout -out publickey && cat publickey`. Using 4096-bit keys are recommended. You'll probably need to flatten out your key - `awk 'NR>2 { sub(/\r/, ""); printf "%s",last} { last=$0 }' publickey`
 `salt`	String	A static salt used during auto-import to hash keys. Set it to a secure string once and never again, or you will begin to encounter issues.
 `queue_limit`	Integer	The maximum amount of imports that can run at once.
 --->
@@ -57,7 +57,7 @@ Key	Type	Description
 `enabled`|Boolean|If `true`, the archiver will be enabled.
 `proxies`|Array of strings|If the array is not empty, the proxy URLs specified will be used at random for downloads and API calls. Tested to work with HTTP and SOCKS5 - other protocols might work, maybe?
 `ban_prefix`|String|If a prefix URL (example: `http://10.0.0.1:8313`) is specified, the archiver will send HTTP `BAN` requests towards it as needed to clear caches, ensuring updates are visible on the frontend. 
-`public_key`|String|Public RSA encryption key for auto-imports and debug contributions. Assuming you have OpenSSL installed, a new key can be generated with the command `openssl genrsa -out privatekey.txt 4096 && openssl rsa -in privatekey.txt -pubout -out publickey && cat publickey`. Using 4096-bit keys are recommended.
+`public_key`|String|Public RSA encryption key for auto-imports and debug contributions. Assuming you have OpenSSL installed, a new key can be generated with the command `openssl genrsa -out privatekey.txt 4096 && openssl rsa -in privatekey.txt -pubout -out publickey && cat publickey`. Using 4096-bit keys are recommended. You'll probably need to flatten out your key - `awk 'NR>2 { sub(/\r/, ""); printf "%s",last} { last=$0 }' publickey`
 `salt`|String|A static salt used during auto-import to hash keys. Set it to a secure string once and never again, or you will begin to encounter issues.
 `queue_limit`|Integer|The maximum amount of imports that can run at once.
 
