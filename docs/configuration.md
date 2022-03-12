@@ -24,8 +24,8 @@ Key	Type	Description
 **Key**|**Type**|**Description**
 :-----:|:-----:|:-----:
 `site`|String|The URL at which your instance will reside.
-`development\_mode`|Boolean|If `true`, this instance will run in development mode, enabling certain niceties like hot reloading. This should be disabled in production instances.
-`download\_directory`|String|The directory the webserver will serve files from, and the one the archiver will download to.
+`development_mode`|Boolean|If `true`, this instance will run in development mode, enabling certain niceties like hot reloading. This should be disabled in production instances.
+`download_directory`|String|The directory the webserver will serve files from, and the one the archiver will download to.
 
 ## Webserver
 <!---
@@ -37,7 +37,7 @@ Key	Type	Description
 **Key**|**Type**|**Description**
 :-----:|:-----:|:-----:
 `enabled`|Boolean|If `true`, the webserver will be enabled.
-`secret\_key`|String|The encryption key that will be used for session cookies. Make sure to make it random, secure, and reasonably long.
+`secret_key`|String|The encryption key that will be used for session cookies. Make sure to make it random, secure, and reasonably long.
 `workers`|Integer|The number of threads the webserver will use.
 
 ## Archiver
@@ -54,10 +54,10 @@ Key	Type	Description
 :-----:|:-----:|:-----:
 `enabled`|Boolean|If `true`, the archiver will be enabled.
 `proxies`|Array of strings|If the array is not empty, the proxy URLs specified will be used at random for downloads and API calls. Tested to work with HTTP and SOCKS5 - other protocols might work, maybe?
-`ban\_prefix`|String|If a prefix URL (example: `http://10.0.0.1:8313`) is specified, the archiver will send HTTP `BAN` requests towards it as needed to clear caches, ensuring updates are visible on the frontend. 
-`public\_key`|String|Public RSA encryption key for auto-imports and debug contributions. Assuming you have OpenSSL installed, a new key can be generated with the command `openssl genrsa -out privatekey.txt 4096 && openssl rsa -in privatekey.txt -pubout -out publickey && cat publickey`. Using 4096-bit keys are recommended.
+`ban_prefix`|String|If a prefix URL (example: `http://10.0.0.1:8313`) is specified, the archiver will send HTTP `BAN` requests towards it as needed to clear caches, ensuring updates are visible on the frontend. 
+`public_key`|String|Public RSA encryption key for auto-imports and debug contributions. Assuming you have OpenSSL installed, a new key can be generated with the command `openssl genrsa -out privatekey.txt 4096 && openssl rsa -in privatekey.txt -pubout -out publickey && cat publickey`. Using 4096-bit keys are recommended.
 `salt`|String|A static salt used during auto-import to hash keys. Set it to a secure string once and never again, or you will begin to encounter issues.
-`queue\_limit`|Integer|The maximum amount of imports that can run at once.
+`queue_limit`|Integer|The maximum amount of imports that can run at once.
 
 ## Database
 <!---
