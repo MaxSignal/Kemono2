@@ -26,7 +26,7 @@
             class="form__option"
             value="{{ entry }}"
             {{ "selected" if loop.first }}
-            {{ "disabled" if entry == 'subscribestar' }}
+            {{ "disabled" if entry == 'subscribestar' or entry == 'patreon' }}
           >
             {{ paysite.title }}
           </option>
