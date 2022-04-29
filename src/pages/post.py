@@ -107,8 +107,10 @@ def get(service, artist_id, post_id):
             'a': ['href', 'title'],
             'abbr': ['title'],
             'acronym': ['title'],
-            'img': ['src']
+            'img': ['src'],
+            'span': ['style']
         },
+        styles=['font-weight'],
         strip=True
     )
     post['content'] = scrub.clean(post['content'])
