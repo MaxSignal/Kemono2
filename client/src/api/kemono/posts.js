@@ -1,5 +1,5 @@
 import { kemonoFetch } from "./kemono-fetch";
-import { KemonoError } from "@wp/utils";
+import { KemonoAPIError } from "@wp/utils";
 
 
 export const posts = {
@@ -17,7 +17,7 @@ async function attemptFlag(service, user, post_id) {
 
     if (!response || !response.ok) {
 
-      alert(new KemonoError(5));
+      alert(new KemonoAPIError(5));
       return false;
     }
 

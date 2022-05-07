@@ -1,0 +1,47 @@
+{
+	"folders": [
+		{
+			"name": "server",
+			"path": "."
+		},
+		{
+			"name": "client",
+			"path": "client"
+		},
+		{
+			"name": "archiver",
+			"path": "archiver"
+		},
+		{
+			"name": "docs",
+			"path": "docs"
+		}
+	],
+	"settings": {
+    "files.exclude": {
+			"venv/": true,
+			"dist/": true,
+			"client/": true,
+			"archiver/": true,
+			"docs/": true,
+		},
+    "editor.wordWrap": "bounded",
+		"editor.wordWrapColumn": 120,
+		"editor.rulers": [
+			{
+				"column": 65,
+				"color": "orange"
+			},
+			{
+				"column": 120,
+				"color": "red"
+			},
+		],
+		"files.associations": {
+			"*.html": "jinja-html"
+		},
+		"emmet.includeLanguages": {
+			"jinja-html": "html"
+		},
+	}
+}

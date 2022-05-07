@@ -1,6 +1,8 @@
 @use "../../../css/variables" as *;
 
 .dm-card {
+  // quick hack until the card business is figured out
+  grid-template-columns: var(--card-size);
 
   &__icon {
     display: inline-block;

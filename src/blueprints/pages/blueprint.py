@@ -9,7 +9,7 @@ from flask import (
     request
 )
 
-pages = Blueprint('api', __name__)
+pages = Blueprint('pages', __name__)
 
 
 @pages.get('/')

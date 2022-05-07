@@ -1,13 +1,13 @@
-export { KemonoError } from "./kemono-error";
+export { KemonoError, KemonoAPIError, KemonoValidationError } from "./kemono-error/_index.js";
 
 const defaultDelay = parseInt(document.documentElement.style.getPropertyValue("--duration-global"));
 
 /**
- * @param {string} name 
- * @param {string} url 
- * @returns 
+ * @param {string} name
+ * @param {string} url
+ * @returns
  */
-function getParameterByName (name, url) {
+function getParameterByName(name, url) {
   if (!url) url = window.location.href;
   name = name.replace(/[[]]/g, '\\$&');
   var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
@@ -18,15 +18,15 @@ function getParameterByName (name, url) {
 }
 
 /**
- * @param {() => void} func 
- * @param {number} wait 
- * @param {boolean} immediate 
+ * @param {() => void} func
+ * @param {number} wait
+ * @param {boolean} immediate
  * @returns {void}
  */
-function debounce (func, wait, immediate) {
+function debounce(func, wait, immediate) {
   let timeout;
   return function () {
-    var context = this; 
+    var context = this;
     var args = arguments;
     var callNow = immediate && !timeout;
     clearTimeout(timeout);
@@ -41,10 +41,10 @@ function debounce (func, wait, immediate) {
 }
 
 /**
- * @param {number} time 
- * @returns 
+ * @param {number} time
+ * @returns
  */
-export function setTimeoutAsync(time=defaultDelay) {
+export function setTimeoutAsync(time = defaultDelay) {
   const timeOut = new Promise((resolve) => {
     setTimeout(resolve, time);
   });
@@ -65,8 +65,8 @@ export function fixImageLinks(imageElements) {
     const link = image.closest("a");
 
     if (
-      link 
-      // && !image.nextSibling 
+      link
+      // && !image.nextSibling
       // && !image.previousSibling
       // TODO: fix this later
       && !link.classList.contains("user-header__profile")
@@ -147,32 +147,39 @@ export const freesites = {
     title: "Kemono",
     user: {
       /**
-       * @param {string} service 
-       * @param {string} artistID 
+       * @param {string} service
+       * @param {string} artistID
        */
       profile: (service, artistID) => `/${service}/${service === 'discord' ? 'server' : 'user'}/${artistID}`,
       /**
-       * @param {string} service 
-       * @param {string} artistID 
+       * @param {string} service
+       * @param {string} artistID
        */
       icon: (service, artistID) => `/icons/${service}/${artistID}`,
     },
     post: {
       /**
-       * @param {string} service 
-       * @param {string} userID 
-       * @param {string} postID 
-       * @returns 
+       * @param {string} service
+       * @param {string} userID
+       * @param {string} postID
+       * @returns
        */
       link: (service, userID, postID) => `/${service}/user/${userID}/post/${postID}`
     }
-    
+
   }
 }
 
 /**
- * @param {number} time 
+ * @param {number} time
  */
 export function waitAsync(time) {
   return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+/**
+ * @param {string} str
+ */
+export function isLowerCase(str) {
+  return Boolean(str.match(/[0-9a-z]+/i))
 }

@@ -1,0 +1,68 @@
+{
+  "patreon": {
+    "title": "Patreon",
+    "origin": "https://www.patreon.com/",
+    "import_key": {
+      "description": "43 characters without newline, ascii",
+      "length": 43,
+      "examples": [
+        "O5pM2TIloxqT1111jw8zaNyYhlYT-hBIiQiSMSKZoBU"
+      ]
+    }
+  },
+  "fanbox": {
+    "title": "Pixiv Fanbox",
+    "origin": "https://www.fanbox.cc/",
+    "import_key": {
+      "description": "format is (int)_(string), ascii",
+      "pattern": "/^\\d+_\\w+$/i",
+      "examples": [
+        "6571950_ShK1NEyUucaaaaMeu5R31dc4nU0oFx8c",
+        "44303021_ez4MFtcAnODL1236SdFVnoG6GP3fizDe"
+      ]
+    }
+  },
+  "fantia": {
+    "title": "Fantia",
+    "origin": "https://fantia.jp",
+    "import_key": {
+      "description": "32 characters without newline, hex, lower",
+      "length": 32,
+      "encoding": "hex",
+      "examples": [
+        "faa67284c722229615100d5727986379"
+      ]
+    }
+  },
+  "gumroad": {
+    "title": "Gumroad",
+    "origin": "https://gumroad.com/",
+    "import_key": {
+      "min_length": 200,
+      "examples": [
+        "BbKTlILOYmfrb8FpG3tw%2BZW98a8M4atD7aC3c4Hh%2Bo2%2Bt%2FbY0J0DNUeUklAeEpjdXreTtLAk%2F2w9hO2XeuWCWFPL3VQhq8tqliFJfUZjbVMxLmdanmftPnkXJW%2BzeqV0qDyfhZuFhOYINirMWbrLzmYzULyycUNS%2FmJrJt6x70pkM4qycRID%2B0j8T3McswawR16iALQEsMoPXARrAmtklDCrkQuX7Ap7Xya3xOE5C10oE66ViZjICWWrmhV6wpfDXhsarm01V1J6iSIZ3IrcLFcW%2FgDx0jP6GuxEHUUI3iAjaEEXHV36W3lZpC9QJWYvbiW7RPYdqQbPQzQP%2FNhjRD4W%2BvdTxyEPv%2FJDmEU6x%2F8bU4dEFDuBbW%2BcbWD2gmRnGlORtH%2Fzf0YpUs9Et0fVuui7FibljQ75LgF%2Fe5%2BAUpx53Oh%2B%2BWyN12iCxpqcYTI07Gpbroa4tRNbiI1uk7FyIO2X1ZFd0fo%2Bbt7s6jBS%2FX119doQHmKFMCcWxIrF--Q4HyAzfF9nHUpnds--9SYlectRVu21LFXWBJAZnA%3D%3D"
+      ]
+    }
+  },
+  "subscribestar": {
+    "title": "SubscribeStar",
+    "origin": "https://www.subscribestar.com/",
+    "import_key": {
+      "description": "ascii",
+      "examples": [
+        "IgNXZmFYcE1texeYMUFpeG3oOEp5Snci--9c581a9c65029b938790c2f7999ee3eb182d51dd"
+      ]
+    }
+  },
+  "discord": {
+    "title": "Discord",
+    "origin": "https://discord.com/",
+    "import_key": {
+      "pattern": "/(mfa.[a-z0-9_-]{20,})|([a-z0-9_-]{23,28}.[a-z0-9_-]{6,7}.[a-z0-9_-]{27})/i",
+      "examples": [
+        "MjE0Nc0DMzMjkzkwNTM5MDA4.YW9lhQ.M075DeZKIV_f4xsFOXXo2FKf2W8",
+        "mfa.8nFtHCD9KcGfRDYojBcaVpadSE7T2omb8ouQ_6ixBbvuvzd1lmTKfEHc8F02A9kCsTeEb6chlzZYqkzjXLd1"
+      ]
+    }
+  }
+}
