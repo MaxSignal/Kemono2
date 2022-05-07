@@ -22,7 +22,7 @@ from src.pages.artists import artists
 from src.pages.dms import dms
 from src.pages.favorites import favorites
 from src.pages.help import help_app
-from src.pages.imports import imports
+from src.pages.importer import importer_page
 from src.pages.legacy import legacy
 from src.pages.post import post
 from src.pages.posts import posts
@@ -58,7 +58,7 @@ app = Flask(
 
 app.url_map.strict_slashes = False
 
-app.register_blueprint(api)
+# app.register_blueprint(api)
 app.register_blueprint(pages)
 app.register_blueprint(legacy)
 app.register_blueprint(artists)
@@ -70,8 +70,8 @@ app.register_blueprint(favorites)
 app.register_blueprint(support)
 app.register_blueprint(dms)
 app.register_blueprint(help_app, url_prefix='/help')
+app.register_blueprint(importer_page)
 app.register_blueprint(dmca)
-app.register_blueprint(imports)
 if (is_development):
     from src.dev_only import dev_only
     app.register_blueprint(dev_only)

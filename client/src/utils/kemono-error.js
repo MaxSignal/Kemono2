@@ -1,5 +1,3 @@
-import { KemonoError } from "./base.js";
-
 const errorList = {
   0: "Could not connect to server.",
   1: "Could not favorite post.",
@@ -12,7 +10,7 @@ const errorList = {
   8: "Could not retrieve artists.",
 };
 
-export class KemonoAPIError extends KemonoError {
+export class KemonoError extends Error {
   /**
    * @param {number} code 
    */
@@ -22,4 +20,4 @@ export class KemonoAPIError extends KemonoError {
     this.code = String(code).padStart(3, "0");
     this.message = `${this.name} ${this.code}: ${errorList[code]}`;
   }
-}
+};

@@ -1,13 +1,30 @@
-from flask import Blueprint, request, make_response, render_template, redirect, flash, url_for
+from flask import Blueprint, request, make_response, render_template, session, redirect, flash, url_for, current_app, jsonify
 
-from src.utils.utils import make_cache_key, get_value, restrict_value, sort_dict_list_by, take, offset, parse_int
-from src.lib.account import load_account
-from src.lib.favorites import get_favorite_artists, get_favorite_posts, add_favorite_post, add_favorite_artist, remove_favorite_post, remove_favorite_artist
-from src.lib.security import is_password_compromised
-from src.internals.cache.flask_cache import cache
+from ..utils.utils import make_cache_key, get_value, restrict_value, sort_dict_list_by, take, offset, parse_int
+from ..lib.account import load_account
+from ..lib.favorites import get_favorite_artists, get_favorite_posts, add_favorite_post, add_favorite_artist, remove_favorite_post, remove_favorite_artist, get_posts_by_favorited_artists
+from ..lib.security import is_password_compromised
+from ..internals.cache.flask_cache import cache
 
 favorites = Blueprint('favorites', __name__)
 
+@favorites.route('/api/favorites', methods=['GET'])
+def api_list():
+    account = load_account()
+    if account is None:
+        return "", 401
+
+    favorites = []
+    fave_type = get_value(request.args, 'type', 'artist')
+    if fave_type == 'post':
+        favorites = get_favorite_posts(account['id'])
+    else:
+        favorites = get_favorite_artists(account['id'])
+
+    results = favorites
+    response = make_response(jsonify(results), 200)
+    response.headers['Cache-Control'] = 's-maxage=60'
+    return response
 
 @favorites.route('/favorites', methods=['GET'])
 def list():
@@ -43,14 +60,37 @@ def list():
 
     response = make_response(render_template(
         'favorites.html',
-        props=props,
-        base=base,
-        source='account',
-        results=results,
+        props = props,
+        base = base,
+        results = results,
     ), 200)
     response.headers['Cache-Control'] = 's-maxage=60'
     return response
 
+@favorites.route('/favorites/posts', methods=['GET'])
+def get_favorite_artist_posts():
+    account = load_account()
+    if account is None:
+        flash('We now support accounts! Register for an account and your current favorites will automatically be added to your account.')
+        return redirect(url_for('account.get_login'))
+
+    props = {
+        'currentPage': 'favorite_artist_posts'
+    }
+    base = request.args.to_dict()
+    base.pop('o', None)
+
+    offset = parse_int(request.args.get('o'), 0)
+
+    favorites = get_posts_by_favorited_artists(account['id'], offset)
+    response = make_response(render_template(
+        'posts.html',
+        props = props,
+        base = base,
+        results = favorites,
+    ), 200)
+    response.headers['Cache-Control'] = 's-maxage=60'
+    return response
 
 @favorites.route('/favorites/post/<service>/<artist_id>/<post_id>', methods=['POST'])
 def post_favorite_post(service, artist_id, post_id):
@@ -60,7 +100,6 @@ def post_favorite_post(service, artist_id, post_id):
     add_favorite_post(account['id'], service, artist_id, post_id)
     return '', 200
 
-
 @favorites.route('/favorites/artist/<service>/<artist_id>', methods=['POST'])
 def post_favorite_artist(service, artist_id):
     account = load_account()
@@ -68,7 +107,6 @@ def post_favorite_artist(service, artist_id):
         return redirect(url_for('account.get_login'))
     add_favorite_artist(account['id'], service, artist_id)
     return '', 200
-
 
 @favorites.route('/favorites/post/<service>/<artist_id>/<post_id>', methods=['DELETE'])
 def delete_favorite_post(service, artist_id, post_id):
@@ -78,7 +116,6 @@ def delete_favorite_post(service, artist_id, post_id):
     remove_favorite_post(account['id'], service, artist_id, post_id)
     return '', 200
 
-
 @favorites.route('/favorites/artist/<service>/<artist_id>', methods=['DELETE'])
 def delete_favorite_artist(service, artist_id):
     account = load_account()
@@ -86,7 +123,6 @@ def delete_favorite_artist(service, artist_id):
         return redirect(url_for('account.get_login'))
     remove_favorite_artist(account['id'], service, artist_id)
     return '', 200
-
 
 def sort_and_filter_favorites(favorites, o, field, asc):
     favorites = sort_dict_list_by(favorites, field, not asc)

@@ -1,4 +1,4 @@
-import { KemonoAPIError } from "@wp/utils";
+import { KemonoError } from "@wp/utils";
 import { kemonoFetch } from "./kemono-fetch";
 
 /**
@@ -48,7 +48,7 @@ async function favoriteArtist(service, userID) {
     );
 
     if (!response || !response.ok) {
-      alert(new KemonoAPIError(3));
+      alert(new KemonoError(3));
       return false;
     }
 
@@ -71,7 +71,7 @@ async function unfavoriteArtist(service, userID) {
     );
 
     if (!response || !response.ok) {
-      alert(new KemonoAPIError(4));
+      alert(new KemonoError(4));
       return false;
     }
 
@@ -110,7 +110,7 @@ async function retrieveFavoritePosts() {
     });
 
     return JSON.stringify(transformedFavs);
-
+    
   } catch (error) {
     console.error(error);
   }
@@ -129,7 +129,7 @@ async function favoritePost(service, user, post_id) {
     );
 
     if (!response || !response.ok) {
-      alert(new KemonoAPIError(1));
+      alert(new KemonoError(1));
       return false;
     }
 
@@ -153,7 +153,7 @@ async function unfavoritePost(service, user, post_id) {
     );
 
     if (!response || !response.ok) {
-      alert(new KemonoAPIError(2));
+      alert(new KemonoError(2));
       return false;
     }
 
