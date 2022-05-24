@@ -1,0 +1,4 @@
+[database]
+user = "nano"
+password = "shinonome"
+dbname = "kemonodb"

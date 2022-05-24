@@ -1,0 +1,13 @@
+{
+  "site": "http://localhost:6942",
+  "development_mode": true,
+  "database": {
+    "user": "nano",
+    "password": "shinonome",
+    "database": "kemonodb"
+  },
+  "webserver": {
+    "port": 6942,
+    "workers": 1
+  }
+}
