@@ -4,7 +4,7 @@ from re import compile as compile_regexp
 from typing import List, TypeVar, Generic
 
 T = TypeVar("T")
-max_length = 500
+max_length = 1024
 
 
 @dataclass
@@ -26,7 +26,7 @@ def patreonKey(key: str, errors: List[str]):
 
 def fanboxKey(key: str, errors: List[str]):
     key_length = len(key)
-    pattern_str = r"/^\d+_\w+$/i"
+    pattern_str = r"^\d+_\w+$"
     pattern = compile_regexp(pattern=pattern_str, flags=RegexFlag.IGNORECASE)
 
     if key_length > max_length:
@@ -39,11 +39,14 @@ def fanboxKey(key: str, errors: List[str]):
 
 
 def fantiaKey(key: str, errors: List[str]):
-    req_length = 32
+    req_lengths = [32, 64]
     key_length = len(key)
 
-    if key_length != req_length:
-        errors.append(f'The key length of "{key_length}" is not a valid Fantia key. Required length: "{req_length}".')
+    if not any(list(key_length != length for length in req_lengths)):
+        errors.append(
+            f'The key length of "{key_length}" is not a valid Fantia key. '
+            f'Accepted lengths: {", ".join(req_lengths)}.'
+        )
 
     if (not key.islower()):
         errors.append('The key is not in lower case.')
@@ -83,8 +86,8 @@ def dlsiteKey(key: str, errors: List[str]):
 
 
 def discordKey(key: str, errors: List[str]):
-    pattern_str = r"/(mfa.[a-z0-9_-]{20,})|([a-z0-9_-]{23,28}.[a-z0-9_-]{6,7}.[a-z0-9_-]{27})/i"
-    pattern = compile_regexp(pattern_str)
+    pattern_str = r"(mfa.[a-z0-9_-]{20,})|([a-z0-9_-]{23,28}.[a-z0-9_-]{6,7}.[a-z0-9_-]{27})"
+    pattern = compile_regexp(pattern_str, RegexFlag.IGNORECASE)
     key_length = len(key)
 
     if key_length > max_length:

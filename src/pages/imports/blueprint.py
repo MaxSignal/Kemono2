@@ -128,13 +128,13 @@ def get_importer_logs(import_id: str):
 # TODO: move into separate blueprint
 @importer_page.post('/api/import')
 def importer_submit():
-    key = request.form.get("session_key")
     if not session.get('account_id') and request.form.get("save_dms"):
         return 'You must be logged in to import direct messages.', 401
     
     if not request.form.get("session_key"):
         return "Session key missing.", 401
 
+    key = request.form.get("session_key").strip()
     result = validate_import_key(key, request.form.get("service"))
 
     if not result.is_valid:

@@ -80,10 +80,17 @@ function fanboxKey(key, errors) {
  * @type KeyValidator
  */
 function fantiaKey(key, errors) {
-  const reqLength = 32;
+  const reqLengths = [32, 64];
 
-  if (key.length !== reqLength) {
-    errors.push(`The key length of "${key.length}" is not a valid Fantia key. Required length: "${reqLength}".`)
+  if (
+    reqLengths
+      .map(reqLength => key.length !== reqLength)
+      .every(v => v === false)
+  ) {
+    errors.push(
+      `The key length of "${key.length}" is not a valid Fantia key. ` +
+      `Accepted lengths: ${reqLengths.join(', ')}.`
+    )
   }
 
   if (!isLowerCase(key)) {
