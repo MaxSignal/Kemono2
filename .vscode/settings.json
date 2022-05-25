@@ -1,4 +1,24 @@
 {
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "/json-schema/*.schema.json"
+      ],
+      "url": "/json-schema/_meta.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/json-schema/api/*.json"
+      ],
+      "url": "/json-schema/api.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/json-schema/paywalls.json"
+      ],
+      "url": "/json-schema/paywalls.schema.json"
+    },
+  ],
   "[json]": {
     "editor.tabSize": 2,
   },
@@ -18,7 +38,7 @@
     "--multi-line",
     "3"
   ],
-  "python.analysis.diagnosticSeverityOverrides":{
+  "python.analysis.diagnosticSeverityOverrides": {
     // flake8 already covers it
     "reportUndefinedVariable": "none",
   }

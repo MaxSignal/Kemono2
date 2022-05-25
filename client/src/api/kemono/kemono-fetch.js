@@ -26,10 +26,6 @@ import { isLoggedIn } from "@wp/js/account";
       return;
     }
 
-    if (response.redirected) {
-      location = addURLParam(response.url, "redir", location.pathname);
-    }
-
     return response;
 
   } catch (error) {

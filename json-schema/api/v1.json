@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "endpoints": {
+    "/account/favorites": {
+      "description": "A list of favorite artists/posts for an account.",
+      "method": "GET",
+      "search_params": ["type"],
+      "response": {
+        "200": {}
+      }
+    }
+  }
+}

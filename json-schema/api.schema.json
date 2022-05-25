@@ -1,0 +1,48 @@
+{
+  "title": "KemonoAPI",
+  "description": "API information of Kemono.",
+  "required": [
+    "version"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "The version of API."
+    },
+    "endpoints": {
+      "type": "object",
+      "additionalProperties": {
+        "title": "APIEndpoint",
+        "description": "Endpoint info",
+        "required": [
+          "method",
+          "description",
+          "response"
+        ],
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "search_params": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "request": {},
+          "response": {
+            "required": [
+              "200"
+            ],
+            "properties": {
+              "200": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}
