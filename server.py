@@ -16,7 +16,7 @@ from src.internals.cache.flask_cache import cache
 from src.lib.ab_test import get_all_variants
 from src.lib.account import is_logged_in, load_account
 from src.lib.notification import count_new_notifications
-from src.blueprints import pages
+from src.blueprints import pages, api
 from src.pages.account import account
 from src.pages.artists import artists
 from src.pages.dms import dms
