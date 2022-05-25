@@ -3,7 +3,7 @@ import { addFavouritePost, removeFavouritePost, findFavouritePost } from "@wp/js
 import { LoadingIcon, registerMessage, showTooltip } from "@wp/components";
 import { createComponent } from "@wp/js/component-factory";
 import { isLoggedIn } from "@wp/js/account";
-import { isAntiscraperLink } from "@wp/lib/antiantiscraper.js";
+import { isAntiscraperLink } from "@wp/lib";
 import { AntiscraperLink } from "@wp/components";
 
 const meta = {
