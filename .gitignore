@@ -158,3 +158,4 @@ cython_debug/
 flask.cfg
 kitsune.py
 redis_map.py
+.DS_Store
