@@ -14,7 +14,7 @@ import { isLowerCase } from "@wp/utils";
  * @returns {string[]} An array of error messages, if any.
  */
 
-const maxLength = 500;
+const maxLength = 1024;
 
 /**
  * @type {Record<string, KeyValidator>}
