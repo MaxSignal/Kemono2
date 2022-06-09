@@ -1,9 +1,0 @@
-{%- macro submit_button(text) -%}
-  <button
-    type="submit"
-    class="button form__button form__button--submit {{ kwargs.pop('class') if kwargs.class }}"
-    {% for attribute in kwargs %}
-      {{ attribute }}="{{kwargs[attribute]}}"
-    {% endfor %}
-  >{{ text if not caller else caller() }}</button>
-{%- endmacro -%}

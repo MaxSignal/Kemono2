@@ -59,9 +59,6 @@ def get_dms():
 
 
 def get_dm_page(offset: int, limit: int):  # noqa F811
-    # @REVIEW: TypeError: dict is not a sequence
-    # @RESPONSE: can't debug db queries until the test importer is fixed
-    # @RESPONSE: done
     posts = get_all_dms(offset, limit)
     total_count = get_all_dms_count()
     return (posts, total_count)

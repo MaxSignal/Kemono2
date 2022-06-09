@@ -1,22 +1,28 @@
-import ujson
-import copy
-import bcrypt
 import base64
+import copy
 import hashlib
-import dateutil
-import redis_lock
 import time
-from flask import session, current_app, flash
 from threading import Lock
-from bleach.sanitizer import Cleaner
-from ..internals.database.database import get_cursor
-from ..utils.utils import get_value
-from ..internals.cache.redis import get_conn, serialize_dict_list, deserialize_dict_list, KemonoRedisLock
-from ..lib.favorites import add_favorite_artist
-from ..lib.artist import get_artist
-from ..lib.security import is_login_rate_limited
-from src.types.account import Account, Service_Key
 from typing import Dict, List, Optional
+
+import bcrypt
+import ujson
+from bleach.sanitizer import Cleaner
+from dateutil import parser as dateParser
+from flask import current_app, flash, session
+
+from src.internals.cache.redis import (
+    KemonoRedisLock,
+    deserialize_dict_list,
+    get_conn,
+    serialize_dict_list
+)
+from src.internals.database.database import get_cursor
+from src.lib.artist import get_artist
+from src.lib.favorites import add_favorite_artist
+from src.lib.security import is_login_rate_limited
+from src.types.account import Account, Service_Key
+from src.utils.utils import get_value
 
 account_create_lock = Lock()
 
@@ -239,5 +245,5 @@ def prepare_account_fields(account):
 
 
 def rebuild_account_fields(account):
-    account['created_at'] = dateutil.parser.parse(account['created_at'])
+    account['created_at'] = dateParser.parse(account['created_at'])
     return account

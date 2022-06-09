@@ -59,8 +59,10 @@ def init():
 def get_conn():
     return cluster.get_routing_client()
 
+
 def scan_keys(pattern):
     return cluster.get_local_client_for_key(pattern).scan_iter(match=pattern, count=5000)
+
 
 def serialize_dict(data):
     to_serialize = {
@@ -98,3 +100,35 @@ def deserialize_dict_list(data):
     data = ujson.loads(data)
     to_return = list(map(lambda elem: deserialize_dict(elem), data))
     return to_return
+
+
+def create_key_constructor(namespace: str):
+    """
+    Creates a redis key constructor function for a given namespace.
+    """
+    def construct_key(*keys: str):
+        """
+        Filters out all falsy values in passed args
+        and joins them into a redis key string.
+        """
+        filtered_args = (key for key in keys if key)
+        key_string = ":".join((namespace, *filtered_args))
+        return key_string
+
+    return construct_key
+
+
+def create_counts_key_constructor(namespace: str):
+    """
+    Creates a `counts:` redis key constructor function for a given namespace.
+    """
+    def construct_counts_key(*keys: str):
+        """
+        Filters out all falsy values in passed args
+        and joins them into a redis `counts:` key string.
+        """
+        filtered_args = (key for key in keys if key)
+        key_string = ":".join(("counts", namespace, *filtered_args))
+        return key_string
+
+    return construct_counts_key

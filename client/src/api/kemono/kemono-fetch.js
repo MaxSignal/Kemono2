@@ -3,7 +3,7 @@ import { isLoggedIn } from "@wp/js/account";
 /**
  * Generic request for Kemono API.
  * @param {RequestInfo} endpoint
- * @param {RequestInit} options
+ * @param {RequestInit} [options]
  * @returns {Promise<Response>}
  */
  export async function kemonoFetch(endpoint, options) {

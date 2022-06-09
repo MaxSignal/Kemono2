@@ -1,0 +1,14 @@
+{% from 'components/forms/base.html' import form_section %}
+{% from 'components/buttons.html' import button %}
+{# jinja doesn't allow nested callable macros #}
+{# therefore none of these macros are callable #}
+
+{% macro form_button(title) %}
+  {# djlint: off #}
+  {% call form_section(**kwargs) %}
+    {% call button(class="form__button") %}
+      {{ title }}
+    {% endcall %}
+  {% endcall %}
+  {# djlint: on #}
+{% endmacro %}

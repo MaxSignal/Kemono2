@@ -160,8 +160,6 @@ def get_dms(service: str, artist_id: str):
         return redirect(url_for('artists.list'))
 
     dms = get_artist_dms(service, artist_id)
-    # @REVIEW: TypeError: __init__() got an unexpected keyword argument 'id'
-    # @RESPONSE: fixed
     props = ArtistDMsProps(
         id=artist_id,
         service=service,

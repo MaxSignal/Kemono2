@@ -33,6 +33,7 @@ from src.utils.utils import (
     freesites,
     paysite_list,
     paysites,
+    paysite_options,
     render_page_data,
     url_is_for_non_logged_file_extension
 )
@@ -92,6 +93,7 @@ def do_init_stuff():
     g.freesites = freesites
     g.paysite_list = paysite_list
     g.paysites = paysites
+    g.paysite_options = paysite_options
     g.origin = getenv("KEMONO_SITE")
     g.canonical_url = urljoin(getenv("KEMONO_SITE"), request.path)
     session.permanent = True

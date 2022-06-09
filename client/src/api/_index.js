@@ -1,2 +1,1 @@
-export { kemonoAPI } from "./kemono/_index";
-export { paysitesAPI } from "./paysites/_index";
+export { kemonoAPI, fetchArtists } from "./kemono/_index";

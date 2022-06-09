@@ -1,30 +1,21 @@
-import re
+import json
 import random
 import string
-import json
-import pytz
-from feedgen.feed import FeedGenerator
-from urllib.parse import urlencode
-from datetime import datetime, timedelta
-from os import getenv, stat, rename, makedirs
-from os.path import join, dirname, isfile, splitext, basename
-from shutil import move
+from datetime import datetime
+from os import getenv, makedirs
+from os.path import basename, join
 
-from PIL import Image
-from python_resumable import UploaderFlask
-from flask import Flask, jsonify, render_template, render_template_string, request, redirect, url_for, send_from_directory, make_response, g, abort, session, Blueprint
-from werkzeug.utils import secure_filename
-from slugify import slugify_filename
 import requests
-from markupsafe import Markup
 from bleach.sanitizer import Cleaner
-from hashlib import sha256
+from flask import Blueprint, jsonify, make_response, render_template, request
+from python_resumable import UploaderFlask
 
-from ..internals.database.database import get_cursor
-from ..internals.cache.flask_cache import cache
-from ..utils.utils import make_cache_key, relative_time, delta_key, allowed_file, limit_int
+from src.internals.cache.flask_cache import cache
+from src.internals.database.database import get_cursor
+from src.utils.utils import make_cache_key
 
 legacy = Blueprint('legacy', __name__)
+
 
 @legacy.route('/posts/upload')
 def upload_post():
@@ -145,15 +136,6 @@ def upload():
         "chunkUploadStatus": True,
         "resumableIdentifier": resumable.repo.file_id
     })
-
-
-@legacy.route('/api/creators')
-def creators():
-    cursor = get_cursor()
-    query = "SELECT * FROM lookup WHERE service != 'discord-channel'"
-    cursor.execute(query)
-    results = cursor.fetchall()
-    return make_response(jsonify(results), 200)
 
 
 @legacy.route('/api/bans')

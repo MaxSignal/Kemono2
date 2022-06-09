@@ -2,7 +2,7 @@
 
 .paginator {
   &__count {}
-  
+
   &__pages {
     display: flex;
     flex-flow: row nowrap;
@@ -16,7 +16,7 @@
     display: grid;
     min-width: 44px;
     min-height: 44px;
-    
+
     &--current {
       position: relative;
       flex: 0 1 var(--local-width);
@@ -50,5 +50,107 @@
 
   &__controller {
     display: none;
+  }
+}
+
+.paginator-client {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  max-width: $width-phone;
+  padding: $size-small 0;
+  margin: 0 auto;
+
+  &__info {
+    margin: 0;
+  }
+
+  &__pages {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    gap: 1em;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: $button-min-width;
+    min-height: $button-min-height;
+  }
+
+  &__selected-page {
+    position: relative;
+    max-width: var(--local-width, 3em);
+    padding: 0;
+    margin: 0;
+
+    & > * {
+      padding: 0;
+    }
+
+    &:focus-within {
+
+      & .paginator-client__subtract,
+      & .paginator-client__increase,
+      & .paginator-client__submit {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+
+  &__selected-input {
+
+    & label {
+      display: none;
+    }
+
+    & input {
+      text-align: center;
+
+      -moz-appearance: textfield;
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+    }
+  }
+
+  &__subtract {
+    position: absolute;
+    top: 0;
+    right: calc(100% + #{$size-normal});
+    visibility: hidden;
+    opacity: 0;
+
+    transition-duration: var(--duration-global);
+    transition-property: opacity, visibility;
+  }
+
+  &__increase {
+    position: absolute;
+    top: 0;
+    left: calc(100% + #{$size-normal});
+    visibility: hidden;
+    opacity: 0;
+
+    transition-duration: var(--duration-global);
+    transition-property: opacity, visibility;
+  }
+
+  &__submit {
+    position: absolute;
+    top: calc(100% + #{$size-normal});
+    visibility: hidden;
+    opacity: 0;
+
+    transition-duration: var(--duration-global);
+    transition-property: opacity, visibility;
   }
 }

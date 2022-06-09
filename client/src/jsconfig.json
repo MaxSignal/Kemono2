@@ -15,8 +15,9 @@
     },
     "target": "es6",
     "module": "es6",
-    "lib": ["dom", "dom.iterable"],
+    "lib": ["DOM", "DOM.Iterable", "ES7"],
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "checkJs": true
   }
 }

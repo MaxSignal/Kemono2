@@ -22,7 +22,7 @@ namespace KemonoAPI {
     faved_seq?: number
   }
 
-  interface User {
+  interface Artist {
     id: string
     name: string
     service: string
@@ -30,7 +30,7 @@ namespace KemonoAPI {
     updated: string
     faved_seq?: number
   }
-  
+
   interface Favorites {
     retrieveFavoriteArtists: () => Promise<string>,
     favoriteArtist: (service: string, id: string) => Promise<boolean>,
@@ -41,7 +41,7 @@ namespace KemonoAPI {
   }
 
   namespace Favorites {
-    interface User extends KemonoAPI.User {
+    interface User extends KemonoAPI.Artist {
     }
 
     interface Post {
@@ -58,7 +58,8 @@ namespace KemonoAPI {
   interface API {
     bans: () => Promise<API.BanItem[]>
     bannedArtist: (id:string, service:string) => Promise<API.BannedArtist>
-    creators: () => Promise<User[]>
+    creators: () => Promise<Artist[]>
+    artists: (page?: number, service?: string, name?: string) => Promise<Artist[]>
     logs: (importID: string) => Promise<API.LogItem[]>
   }
 
@@ -99,7 +100,7 @@ namespace Component {
     /**
      * Element to initiate the component from.
      */
-    element?: HTMLElement 
+    element?: HTMLElement
     className?: string
   }
 
@@ -108,7 +109,7 @@ namespace Component {
       interface Callback {
         (props: Props): HTMLLIElement
       }
-    
+
       interface Props extends Component.Props {
         element?: HTMLLIElement
         link: string

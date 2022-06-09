@@ -8,6 +8,7 @@ from flask import (
     render_template,
     request
 )
+from .search import search
 
 pages = Blueprint('pages', __name__)
 
@@ -51,3 +52,6 @@ def do_antiscraper_thing():
     except Exception as error:
         current_app.logger.exception(f'Couldn\'t bypass "{url}". Reason: {error}')
         return ('Error while trying to bypass the antiscraper link. The admins were notified of the problem.', 500)
+
+
+pages.register_blueprint(search)

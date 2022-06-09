@@ -1,67 +1,13 @@
-{% extends 'components/shell.html' %}
+{% extends "components/shell.html" %}
 
 {% from 'components/image_link.html' import image_link %}
 {% from 'components/card_list.html' import card_list %}
 {% from 'components/cards/user.html' import user_card, user_card_header, user_card_skeleton %}
 
 {% block content %}
-  <section 
+  <section
     class="site-section site-section--artists page" id="page"
   >
-    <div class="no-posts" id="loading">
-      <span class="subtitle">
-        Loading creator index... (please wait before searching)
-      </span>
-    </div>
-    <form
-      autocomplete="off"
-      id="search-form"
-      class="search-form"
-      novalidate="novalidate"
-      accept-charset="UTF-8"
-    >
-      <div>
-        <label for="q">Name</label>
-        <input
-          type="text"
-          name="q"
-          id="q"
-          autocomplete="off"
-        >
-        <small class="subtitle" style="margin-left: 5px;">Leave blank to list all</small>
-      </div>
-      <div>
-        <label for="service">Service</label>
-        <select id="service" name="service">
-          <option value="">All</option>
-          {% for paysite in g.paysite_list %}
-            <option value="{{ paysite }}">
-              {{ g.paysites[paysite].title }}
-            </option>
-          {% else %}
-          {% endfor %}
-        </select>
-      </div>
-      <div>
-        <label for="sort_by">Sort by</label>
-        <select id="sort_by" name="sort_by">
-          <option value="indexed" >Date Indexed</option>
-          <option value="name">Alphabetical Order</option>
-          <option value="service">Service</option>
-        </select>
-        <select id="order" name="order">
-          <option value="desc">Descending</option>
-          <option value="asc">Ascending</option>
-        </select>
-      </div>
-    </form>
-    {% if props.display %}
-      <div style="text-align: center;">
-        <h3 id="display-status" class="subtitle">
-          Displaying {{ props.display }}
-        </h3>
-      </div>
-    {% endif %}
     {% if results|length %}
       <div class="paginator" id="paginator-top">
         {% include 'components/paginator.html' %}
@@ -82,8 +28,8 @@
         {% include 'components/paginator.html' %}
       </div>
     {% endif %}
-  <section>
-{% endblock %}
+  </section>
+{% endblock content %}
 
 {% block components %}
   {{ image_link("") }}

@@ -20,7 +20,8 @@
   "javascript.preferences.quoteStyle": "double",
   "javascript.format.semicolons": "insert",
   "[jinja-html]": {
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "monosans.djlint"
   },
   "[javascript]": {
     "editor.tabSize": 2

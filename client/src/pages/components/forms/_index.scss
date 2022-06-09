@@ -1,4 +1,4 @@
-@use "../variables.scss" as *;
+@use "../../../css/variables.scss" as *;
 
 .form {
   max-width: $width-mobile;
@@ -17,8 +17,40 @@
     display: none;
   }
 
-  &__section,
+  &--submitting {
+    cursor: progress;
+    pointer-events: none;
+  }
+
   &__fieldset {
+    padding: 0;
+    border: none;
+
+    transition-duration: var(--duration-global);
+    transition-property: opacity, visibility;
+
+    &--optional {
+      & > *:not(.form__more) {
+        display: none;
+      }
+
+      &.form__fieldset--more {
+        & > * {
+          display: block;
+          padding-bottom: $size-normal;
+
+          &:last-child {
+            padding-bottom: $size-normal;
+          }
+        }
+        & > .form__more {
+          display: none;
+        }
+      }
+    }
+  }
+
+  &__section {
     padding-bottom: $size-normal;
     transition-property: opacity, visibility;
     transition-duration: var(--duration-global);
