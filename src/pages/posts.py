@@ -16,15 +16,16 @@ def get_posts():
     base = request.args.to_dict()
     base.pop('o', None)
 
+    query = request.args.get('q')
     offset = parse_int(request.args.get('o'), 0)
     props['limit'] = 25
 
-    if not request.args.get('q'):
+    if not query or len(query) < 3:
         results = get_all_posts(offset)
         props['count'] = count_all_posts()
     else:
-        results = get_all_posts_for_query(request.args.get('q'), offset)
-        props['count'] = count_all_posts_for_query(request.args.get('q'))
+        results = get_all_posts_for_query(query, offset)
+        props['count'] = count_all_posts_for_query(query)
 
     (result_previews, result_attachments, result_flagged,
      result_after_kitsune, result_is_image) = get_render_data_for_posts(results)

@@ -125,7 +125,7 @@ def get(service: str, artist_id: str):
         favorited = is_artist_favorited(account['id'], service, artist_id)
 
     (posts, total_count) = ([], 0)
-    if query is None:
+    if not query or len(query) < 3:
         (posts, total_count) = get_artist_post_page(artist_id, service, offset, limit)
     else:
         (posts, total_count) = do_artist_post_search(artist_id, service, query, offset, limit)
