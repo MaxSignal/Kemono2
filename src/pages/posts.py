@@ -16,7 +16,7 @@ def get_posts():
     base = request.args.to_dict()
     base.pop('o', None)
 
-    query = request.args.get('q')
+    query = request.args.get('q', default='').strip()
     offset = parse_int(request.args.get('o'), 0)
     props['limit'] = 25
 

@@ -92,7 +92,7 @@ def get(service: str, artist_id: str):
     base["artist_id"] = artist_id
 
     offset = parse_int(request.args.get('o'), 0)
-    query = request.args.get('q')
+    query = request.args.get('q', default='').strip()
     limit = limit_int(int(request.args.get('limit') or 25), 50)
 
     favorited = False
