@@ -39,6 +39,7 @@ class TDAPIResponseFaillure(TypedDict):
 class TDArtistsParams(TypedDict):
     service: Optional[str]
     # name: Optional[str]
+    sort_by: str
 
 
 class TDValidationFailure(TypedDict):

@@ -67,12 +67,11 @@ def list_artists(page: str):
         return response
 
     search_params: TDArtistsParams = result['data']
-    service = search_params["service"]
     # artist_name = search_params["name"]
     current_page = parse_int(page)
     limit = DEFAULT_PAGE_LIMIT
     artist_count = count_artists(
-        service,
+        search_params["service"],
         # artist_name
     )
     total_pages = math.floor(artist_count / limit) + 1
@@ -101,8 +100,7 @@ def list_artists(page: str):
     )
     artists = get_artists(
         pagination_db,
-        service,
-        # artist_name
+        search_params,
     )
     pagination = TDPagination(
         total_count=artist_count,

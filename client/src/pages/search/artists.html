@@ -41,6 +41,18 @@
         options=options
       ) }}
 
+      {{ input_select(
+        id="search-artists-sort-by",
+        name="sort_by",
+        title="Sort by:",
+        options=[
+          dict(value="updated", title="Last update"),
+          dict(value="added", title="Added"),
+          dict(value="name", title="Name"),
+          dict(value="service", title="Paywall")
+        ]
+      ) }}
+
       {{ form_button(
         title="Less options",
         class="form__less"

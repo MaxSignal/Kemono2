@@ -7,12 +7,13 @@ import { findFavouriteArtist } from "@wp/js/favorites";
  * @property {boolean} isLoading
  * @property {number} [currentPage]
  * @property {string} [service]
- * @property {string} [artist_name]
+ * @property {string} [name]
+ * @property {import("api/kemono/fetch-artists.js").IArtistsSort} [sort_by]
  */
 
 /**
  * @typedef IRenderPageProps
- * @property {import("api/kemono/api.js").IArtistsAPIResponse["data"]} data
+ * @property {import("api/kemono/fetch-artists.js").IArtistsAPIResponse["data"]} data
  * @property {HTMLUListElement} artistList
  * @property {IState} state
  */
@@ -27,8 +28,9 @@ export async function searchArtistsPage(section) {
   const state = {
     isLoading: false,
     currentPage: undefined,
-    artist_name: undefined,
-    service: undefined
+    name: undefined,
+    service: undefined,
+    sort_by: undefined
   };
   /**
    * @type {HTMLFormElement}
@@ -91,6 +93,14 @@ function initSearchForm(form, artistList, state) {
        */
       const serviceSelect = form.elements["service"];
       const service = serviceSelect.value;
+      /**
+       * @type {HTMLSelectElement}
+       */
+      const sortSelect = form.elements["sort_by"];
+      /**
+       * @type {import("api/kemono/fetch-artists.js").IArtistsSort}
+       */
+      const sort_by = sortSelect.value;
 
       /**
        * @type {HTMLInputElement}
@@ -98,9 +108,14 @@ function initSearchForm(form, artistList, state) {
       const nameInput = form.elements["name"];
       const name = nameInput.value.trim().toLowerCase();
 
-      const { data } = await fetchArtists(state.currentPage, service, name);
+      const { data } = await fetchArtists(state.currentPage, {
+        name,
+        service,
+        sort_by
+      });
       state.service = service;
-      state.artist_name = name;
+      state.name = name;
+      state.sort_by = sort_by;
 
       await renderPage({ data, artistList, state });
     } catch (error) {
@@ -127,7 +142,7 @@ async function renderPage({ data, artistList, state }) {
       try {
         state.isLoading = true;
 
-        const { data } = await fetchArtists(page, state.service, state.artist_name);
+        const { data } = await fetchArtists(page, state);
         paginatorTop.remove();
         paginatorBottom.remove();
         renderPage({ data, artistList, state });
@@ -148,7 +163,7 @@ async function renderPage({ data, artistList, state }) {
       try {
         state.isLoading = true;
 
-        const { data } = await fetchArtists(page, state.service, state.artist_name);
+        const { data } = await fetchArtists(page, state);
         paginatorTop.remove();
         paginatorBottom.remove();
         const { left, top } = artistList.getBoundingClientRect();
