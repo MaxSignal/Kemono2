@@ -30,12 +30,12 @@ def get_dms():
     base.pop('o', None)
 
     offset = parse_int(request.args.get('o'), 0)  # noqa F811
-    query = request.args.get('q')
+    query = request.args.get('q', default='').strip()
     limit = limit_int(int(request.args.get('limit') or 25), 50)
     dms = None
     total_count = None
 
-    if query is None:
+    if not query or len(query) < 3:
         (dms, total_count) = get_dm_page(offset, limit)
     else:
         (dms, total_count) = do_dm_search(query, offset, limit)
