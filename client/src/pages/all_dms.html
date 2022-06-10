@@ -19,6 +19,7 @@
         id="q"
         autocomplete="off"
         value="{{ request.args.get('q') if request.args.get('q') }}"
+        minlength="3"
         class="search-input"
         placeholder="search for dms..."
       >
