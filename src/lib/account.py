@@ -18,7 +18,7 @@ from src.internals.cache.redis import (
     get_conn,
     serialize_dict_list
 )
-from src.internals.database.database import get_cursor
+from src.database import get_cursor
 from src.lib.artist import get_artist
 from src.lib.favorites import add_favorite_artist
 from src.lib.security import is_login_rate_limited
@@ -121,7 +121,7 @@ def get_saved_keys(account_id: int, reload: bool = False):
             return get_saved_keys(account_id, reload=reload)
     else:
         result = deserialize_dict_list(saved_keys)
-    saved_keys = [Service_Key.init_from_dict(service_key) for service_key in result]
+    saved_keys = [Service_Key.from_dict(service_key) for service_key in result]
     return saved_keys
 
 

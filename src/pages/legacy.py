@@ -10,8 +10,8 @@ from bleach.sanitizer import Cleaner
 from flask import Blueprint, jsonify, make_response, render_template, request
 from python_resumable import UploaderFlask
 
+from src.database import get_cursor
 from src.internals.cache.flask_cache import cache
-from src.internals.database.database import get_cursor
 from src.utils.utils import make_cache_key
 
 legacy = Blueprint('legacy', __name__)

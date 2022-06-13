@@ -7,7 +7,7 @@ import dateutil
 import ujson
 
 from src.internals.cache.redis import KemonoRedisLock, get_conn
-from src.internals.database.database import get_cursor
+from src.database import get_cursor
 from src.utils.utils import get_value
 
 

@@ -11,7 +11,7 @@ from src.internals.cache.redis import (
     get_conn,
     serialize_dict_list
 )
-from src.internals.database.database import get_cursor
+from src.database import get_cursor
 from src.utils.utils import paysite_list, encode_text_query
 
 from .types import (

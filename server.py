@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from flask import Flask, abort, g, redirect, render_template, request, session
 
 import src.internals.cache.redis as redis
-import src.internals.database.database as database
+from src.database import init_database, get_pool
 from src.internals.cache.flask_cache import cache
 from src.lib.ab_test import get_all_variants
 from src.lib.account import is_logged_in, load_account
@@ -81,7 +81,7 @@ logging.getLogger('requests').setLevel(logging.WARNING)
 logging.getLogger('urllib3').setLevel(logging.WARNING)
 
 cache.init_app(app)
-database.init()
+init_database()
 redis.init()
 
 
@@ -100,7 +100,7 @@ def do_init_stuff():
     session.modified = False
     account = load_account()
     if account:
-        g.account = Account.init_from_dict(account)
+        g.account = Account.from_dict(account)
         g.new_notifications_count = count_new_notifications(g.account.id)
 
 
@@ -141,7 +141,7 @@ def close(e):
         connection = g.pop('connection', None)
         if connection is not None:
             try:
-                pool = database.get_pool()
+                pool = get_pool()
                 connection.commit()
                 pool.putconn(connection)
             except:

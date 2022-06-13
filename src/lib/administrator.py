@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from src.internals.database.database import get_cursor
+from src.database import get_cursor
 from src.lib.account import TDAccount
 from src.lib.notification import send_notifications
 from src.lib.pagination import Pagination
@@ -23,7 +23,7 @@ def get_account(account_id: str) -> Account:
         """
     cursor.execute(query, (account_id))
     account = cursor.fetchone()
-    account = Account.init_from_dict(account)
+    account = Account.from_dict(account)
 
     return account
 
@@ -73,7 +73,7 @@ def get_accounts(pagination: Pagination, queries: Dict[str, str]) -> List[Accoun
     """
     cursor.execute(query, arg_dict)
     accounts = cursor.fetchall()
-    accList = [Account.init_from_dict(acc) for acc in accounts]
+    accList = [Account.from_dict(acc) for acc in accounts]
 
     count = count_accounts(queries)
     pagination.add_count(count)

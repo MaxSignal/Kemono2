@@ -1,16 +1,29 @@
-from flask import Blueprint, request, make_response, render_template, redirect, url_for
-from pathlib import PurePath
-from bleach.sanitizer import Cleaner
 import datetime
 import re
+from pathlib import PurePath
 
-from ..utils.utils import make_cache_key
-from ..internals.cache.flask_cache import cache
-from ..internals.database.database import get_cursor
-from ..lib.post import get_post, is_post_flagged, get_next_post_id, get_previous_post_id, get_post_comments
-from ..lib.artist import get_artist
-from ..lib.favorites import is_post_favorited
-from ..lib.account import load_account
+from bleach.sanitizer import Cleaner
+from flask import (
+    Blueprint,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    url_for
+)
+
+from src.internals.cache.flask_cache import cache
+from src.lib.account import load_account
+from src.lib.artist import get_artist
+from src.lib.favorites import is_post_favorited
+from src.lib.post import (
+    get_next_post_id,
+    get_post,
+    get_post_comments,
+    get_previous_post_id,
+    is_post_flagged
+)
+from src.utils.utils import make_cache_key
 
 post = Blueprint('post', __name__)
 

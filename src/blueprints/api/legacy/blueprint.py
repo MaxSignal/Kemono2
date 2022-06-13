@@ -3,7 +3,7 @@ from typing import List
 from flask import Blueprint, jsonify, make_response, redirect, request, url_for
 
 from src.blueprints.api.v1.types import TDArtist
-from src.internals.database.database import get_cursor
+from src.database import get_cursor
 
 legacy_api = Blueprint('legacy_api', __name__)
 
