@@ -1,9 +1,14 @@
 # Kemono project
 
 ## Table of contents
+- [Requirements](#requirement)
 - [Setup](#setup)
 - [Develop](#develop)
 - [Frequently Asked Questions](#frequently-asked-questions)
+
+## Requirements
+- Python - 3.10+
+- NodeJS - 12.20+
 
 ## Setup
 1. Clone repo and switch to the repo folder:

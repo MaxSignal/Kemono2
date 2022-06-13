@@ -9,7 +9,7 @@ from typing import Dict, List, Optional, TypedDict
 import bcrypt
 import ujson
 from bleach.sanitizer import Cleaner
-from dateutil import parser as dateParser
+from dateutil import parser as date_parser
 from flask import current_app, flash, session
 
 from src.internals.cache.redis import (
@@ -22,7 +22,7 @@ from src.internals.database.database import get_cursor
 from src.lib.artist import get_artist
 from src.lib.favorites import add_favorite_artist
 from src.lib.security import is_login_rate_limited
-from src.types.account import Account, Service_Key, IAccountRoles
+from src.types.account import Account, IAccountRoles, Service_Key
 from src.utils.utils import get_value
 
 account_create_lock = Lock()
@@ -256,5 +256,5 @@ def prepare_account_fields(account):
 
 
 def rebuild_account_fields(account):
-    account['created_at'] = dateParser.parse(account['created_at'])
+    account['created_at'] = date_parser.parse(account['created_at'])
     return account
