@@ -2,8 +2,9 @@ import base64
 import copy
 import hashlib
 import time
+from datetime import datetime
 from threading import Lock
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, TypedDict
 
 import bcrypt
 import ujson
@@ -21,13 +22,23 @@ from src.internals.database.database import get_cursor
 from src.lib.artist import get_artist
 from src.lib.favorites import add_favorite_artist
 from src.lib.security import is_login_rate_limited
-from src.types.account import Account, Service_Key
+from src.types.account import Account, Service_Key, IAccountRoles
 from src.utils.utils import get_value
 
 account_create_lock = Lock()
 
 
-def load_account(account_id: str = None, reload: bool = False):
+class TDAccount(TypedDict):
+    id: int
+    username: str
+    created_at: datetime
+    role: IAccountRoles
+
+
+def load_account(
+    account_id: str = None,
+    reload: bool = False
+) -> Optional[TDAccount]:
     """
     TODO: Make it return an instance of `Account`.
     """

@@ -1,4 +1,7 @@
 from dataclasses import dataclass, field
+
+from configs.derived_vars import is_development
+
 from .discord import Discord
 from .dlsite import DLSite
 from .fanbox import Fanbox
@@ -6,8 +9,6 @@ from .fantia import Fantia
 from .gumroad import Gumroad
 from .patreon import Patreon
 from .subscribestar import Subscribestar
-
-# from typing import List
 
 
 @dataclass
@@ -19,6 +20,10 @@ class Paysites:
     gumroad: Gumroad = field(default_factory=Gumroad)
     patreon: Patreon = field(default_factory=Patreon)
     subscribestar: Subscribestar = field(default_factory=Subscribestar)
+
+    if (is_development):
+        from .kemono_dev import KemonoDev
+        kemonodev: KemonoDev = field(default_factory=KemonoDev)
 
     def __getitem__(self, key):
         return getattr(self, key)

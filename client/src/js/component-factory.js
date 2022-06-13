@@ -9,7 +9,7 @@ const components = new Map();
 export function initComponentFactory(footer) {
   const container = footer.querySelector(".component-container");
   /**
-   * @type {NodeListOf<HTMLElement}
+   * @type {NodeListOf<HTMLElement>}
    */
   const componentElements = container.querySelectorAll(`#${container.id} > *`);
 

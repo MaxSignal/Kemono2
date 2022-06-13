@@ -15,8 +15,8 @@ class Post(Service_Post):
 
 
 @dataclass
-class Kemono_Dev(Paysite):
-    name: str = 'kemono-dev'
+class KemonoDev(Paysite):
+    name: str = 'kemonodev'
     title: str = 'Kemono Dev'
     user: User = User()
     post: Post = Post()

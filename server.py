@@ -4,7 +4,6 @@ import re
 from datetime import timedelta
 from os import getenv
 from os.path import dirname, join
-from threading import Lock
 from urllib.parse import urljoin
 
 from dotenv import load_dotenv
@@ -12,7 +11,6 @@ from flask import Flask, abort, g, redirect, render_template, request, session
 
 import src.internals.cache.redis as redis
 import src.internals.database.database as database
-from configs.derived_vars import is_development
 from src.internals.cache.flask_cache import cache
 from src.lib.ab_test import get_all_variants
 from src.lib.account import is_logged_in, load_account
@@ -61,12 +59,13 @@ app.register_blueprint(favorites)
 app.register_blueprint(dms)
 app.register_blueprint(help_app, url_prefix='/help')
 app.register_blueprint(imports)
-if (is_development):
-    from development import development
-    app.register_blueprint(development)
 
 
 app.config.from_pyfile('flask.cfg')
+app.config.update(
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_SAMESITE='Strict',
+)
 app.jinja_options = dict(
     trim_blocks=True,
     lstrip_blocks=True

@@ -1,8 +1,19 @@
-from flask import Blueprint, g, redirect, url_for, make_response, render_template
+import requests
+from os import getenv
+from flask import (
+    g,
+    Blueprint,
+    current_app,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    url_for
+)
 
-from .pages import config, test_entries, design
+from .test_entries import test_entries
 
-development = Blueprint('development', __name__, url_prefix='/development')
+development = Blueprint('development', __name__, url_prefix="/development")
 
 
 @development.before_request
@@ -24,6 +35,4 @@ def home_page():
     return response
 
 
-development.register_blueprint(config)
 development.register_blueprint(test_entries)
-development.register_blueprint(design)

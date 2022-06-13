@@ -11,3 +11,15 @@
   ) }}
   >{{ text if not caller else caller() }}</button>
 {%- endmacro -%}
+
+{%- macro ban_button(artist_id, service) -%}
+  {%- call button(
+    class="artist-ban",
+    data_artist_id=artist_id,
+    data_service=service,
+    **kwargs
+  ) -%}
+    <span class="artist-ban__action artist-ban__action--ban" >Ban</span>
+    <span class="artist-ban__action artist-ban__action--unban" >Unban</span>
+  {%- endcall -%}
+{%- endmacro -%}

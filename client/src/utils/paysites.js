@@ -67,7 +67,7 @@ export const paysites = {
 };
 
 if (IS_DEVELOPMENT) {
-  paysites["kemono-dev"] = {
+  paysites["kemonodev"] = {
     title: "Kemono Dev",
     user: {
       profile: (artistID) => `/artist/${artistID}`

@@ -36,16 +36,6 @@ freesites = {
     }
 }
 
-paysite_list = [
-    "patreon",
-    "fanbox",
-    "gumroad",
-    "subscribestar",
-    "dlsite",
-    "discord",
-    "fantia",
-]
-
 paysites = Paysites()
 # pre-configured `options`
 # because Jinja cannot into list comprehensions
@@ -57,6 +47,8 @@ paysite_options = [
     for field
     in fields(paysites)
 ]
+
+paysite_list = [field.name for field in fields(paysites)]
 
 
 def set_query_parameter(url, param_name, param_value):
@@ -191,8 +183,5 @@ def encode_text_query(query: str):
     return b64encode(query.encode('utf-8')).decode('utf-8') if query else ""
 
 
-# doing it in the end to avoid circular import error
-if is_development:
-    from development import kemono_dev
-    paysite_list.append(kemono_dev.name)
-    setattr(paysites, kemono_dev.name, kemono_dev)
+def is_valid_service(service: str):
+    return service in paysite_list

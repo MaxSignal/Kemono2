@@ -1,21 +1,22 @@
 {% from 'components/links.html' import fancy_link %}
+{% from 'components/buttons.html' import ban_button %}
 {% from 'components/fancy_image.html' import background_image %}
 {% from 'components/image_link.html' import image_link %}
 
 {% macro user_header(request, props) %}
   {% set artist_icon = g.freesites.kemono.user.icon(props.service, props.id) %}
   {% set artist_banner = g.freesites.kemono.user.banner(props.service, props.id) %}
-  {% set paysite_icons = {
-    'patreon': '/static/patreon.svg',
-    'fanbox': '/static/fanbox.svg',
-    'gumroad': '/static/gumroad.svg',
-    'subscribestar': '/static/subscribestar.png',
-    'dlsite': '/static/dlsite.png',
-    'fantia': '/static/fantia.png',
-  } %}
+  {% set paysite_icons = dict(
+    patreon='/static/patreon.svg',
+    fanbox='/static/fanbox.svg',
+    gumroad='/static/gumroad.svg',
+    subscribestar='/static/subscribestar.png',
+    dlsite='/static/dlsite.png',
+    fantia='/static/fantia.png',
+  ) %}
 
-  <header 
-    class="user-header" 
+  <header
+    class="user-header"
     itemscope
     itemtype="https://schema.org/Person"
   >
@@ -34,26 +35,26 @@
     ) }}
 
     <div class="user-header__info">
-      <h1 
+      <h1
         id="user-header__info-top"
-        class="user-header__name" 
+        class="user-header__name"
       >
-        <a 
+        <a
           class="user-header__profile"
-          target="_blank" 
+          target="_blank"
           rel="noreferrer"
           href="{{ props.display_data.href }}"
-          itemprop="url" 
+          itemprop="url"
         >
           <span class="user-header__profile-image">
-            <img 
-            src="{{ paysite_icons[props.service] }}" 
+            <img
+            src="{{ paysite_icons[props.service] }}"
           >
           </span>
           <span itemprop="name">{{ props.artist.name }}</span>
         </a>
       </h1>
-      
+
       <div class="user-header__actions">
         {% if props.currentPage == 'dms' %}
           {{ fancy_link(
@@ -73,15 +74,19 @@
         <a
           class="user-header__upload"
           href="/posts/upload?service={{ props.service }}&user={{ props.id }}"
-        > 
+        >
           {# hiding the icon until the introduction of SVG icons #}
           {# <span>
-            <img 
-              src="/static/upload.svg" 
+            <img
+              src="/static/upload.svg"
             >
           </span> #}
           <span>Upload file</span>
         </a>
+        {{ ban_button(
+          artist_id=props.id,
+          service=props.service
+        ) }}
       </div>
     </div>
   </header>

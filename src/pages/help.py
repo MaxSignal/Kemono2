@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, make_response, redirect, url_for, 
 
 help_app = Blueprint('help_app', __name__)
 
+
 @help_app.route('/')
 def help():
     return redirect(url_for('help_app.faq'), 302)
@@ -15,14 +16,15 @@ def help():
     # response.headers['Cache-Control'] = 'max-age=60, public, stale-while-revalidate=2592000'
     # return response
 
+
 @help_app.get('/faq')
 def faq():
     props = dict(
-        currentPage= 'help'
+        currentPage='help'
     )
     response = make_response(render_template(
         'help/faq.html',
-        props = props
+        props=props
     ), 200)
     response.headers['Cache-Control'] = 'max-age=60, public, stale-while-revalidate=2592000'
     return response
@@ -46,18 +48,6 @@ def faq():
 #     )
 #     response = make_response(render_template(
 #         'help/about.html',
-#         props = props
-#     ), 200)
-#     response.headers['Cache-Control'] = 'max-age=60, public, stale-while-revalidate=2592000'
-#     return response
-
-# @help_app.route('/bans')
-# def bans():
-#     props = dict(
-#         currentPage= 'help'
-#     )
-#     response = make_response(render_template(
-#         'help/bans.html',
 #         props = props
 #     ), 200)
 #     response.headers['Cache-Control'] = 'max-age=60, public, stale-while-revalidate=2592000'

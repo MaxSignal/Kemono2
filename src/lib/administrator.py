@@ -1,9 +1,18 @@
-from src.internals.database.database import get_cursor
-from src.lib.pagination import Pagination
-from src.lib.notification import send_notifications
-
 from typing import Dict, List
-from src.types.account import Account, Notification_Types, ACCOUNT_ROLE_CHANGE
+
+from src.internals.database.database import get_cursor
+from src.lib.account import TDAccount
+from src.lib.notification import send_notifications
+from src.lib.pagination import Pagination
+from src.types.account import ACCOUNT_ROLE_CHANGE, Account, Notification_Types
+
+
+def is_administrator(account: TDAccount):
+    if (account["role"] != "administrator"):
+        return False
+
+    return True
+
 
 def get_account(account_id: str) -> Account:
     cursor = get_cursor()
@@ -39,8 +48,9 @@ def count_accounts(queries: Dict[str, str]) -> int:
     number_of_accounts = result['total_number_of_accounts']
     return number_of_accounts
 
+
 def get_accounts(pagination: Pagination, queries: Dict[str, str]) -> List[Account]:
-    
+
     arg_dict = {
         'role': queries['role'],
         'offset': pagination.offset,
@@ -70,14 +80,15 @@ def get_accounts(pagination: Pagination, queries: Dict[str, str]) -> List[Accoun
 
     return accList
 
+
 def change_account_role(
-    account_ids: List[str],  
+    account_ids: List[str],
     extra_info: ACCOUNT_ROLE_CHANGE
 ):
     cursor = get_cursor()
     arg_dict = dict(
-        account_ids= account_ids,
-        new_role= extra_info["new_role"]
+        account_ids=account_ids,
+        new_role=extra_info["new_role"]
     )
 
     change_role_query = """
@@ -86,10 +97,10 @@ def change_account_role(
         WHERE id = ANY (%(account_ids)s)
     """
     cursor.execute(change_role_query, arg_dict)
-    
+
     send_notifications(
-        account_ids, 
-        Notification_Types.ACCOUNT_ROLE_CHANGE, 
+        account_ids,
+        Notification_Types.ACCOUNT_ROLE_CHANGE,
         extra_info
     )
 

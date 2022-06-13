@@ -24,6 +24,8 @@ from .types import (
 
 construct_artists_key = create_key_constructor("artists")
 construct_artists_count_key = create_counts_key_constructor("artists")
+construct_banned_artists_key = create_key_constructor("banned_artists")
+construct_banned_artists_count_key = create_counts_key_constructor("banned_artists")
 
 available_params = frozenset(("service", "sort_by"))
 default_sort = "updated"
@@ -154,7 +156,7 @@ def get_artists(
 
     artists = redis.get(redis_key)
 
-    if artists and not reload:
+    if artists is not None and not reload:
         return deserialize_dict_list(artists)
 
     lock = KemonoRedisLock(redis, redis_key, expire=60, auto_renewal=True)
@@ -198,3 +200,88 @@ def get_artists(
     lock.release()
 
     return artists
+
+
+def count_banned_artists(reload: bool = False) -> int:
+    redis = get_conn()
+    redis_key = construct_banned_artists_count_key()
+    artist_count = redis.get(redis_key)
+    result = None
+
+    if artist_count and not reload:
+        result = int(artist_count)
+        return result
+
+    lock = KemonoRedisLock(redis, redis_key, expire=60, auto_renewal=True)
+
+    if not lock.acquire(blocking=False):
+        time.sleep(0.1)
+
+        return count_banned_artists(reload=reload)
+
+    cursor = get_cursor()
+    query = """
+        SELECT COUNT(*) as artist_count
+        FROM dnp
+    """
+    cursor.execute(query)
+    result = cursor.fetchone()
+    artist_count: int = result['artist_count']
+    redis.set(redis_key, str(artist_count), ex=600)
+    lock.release()
+
+    return artist_count
+
+
+def get_banned_artists(
+    pagination_db: TDPaginationDB,
+    reload: bool = False
+):
+    redis = get_conn()
+    redis_key = construct_banned_artists_key(
+        str(pagination_db["pagination_init"]["current_page"])
+    )
+    banned_artists = redis.get(redis_key)
+    result = None
+
+    if banned_artists is not None and not reload:
+        result = deserialize_dict_list(banned_artists)
+        return result
+
+    lock = KemonoRedisLock(redis, redis_key, expire=60, auto_renewal=True)
+
+    if not lock.acquire(blocking=False):
+        time.sleep(0.1)
+
+        return get_banned_artists(
+            pagination_db,
+            reload=reload,
+        )
+
+    cursor = get_cursor()
+    query_args = dict(
+        offset=pagination_db["offset"],
+        limit=pagination_db["sql_limit"]
+    )
+    query = """
+        SELECT
+            artist.id,
+            artist.indexed,
+            artist.name,
+            artist.service,
+            artist.updated
+        FROM
+            dnp as banned,
+            lookup as artist
+        WHERE
+            banned.id = artist.id
+            AND banned.service = artist.service
+        OFFSET %(offset)s
+        LIMIT %(limit)s
+    """
+    cursor.execute(query, query_args)
+    result: List[TDArtist] = cursor.fetchall()
+    redis.set(redis_key, serialize_dict_list(banned_artists), ex=600)
+    lock.release()
+
+    return result

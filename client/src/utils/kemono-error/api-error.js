@@ -10,7 +10,10 @@ const errorList = {
   6: "Could not retrieve the list of bans.",
   7: "Could not retrieve banned artist.",
   8: "Could not retrieve artists.",
-  9: "Could not retrieve import logs."
+  9: "Could not retrieve import logs.",
+  10: "Could not ban artist.",
+  11: "Could not unban artist.",
+  12: "Could not get account info."
 };
 
 export class KemonoAPIError extends KemonoError {

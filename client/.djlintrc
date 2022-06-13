@@ -1,5 +1,5 @@
 {
-  "ignore": "H017,H021,H029,J018",
+  "ignore": "H006,H013,H017,H021,H029,J004,J018",
   "indent": "2",
   "profile": "jinja",
   "custom_blocks": "endcall",

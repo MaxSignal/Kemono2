@@ -1,7 +1,7 @@
 import { addFavouriteArtist, findFavouriteArtist, removeFavouriteArtist, findFavouritePost } from "@wp/js/favorites";
-import { CardList, PostCard, showTooltip, registerMessage } from "@wp/components";
+import { CardList, PostCard, showTooltip, registerMessage, ButtonArtistBan } from "@wp/components";
 import { createComponent } from "@wp/js/component-factory";
-import { isLoggedIn } from "@wp/js/account";
+import { isLoggedIn } from "@wp/lib/account.js";
 
 /**
  * @param {HTMLElement} section
@@ -16,7 +16,10 @@ export async function userPage(section) {
   const cardListElement = section.querySelector(".card-list");
 
   await initButtons(buttonsPanel, artistID, artistService);
-  await initCardList(cardListElement);
+
+  if (cardListElement) {
+    await initCardList(cardListElement);
+  }
 }
 
 /**
@@ -25,6 +28,11 @@ export async function userPage(section) {
  * @param {string} artistService
  */
 async function initButtons(panelElement, artistID, artistService) {
+  /**
+   * @type {HTMLButtonElement}
+   */
+  const banButtonElem = panelElement.querySelector(".artist-ban");
+  const banButton = await ButtonArtistBan({ element: banButtonElem });
   /**
    * @type {HTMLButtonElement}
    */
@@ -40,7 +48,7 @@ async function initButtons(panelElement, artistID, artistService) {
 
   favButton.addEventListener("click", handleFavouriting(artistID, artistService));
 
-  panelElement.appendChild(favButton);
+  banButton.insertAdjacentElement("beforebegin", favButton);
 }
 
 /**
@@ -115,5 +123,5 @@ function handleFavouriting(id, service) {
       button.classList.remove("user-header__favourite--loading");
     }
 
-  }
+  };
 }

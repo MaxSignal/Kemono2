@@ -1,12 +1,13 @@
-from flask import current_app
-from os import getenv
-import dateutil
-import datetime
 import copy
-import ujson
+import datetime
+from typing import List, Optional
+
+import dateutil
 import rb
-import redis_map
 import redis_lock
+import ujson
+
+import redis_map
 
 cluster: rb.Cluster = None
 
@@ -91,12 +92,12 @@ def deserialize_dict(data):
     return to_return
 
 
-def serialize_dict_list(data):
-    data = copy.deepcopy(data)
+def serialize_dict_list(data: Optional[List]):
+    data = copy.deepcopy(data) if data is not None else []
     return ujson.dumps(list(map(lambda elem: serialize_dict(elem), data)))
 
 
-def deserialize_dict_list(data):
+def deserialize_dict_list(data: str):
     data = ujson.loads(data)
     to_return = list(map(lambda elem: deserialize_dict(elem), data))
     return to_return

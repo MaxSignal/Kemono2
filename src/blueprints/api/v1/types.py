@@ -1,15 +1,8 @@
-from datetime import datetime
-from typing import Dict, List, Literal, Optional, TypedDict, Type
+from typing import Dict, List, Literal, Optional, TypedDict
+
+from src.lib.artist import TDArtist
 
 DEFAULT_PAGE_LIMIT = 25
-
-
-class TDArtist(TypedDict):
-    id: str
-    indexed: datetime
-    name: str
-    service: str
-    updated: datetime
 
 
 class TDAPIRequest(TypedDict):
@@ -28,7 +21,7 @@ class TDAPIResponseSuccess(TypedDict):
     data: Optional[Dict]
 
 
-class TDAPIResponseFaillure(TypedDict):
+class TDAPIResponseFailure(TypedDict):
     """
     `validation_errors` is a separate entity for use by forms.
     """

@@ -8,4 +8,4 @@ export { showTooltip, registerMessage } from "./tooltip";
 export { initShell } from "./shell";
 export { Timestamp } from "./timestamp";
 export { PaginatorClient } from "./paginator_new.js";
-export { Button } from "./buttons.js"
+export { Button, ButtonArtistBan } from "./buttons.js"

@@ -29,6 +29,7 @@ keyspaces = {
     # counts for various entries
     "counts": 0,
     "artists": 0,
+    "banned_artists":0,
     "account": 0,
     "saved_key_import_ids": 0,
     "saved_keys": 0,

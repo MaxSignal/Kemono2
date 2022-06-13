@@ -1,4 +1,4 @@
-import { isLoggedIn } from "@wp/js/account";
+import { isLoggedIn } from "@wp/lib/account.js";
 import { createComponent } from "@wp/js/component-factory";
 
 /**

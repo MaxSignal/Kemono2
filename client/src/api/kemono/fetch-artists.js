@@ -9,14 +9,7 @@ import { kemonoFetch } from "./kemono-fetch";
  * @property {number} limit
  */
 
-/**
- * @typedef IArtist
- * @property {string} id
- * @property {string} indexed
- * @property {string} name
- * @property {string} service
- * @property {string} updated
- */
+
 
 /**
  * @typedef {"updated"| "added"| "name"| "service"} IArtistsSort
@@ -32,7 +25,7 @@ import { kemonoFetch } from "./kemono-fetch";
 /**
  * @typedef IArtistsAPIBody
  * @property {IPagination} pagination
- * @property {IArtist[]} artists
+ * @property {import("@wp/lib/artists.js").IArtist[]} artists
  */
 
 /**
@@ -63,13 +56,13 @@ const defaultParams = {
 };
 
 /**
- * @type {IArtist[]}
+ * @type {import("@wp/lib/artists.js").IArtist[]}
  */
  let artistList = undefined;
 
 /**
- * @param  {...keyof IArtist} fields
- * @returns {(prev: IArtist, next: IArtist) => -1 | 0 | 1} A comparator function which can be fed to `Array.sort()`.
+ * @param  {...keyof import("@wp/lib/artists.js").IArtist} fields
+ * @returns {(prev: import("@wp/lib/artists.js").IArtist, next: import("@wp/lib/artists.js").IArtist) => -1 | 0 | 1} A comparator function which can be fed to `Array.sort()`.
  */
 function createArtistComparator(...fields) {
   return (prev, next) => {

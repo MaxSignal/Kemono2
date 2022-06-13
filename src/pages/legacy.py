@@ -138,15 +138,6 @@ def upload():
     })
 
 
-@legacy.route('/api/bans')
-def bans():
-    cursor = get_cursor()
-    query = "SELECT * FROM dnp"
-    cursor.execute(query)
-    results = cursor.fetchall()
-    return make_response(jsonify(results), 200)
-
-
 @legacy.route('/api/recent')
 def recent():
     cursor = get_cursor()

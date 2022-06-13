@@ -1,6 +1,6 @@
 import { KemonoError } from "@wp/utils";
 import { validateImportKey } from "@wp/lib";
-import { isLoggedIn } from "@wp/js/account.js";
+import { isLoggedIn } from "@wp/lib/account.js";
 import { showTooltip, registerMessage } from "@wp/components";
 
 /**

@@ -19,7 +19,7 @@ export const globalPageScripts = new Map([
   ["register", registerPage],
   ["post", postPage],
   ["importer", importerPage],
-  ["bans", bansPage],
+  ["banned-artists", bansPage],
   ["importer-status", importerStatusPage],
   ["posts", postsPage],
   ["updated", updatedPage],

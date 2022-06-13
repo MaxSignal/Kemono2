@@ -1,36 +1,14 @@
 import { KemonoAPIError } from "@wp/utils";
 import { artists, creators } from "./fetch-artists.js";
-import { kemonoFetch } from "./kemono-fetch";
+import { defaultHeaders, kemonoFetch } from "./kemono-fetch";
 
 export const api = {
-  bans,
   bannedArtist,
   creators,
   logs,
   artists,
 };
 
-async function bans() {
-  try {
-    const response = await kemonoFetch('/api/bans', { method: "GET" });
-
-    if (!response || !response.ok) {
-
-      alert(new KemonoAPIError(6));
-      return null;
-    }
-
-    /**
-     * @type {KemonoAPI.API.BanItem[]}
-     */
-    const banItems = await response.json();
-
-    return banItems;
-
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 /**
  * @param {string} id

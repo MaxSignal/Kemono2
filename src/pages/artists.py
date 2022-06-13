@@ -242,14 +242,14 @@ def make_artist_display_data(artist: dict):
         'fantia': {
             'service': 'Fantia',
             'href': f"https://fantia.jp/fanclubs/{artist_id}",
-        },
+        }
     }
 
     if is_development:
-        from development import kemono_dev
-        data_by_service_name[kemono_dev.name] = dict(
-            service=kemono_dev.title,
-            href=kemono_dev.user.profile
+        from src.types.paysites.kemono_dev import KemonoDev
+        data_by_service_name[KemonoDev.name] = dict(
+            service=KemonoDev.title,
+            href=KemonoDev.user.profile
         )
     data = data_by_service_name[service_name]
     data['proxy'] = f"/{service_name}/user/{artist_id}"

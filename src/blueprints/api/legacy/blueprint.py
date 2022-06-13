@@ -10,7 +10,7 @@ legacy_api = Blueprint('legacy_api', __name__)
 
 @legacy_api.get('/favorites')
 def api_list():
-    new_url = url_for('api.v1.list_account_favorites', **request.args)
+    new_url = url_for('api.v1.account.list_account_favorites', **request.args)
     return redirect(new_url, 301)
 
 
@@ -33,3 +33,10 @@ def creators():
     artists: List[TDArtist] = cursor.fetchall()
 
     return make_response(jsonify(artists), 200)
+
+
+@legacy_api.get('/bans')
+def bans():
+    new_url = url_for('api.v1.list_banned_artists', **request.args)
+
+    return redirect(new_url, 301)
