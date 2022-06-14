@@ -1,24 +1,27 @@
 import copy
 import datetime
-from typing import List, Optional
+import time
+from typing import Callable, Dict, List, Optional
 
 import dateutil
-import rb
 import redis_lock
 import ujson
+from rb import BaseRouter, Cluster, UnroutableCommand
 
 import redis_map
+from src.database import query_all, query_one
 
-cluster: rb.Cluster = None
+cluster: Cluster = None
 
 
-class KemonoRouter(rb.BaseRouter):
-    def get_host_for_key(self, key):
+class KemonoRouter(BaseRouter):
+    def get_host_for_key(self, key: str):
         top_level_prefix_of_key = key.split(':')[0]
-        if (redis_map.keyspaces.get(top_level_prefix_of_key) is not None):
-            return redis_map.keyspaces[top_level_prefix_of_key]
-        else:
-            raise rb.UnroutableCommand()
+
+        if (redis_map.keyspaces.get(top_level_prefix_of_key) is None):
+            raise UnroutableCommand()
+
+        return redis_map.keyspaces[top_level_prefix_of_key]
 
 
 class KemonoRedisLock(redis_lock.Lock):
@@ -47,9 +50,9 @@ class KemonoRedisLock(redis_lock.Lock):
         self._client.expire(self._name, expire)
 
 
-def init():
+def init_redis_cache():
     global cluster
-    cluster = rb.Cluster(hosts=redis_map.nodes, host_defaults=redis_map.node_options, router_cls=KemonoRouter)
+    cluster = Cluster(hosts=redis_map.nodes, host_defaults=redis_map.node_options, router_cls=KemonoRouter)
     return cluster
 
 # def get_pool():
@@ -133,3 +136,81 @@ def create_counts_key_constructor(namespace: str):
         return key_string
 
     return construct_counts_key
+
+
+def query_one_cached(
+    redis_key: str,
+    query: str,
+    query_args: Dict = None,
+    reload: bool = False,
+    deserializer: Callable[[str], Dict] = deserialize_dict,
+    serializer: Callable[[Dict], str] = serialize_dict
+):
+    redis = get_conn()
+    result = redis.get(redis_key)
+
+    if result is not None and not reload:
+        return deserializer(result)
+
+    lock = KemonoRedisLock(redis, redis_key, expire=60, auto_renewal=True)
+
+    if not lock.acquire(blocking=False):
+        time.sleep(0.1)
+
+        return query_one_cached(
+            redis_key=redis_key,
+            query=query,
+            query_args=query_args,
+            reload=reload,
+            deserializer=deserializer,
+            serializer=serializer,
+        )
+
+    result = query_one(
+        query=query,
+        query_args=query_args,
+    )
+
+    redis.set(redis_key, serializer(result), ex=600)
+    lock.release()
+
+    return result
+
+
+def query_all_cached(
+    redis_key: str,
+    query: str,
+    query_args: Dict = None,
+    reload: bool = False,
+    deserializer: Callable[[str], List[Dict]] = deserialize_dict_list,
+    serializer: Callable[[List[Dict]], str] = serialize_dict_list
+):
+    redis = get_conn()
+    result = redis.get(redis_key)
+
+    if result is not None and not reload:
+        return deserializer(result)
+
+    lock = KemonoRedisLock(redis, redis_key, expire=60, auto_renewal=True)
+
+    if not lock.acquire(blocking=False):
+        time.sleep(0.1)
+
+        return query_all_cached(
+            redis_key=redis_key,
+            query=query,
+            query_args=query_args,
+            reload=reload,
+            deserializer=deserializer,
+            serializer=serializer,
+        )
+
+    result = query_all(
+        query=query,
+        query_args=query_args,
+    )
+
+    redis.set(redis_key, serializer(result), ex=600)
+    lock.release()
+
+    return result

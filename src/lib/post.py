@@ -7,7 +7,7 @@ import dateutil
 import ujson
 
 from src.database import get_cursor
-from src.internals.cache.redis import KemonoRedisLock, get_conn
+from src.lib.cache import KemonoRedisLock, get_conn
 
 
 def get_random_posts_keys(count, reload=False):

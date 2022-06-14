@@ -9,9 +9,8 @@ from urllib.parse import urljoin
 from dotenv import load_dotenv
 from flask import Flask, abort, g, redirect, render_template, request, session
 
-import src.internals.cache.redis as redis
 from src.database import init_database, get_pool
-from src.internals.cache.flask_cache import cache
+from src.lib.cache import init_redis_cache, flask_cache
 from src.lib.ab_test import get_all_variants
 from src.lib.account import is_logged_in, load_account
 from src.lib.notification import count_new_notifications
@@ -80,9 +79,9 @@ logging.getLogger('PIL').setLevel(logging.INFO)
 logging.getLogger('requests').setLevel(logging.WARNING)
 logging.getLogger('urllib3').setLevel(logging.WARNING)
 
-cache.init_app(app)
+flask_cache.init_app(app)
 init_database()
-redis.init()
+init_redis_cache()
 
 
 @app.before_request

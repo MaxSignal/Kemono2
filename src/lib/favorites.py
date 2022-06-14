@@ -1,10 +1,6 @@
 from src.database import get_cursor
-from src.internals.cache.redis import (
-    deserialize_dict_list,
-    get_conn,
-    serialize_dict_list
-)
 from src.lib.artist import get_artist, get_artist_last_updated
+from src.lib.cache import deserialize_dict_list, get_conn, serialize_dict_list
 from src.lib.post import get_post
 from src.utils.utils import get_value
 

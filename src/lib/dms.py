@@ -6,8 +6,8 @@ from typing import List
 import dateutil
 import ujson
 
-from src.internals.cache.redis import KemonoRedisLock, get_conn
 from src.database import get_cursor
+from src.lib.cache import KemonoRedisLock, get_conn
 from src.types.kemono import Approved_DM, Unapproved_DM
 
 

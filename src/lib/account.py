@@ -12,14 +12,14 @@ from bleach.sanitizer import Cleaner
 from dateutil import parser as date_parser
 from flask import current_app, flash, session
 
-from src.internals.cache.redis import (
+from src.database import get_cursor
+from src.lib.artist import get_artist
+from src.lib.cache import (
     KemonoRedisLock,
     deserialize_dict_list,
     get_conn,
     serialize_dict_list
 )
-from src.database import get_cursor
-from src.lib.artist import get_artist
 from src.lib.favorites import add_favorite_artist
 from src.lib.security import is_login_rate_limited
 from src.types.account import Account, IAccountRoles, Service_Key

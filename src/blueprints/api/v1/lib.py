@@ -3,7 +3,8 @@ from typing import List, Union
 
 from flask import Request
 
-from src.internals.cache.redis import (
+from src.database import get_cursor
+from src.lib.cache import (
     KemonoRedisLock,
     create_counts_key_constructor,
     create_key_constructor,
@@ -11,8 +12,7 @@ from src.internals.cache.redis import (
     get_conn,
     serialize_dict_list
 )
-from src.database import get_cursor
-from src.utils.utils import paysite_list, encode_text_query
+from src.utils.utils import encode_text_query, paysite_list
 
 from .types import (
     TDArtist,

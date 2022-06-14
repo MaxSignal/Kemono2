@@ -3,11 +3,7 @@ from typing import List, Optional, TypedDict
 from ujson import dumps
 
 from src.database import get_cursor
-from src.internals.cache.redis import (
-    deserialize_dict_list,
-    get_conn,
-    serialize_dict_list
-)
+from src.lib.cache import deserialize_dict_list, get_conn, serialize_dict_list
 from src.types.account import Notification
 
 

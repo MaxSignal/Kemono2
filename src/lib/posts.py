@@ -1,7 +1,7 @@
 import time
 
 from src.database.lib import get_cursor
-from src.internals.cache.redis import (
+from src.lib.cache import (
     KemonoRedisLock,
     deserialize_dict_list,
     get_conn,

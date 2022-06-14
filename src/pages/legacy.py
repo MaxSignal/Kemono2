@@ -11,7 +11,7 @@ from flask import Blueprint, jsonify, make_response, render_template, request
 from python_resumable import UploaderFlask
 
 from src.database import get_cursor
-from src.internals.cache.flask_cache import cache
+from src.lib.cache import flask_cache
 from src.utils.utils import make_cache_key
 
 legacy = Blueprint('legacy', __name__)
@@ -310,7 +310,7 @@ def new_flag_api(service, user, post):
 
 
 @legacy.route('/api/<service>/user/<id>')
-@cache.cached(key_prefix=make_cache_key)
+@flask_cache.cached(key_prefix=make_cache_key)
 def user_api(service, id):
     cursor = get_cursor()
     query = "SELECT * FROM posts WHERE \"user\" = %s AND service = %s ORDER BY published desc "

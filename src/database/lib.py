@@ -1,6 +1,6 @@
 from os import getenv
 from threading import Lock
-from typing import NamedTuple, Optional, Dict, List
+from typing import Optional, Dict, List
 
 from flask import g
 from psycopg2 import pool
@@ -41,7 +41,7 @@ def get_cursor() -> cursor:
     return g.cursor
 
 
-def query_one(query: str, query_args: Dict) -> Optional[NamedTuple]:
+def query_one(query: str, query_args: Dict) -> Optional[Dict]:
     cursor = get_cursor()
     cursor.execute(query, query_args)
     result = cursor.fetchone()
@@ -49,7 +49,7 @@ def query_one(query: str, query_args: Dict) -> Optional[NamedTuple]:
     return result
 
 
-def query_all(query: str, query_args: Dict) -> List[NamedTuple]:
+def query_all(query: str, query_args: Dict) -> List[Dict]:
     cursor = get_cursor()
     cursor.execute(query, query_args)
     result = cursor.fetchall()

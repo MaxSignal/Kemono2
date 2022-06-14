@@ -12,7 +12,6 @@ from flask import (
     url_for
 )
 
-from src.internals.cache.flask_cache import cache
 from src.lib.account import load_account
 from src.lib.artist import get_artist
 from src.lib.favorites import is_post_favorited
@@ -23,7 +22,6 @@ from src.lib.post import (
     get_previous_post_id,
     is_post_flagged
 )
-from src.utils.utils import make_cache_key
 
 post = Blueprint('post', __name__)
 
