@@ -4,9 +4,9 @@
 {% from 'components/card_list.html' import card_list %}
 {% from 'components/cards/dm.html' import approved_dm_card %}
 
-{% block scripts %}
+{% block scripts_extra %}
   <script async src="https://js.wpadmngr.com/static/adManager.js" data-admpid="32201"></script>
-{% endblock %}
+{% endblock scripts_extra %}
 
 {% block content %}
 {% call site.section("all-dms", title="DMs") %}

@@ -37,6 +37,10 @@
   <meta property="og:url" content="{{ g.canonical_url }}">
 {% endblock opengraph %}
 
+{% block scripts_extra %}
+  <script async src="https://js.wpadmngr.com/static/adManager.js" data-admpid="32201"></script>
+{% endblock scripts_extra %}
+
 {% block content %}
 {% if post.service == 'fanbox' and post.user == '314223' %}
   <p style="font-family: 'Comic Sans MS', 'Comic Sans', cursive; text-align: center;">
