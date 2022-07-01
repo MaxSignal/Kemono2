@@ -1,4 +1,6 @@
 {# Put html attributes into kwargs argument #}
+{# kwargs is a magical jinja variable equivalent to `**kwargs` #}
+{# https://jinja.palletsprojects.com/en/3.1.x/templates/#macros #}
 {% macro attributes(class_name) %}
   class="{{ class_name ~ ' ' ~ kwargs.pop('class') if kwargs.class else class_name }}"
   {% for attribute in kwargs %}

@@ -6,8 +6,8 @@ from typing import List
 import dateutil
 import ujson
 
-from src.internals.cache.redis import KemonoRedisLock, get_conn
-from src.internals.database.database import get_cursor
+from src.database import get_cursor
+from src.lib.cache import KemonoRedisLock, get_conn
 from src.types.kemono import Approved_DM, Unapproved_DM
 
 
@@ -22,7 +22,7 @@ def get_unapproved_dms(import_id: str, account_id: int, reload: bool = False) ->
 
     if dms and not reload:
         result = deserialize_dms(dms)
-        return [Unapproved_DM.init_from_dict(dm) for dm in result] if result else []
+        return [Unapproved_DM.from_dict(dm) for dm in result if result]
 
     lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
 
@@ -48,7 +48,7 @@ def get_unapproved_dms(import_id: str, account_id: int, reload: bool = False) ->
     redis.set(key, serialize_dms(result), ex=1)
     lock.release()
 
-    dms = [Unapproved_DM.init_from_dict(dm) for dm in result] if result else []
+    dms = [Unapproved_DM.from_dict(dm) for dm in result] if result else []
 
     return dms
 
@@ -97,7 +97,7 @@ def get_artist_dms(service: str, artist_id: int, reload: bool = False) -> List[A
 
     if dms and not reload:
         result = deserialize_dms(dms)
-        return [Approved_DM.init_from_dict(dm) for dm in result] if result else []
+        return [Approved_DM.from_dict(dm) for dm in result] if result else []
 
     lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
 
@@ -123,7 +123,7 @@ def get_artist_dms(service: str, artist_id: int, reload: bool = False) -> List[A
     redis.set(key, serialize_dms(result), ex=600)
     lock.release()
 
-    dms = [Approved_DM.init_from_dict(dm) for dm in result] if result else []
+    dms = [Approved_DM.from_dict(dm) for dm in result] if result else []
 
     return dms
 
@@ -163,7 +163,7 @@ def get_all_dms(offset: int, limit: int, reload: bool = False) -> List[Approved_
 
     if dms and not reload:
         result = deserialize_dms(dms)
-        return [Approved_DM.init_from_dict(dm) for dm in result] if result else []
+        return [Approved_DM.from_dict(dm) for dm in result] if result else []
 
     lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
 
@@ -190,7 +190,7 @@ def get_all_dms(offset: int, limit: int, reload: bool = False) -> List[Approved_
     redis.set(key, serialize_dms(result), ex=600)
     lock.release()
 
-    dms = [Approved_DM.init_from_dict(dm) for dm in result] if result else []
+    dms = [Approved_DM.from_dict(dm) for dm in result] if result else []
 
     return dms
 
@@ -241,7 +241,7 @@ def get_all_dms_by_query(
 
     if dms and not reload:
         result = deserialize_dms(dms)
-        return [Approved_DM.init_from_dict(dm) for dm in result] if result else []
+        return [Approved_DM.from_dict(dm) for dm in result] if result else []
 
     lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
     if not lock.acquire(blocking=False):
@@ -270,7 +270,7 @@ def get_all_dms_by_query(
     redis.set(key, serialize_dms(result), ex=600)
     lock.release()
 
-    dms = [Approved_DM.init_from_dict(dm) for dm in result] if result else []
+    dms = [Approved_DM.from_dict(dm) for dm in result] if result else []
 
     return dms
 

@@ -1,3 +1,5 @@
+@use "../../css/variables.scss" as *;
+
 .button {
   --local-colour1: var(--colour0-primary);
 
@@ -7,11 +9,50 @@
   font-family: inherit;
   font-size: 100%;
   color: var(--local-colour1);
-  background-image: linear-gradient(
-    hsl(0, 0%, 7%),
-    hsl(220, 7%, 17%)
-  );
+  background-image: linear-gradient(hsl(0, 0%, 7%),
+      hsl(220, 7%, 17%));
   border-radius: 5px;
   border: none;
   padding: 0.5em;
+}
+
+.artist-ban {
+  display: inline-grid;
+  justify-items: flex-start;
+  padding: $size-little;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transition-property: visibility, opacity;
+  transition-duration: var(--duration-global);
+
+  &--ban {
+    visibility: visible;
+    opacity: 1;
+
+    & .artist-ban__action--ban {
+      visibility: visible;
+      opacity: 1
+    }
+  }
+
+  &--unban {
+    visibility: visible;
+    opacity: 1;
+
+    & .artist-ban__action--unban {
+      visibility: visible;
+      opacity: 1
+    }
+  }
+
+  &__action {
+    grid-area: content;
+    visibility: hidden;
+    opacity: 0;
+
+    transition-property: visibility, opacity;
+    transition-duration: var(--duration-global);
+  }
 }

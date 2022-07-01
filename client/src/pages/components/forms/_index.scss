@@ -1,0 +1,170 @@
+@use "../../../css/variables.scss" as *;
+
+.form {
+  max-width: $width-mobile;
+  padding: $size-normal;
+  margin: 0 auto;
+
+  &--bigger {
+    max-width: $width-phone;
+  }
+
+  &--wide {
+    max-width: $width-tablet;
+  }
+
+  &--controller {
+    display: none;
+  }
+
+  &--submitting {
+    cursor: progress;
+    pointer-events: none;
+  }
+
+  &__fieldset {
+    padding: 0;
+    border: none;
+
+    transition-duration: var(--duration-global);
+    transition-property: opacity, visibility;
+
+    &--optional {
+      & > *:not(.form__more) {
+        display: none;
+      }
+
+      &.form__fieldset--more {
+        & > * {
+          display: block;
+          padding-bottom: $size-normal;
+
+          &:last-child {
+            padding-bottom: $size-normal;
+          }
+        }
+        & > .form__more {
+          display: none;
+        }
+      }
+    }
+  }
+
+  &__section {
+    padding-bottom: $size-normal;
+    transition-property: opacity, visibility;
+    transition-duration: var(--duration-global);
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+
+    &--hidden {
+      max-height: 0;
+      opacity: 0;
+      visibility: hidden;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  &__section {
+
+    &--buttons {
+      text-align: center;
+    }
+    &--checkbox {
+      position: relative;
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-around;
+      align-items: center;
+      gap: $size-normal;
+
+      & .form__input {
+        flex: 0 1;
+        -webkit-appearance: none;
+        appearance: none;
+        padding: 0;
+        margin: 0;
+
+        &:before {
+          position: absolute;
+          top: 40%;
+          left: 0.7em;
+          content: "X";
+          font-size: 2em;
+          color: hsl(0, 100%, 60%);
+          transform: translate(-50%, -50%);
+        }
+
+        &:checked:before {
+          content: "\2713"; /* checkmark */
+          color: hsl(120, 100%, 50%);
+        }
+
+        &:checked + .form__label {
+          opacity: 1;
+        }
+      }
+
+      & .form__label {
+        flex: 1 1;
+        opacity: 0.5;
+        transition-property: opacity;
+        transition-duration: 250ms;
+      }
+    }
+  }
+
+  &__input,
+  &__button,
+  &__select {
+    box-sizing: border-box;
+    min-height: $button-min-width;
+    min-width: $button-min-height;
+    width: 100%;
+    font-family: inherit;
+    font-size: 100%;
+    border-radius: 5px;
+    padding: $size-small;
+  }
+
+  &__subtitle {
+    display: block;
+    line-height: normal;
+    color: hsl(0, 0%, 45%);
+  }
+
+  &__input {
+    background: hsl(224, 7%, 32%);
+    color: hsl(0, 0%, 100%);
+    border: 0;
+  }
+
+  &__option {
+    color: hsl(0, 0%, 100%);
+    background-color: hsl(224, 7%, 32%);
+  }
+
+  /* quick hack to overwrite attribute rules */
+  &__input.form__input--text,
+  &__input.form__input--password {
+    text-align: left;
+  }
+
+  &__button {
+    cursor: pointer;
+
+    &--submit {
+      max-width: $width-phone;
+      text-align: center;
+      color: var(--colour0-primary);
+      background-image: linear-gradient(
+        hsl(220, 7%, 17%),
+        hsl(0, 0%, 7%)
+      );
+      border: 0;
+    }
+  }
+}

@@ -1,28 +1,27 @@
-{% extends 'components/shell.html' %}
+{% extends "components/shell.html" %}
 
-{% macro ban_item(href, name, service_title) %}
-  <li class="bans__item">
-    <a href="{{ href }}">
-      <span>{{ name }}</span> <span class="subtitle">{{ service_title }}</span>
-    </a>
-  </li>
-{% endmacro %}
+{% import 'components/site.html' as site %}
+{% from 'components/paginator_new.html' import paginator_client_skeleton, selected_page %}
+{% from 'components/card_list.html' import card_list %}
+{% from 'components/cards/user.html' import user_card, user_card_skeleton %}
+{% from 'components/image_link.html' import image_link %}
 
 {% block content %}
-  {# TODO: rewrite sidebar as a macro #}
+  {# djlint: off #}
+{% call site.section("banned-artists", title="Banned artists") %}
+  {# too lazy to add a stylesheet #}
+  <p style="text-align: center; margin: 0;" >The following users have been banned from this instance. Posts from them will not import.</p>
+  {% call card_list('table') %}
+  {% endcall %}
+{% endcall %}
 
-  <section class="site-section site-section--bans" id="page">
-    <div>
-      <h1>Bans</h1>
-      <p>
-        The following users have been banned from this instance. Posts from them will not import.
-      </p>
-      <ul id="bans" class="bans">
-      </ul>
-    </div>
-  </section>
-{% endblock %}
+  {# djlint: on #}
+{% endblock content %}
 
 {% block components %}
-  {{ ban_item("", "", "") }}
+  {{ selected_page() }}
+  {# {{ button() }} #}
+  {{ paginator_client_skeleton() }}
+  {{ image_link("") }}
+  {{ user_card_skeleton() }}
 {% endblock components %}

@@ -1,20 +1,40 @@
-from flask import (Blueprint, make_response, redirect, render_template,
-                   request, session, url_for)
+from flask import (
+    Blueprint,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for
+)
 
 from configs.derived_vars import is_development
 from src.lib.account import load_account
-from src.lib.artist import (get_all_non_discord_artists, get_artist,
-                            get_artist_post_count, get_artists_by_service,
-                            get_artists_by_update_time,
-                            get_count_of_artists_faved,
-                            get_top_artists_by_faves)
+from src.lib.artist import (
+    get_all_non_discord_artists,
+    get_artist,
+    get_artist_post_count,
+    get_artists_by_service,
+    get_artists_by_update_time,
+    get_count_of_artists_faved,
+    get_top_artists_by_faves
+)
 from src.lib.dms import count_user_dms, get_artist_dms
 from src.lib.favorites import is_artist_favorited
-from src.lib.post import (get_all_posts_by_artist, get_artist_posts,
-                          get_render_data_for_posts, is_post_flagged)
-from src.utils.utils import (limit_int, offset, parse_int, sort_dict_list_by,
-                             take)
-from src.internals.database.database import get_cursor
+from src.lib.post import (
+    get_all_posts_by_artist,
+    get_artist_posts,
+    get_render_data_for_posts,
+    is_post_flagged
+)
+from src.utils.utils import (
+    limit_int,
+    offset,
+    parse_int,
+    sort_dict_list_by,
+    take
+)
+
 from .artists_types import ArtistDMsProps, ArtistPageProps
 
 artists = Blueprint('artists', __name__)
@@ -160,8 +180,6 @@ def get_dms(service: str, artist_id: str):
         return redirect(url_for('artists.list'))
 
     dms = get_artist_dms(service, artist_id)
-    # @REVIEW: TypeError: __init__() got an unexpected keyword argument 'id'
-    # @RESPONSE: fixed
     props = ArtistDMsProps(
         id=artist_id,
         service=service,
@@ -244,14 +262,14 @@ def make_artist_display_data(artist: dict):
         'fantia': {
             'service': 'Fantia',
             'href': f"https://fantia.jp/fanclubs/{artist_id}",
-        },
+        }
     }
 
     if is_development:
-        from development import kemono_dev
-        data_by_service_name[kemono_dev.name] = dict(
-            service=kemono_dev.title,
-            href=kemono_dev.user.profile
+        from src.types.paysites.kemono_dev import KemonoDev
+        data_by_service_name[KemonoDev.name] = dict(
+            service=KemonoDev.title,
+            href=KemonoDev.user.profile
         )
     data = data_by_service_name[service_name]
     data['proxy'] = f"/{service_name}/user/{artist_id}"

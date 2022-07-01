@@ -1,8 +1,53 @@
-{% macro form() %}
-  <form
-    class="form {{ kwargs.pop('class') if kwargs.class }}"
-    {% for attribute in kwargs %}
-      {{ attribute }}="{{kwargs[attribute]}}"
-    {% endfor %}
-  >{{ caller() if caller }}</form>
+{% from 'components/meta/attributes.html' import attributes %}
+
+{%- macro submit_button(text) -%}
+  <button type="submit" {{ attributes('button form__button form__button--submit', **kwargs) }}>{{ text if not caller else caller() }}
+  </button>
+{%- endmacro -%}
+
+{# call-only macro #}
+{% macro fieldset() %}
+  <fieldset{{ attributes('form__fieldset', **kwargs) }} >{{ caller()}}</fieldset>
+{% endmacro %}
+
+{# call-only macro #}
+{% macro form_section() -%}
+  <div {{ attributes('form__section', **kwargs) }}>{{ caller()}}
+  </div>
+{%- endmacro %}
+
+{% macro form(submit_text="Submit", submit_class=None) -%}
+  <form {{ attributes('form', **kwargs) }}>
+  {# only add submit button if it's called #}
+  {% if caller %}
+    {{ caller() }}
+    {% call form_section() %}
+      {{ submit_button(submit_text, class=submit_class) }}
+    {% endcall %}
+  {% endif %}
+  </form>
+{%- endmacro %}
+
+{# call-only macro #}
+{% macro label(for) -%}
+  <label for="{{ for }}" {{ attributes('form__label', **kwargs) }}>
+    {{ caller()}}
+  </label>
+{%- endmacro %}
+
+{% macro input(id, name) -%}
+  <input id="{{ id }}" name="{{ name }}" {{ attributes('form__input', **kwargs) }}>
+{%- endmacro %}
+
+{% macro option(value, title=None) %}
+  {# this element doesn't allow markup within it #}
+  {# so no reason for making it callable #}
+  <option value="{{ value }}" {{ attributes('form__option', **kwargs) }}>
+    {{ title if title else value }}
+  </option>
+{% endmacro %}
+
+{# call-only macro #}
+{% macro select() %}
+  <select {{ attributes('form__select', **kwargs) }}>{{ caller() }}</select>
 {% endmacro %}

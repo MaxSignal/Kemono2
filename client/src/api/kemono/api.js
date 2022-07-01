@@ -1,34 +1,14 @@
 import { KemonoAPIError } from "@wp/utils";
-import { kemonoFetch } from "./kemono-fetch";
+import { artists, creators } from "./fetch-artists.js";
+import { defaultHeaders, kemonoFetch } from "./kemono-fetch";
 
 export const api = {
-  bans,
   bannedArtist,
   creators,
-  logs
+  logs,
+  artists,
 };
 
-async function bans() {
-  try {
-    const response = await kemonoFetch('/api/bans', { method: "GET" });
-
-    if (!response || !response.ok) {
-
-      alert(new KemonoAPIError(6));
-      return null;
-    }
-
-    /**
-     * @type {KemonoAPI.API.BanItem[]}
-     */
-    const banItems = await response.json();
-
-    return banItems;
-
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 /**
  * @param {string} id
@@ -36,7 +16,7 @@ async function bans() {
  */
 async function bannedArtist(id, service) {
   const params = new URLSearchParams([
-    ["service", service ],
+    ["service", service],
   ]).toString();
 
   try {
@@ -59,28 +39,9 @@ async function bannedArtist(id, service) {
   }
 }
 
-async function creators() {
-  try {
-    const response = await kemonoFetch('/api/creators', { method: "GET" });
-
-    if (!response || !response.ok) {
-
-      alert(new KemonoAPIError(8));
-      return null;
-    }
-
-    /**
-     * @type {KemonoAPI.User[]}
-     */
-    const artists = await response.json();
-
-    return artists;
-
-  } catch (error) {
-    console.error(error);
-  }
-}
-
+/**
+ * @param {string} importID
+ */
 async function logs(importID) {
   try {
     const response = await kemonoFetch(`/api/logs/${importID}`, { method: "GET" });

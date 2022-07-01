@@ -1,14 +1,22 @@
-from ..internals.cache.redis import get_conn, KemonoRedisLock
-from ..internals.database.database import get_cursor
-from ..utils.utils import get_value
-from ..types.kemono import User
-from threading import Lock
-import redis_lock
-import ujson
-import dateutil
 import copy
-import datetime
 import time
+from datetime import datetime
+from typing import TypedDict
+
+import dateutil
+import ujson
+
+from src.database import get_cursor
+from src.lib.cache import KemonoRedisLock, get_conn
+from src.utils.utils import get_value
+
+
+class TDArtist(TypedDict):
+    id: str
+    indexed: datetime
+    name: str
+    service: str
+    updated: datetime
 
 
 def get_top_artists_by_faves(offset, count, reload=False):
@@ -209,7 +217,7 @@ def get_artist_last_updated(service, artist_id, reload=False):
             if get_value(last_updated, 'max') is not None:
                 last_updated = last_updated['max']
             else:
-                last_updated = datetime.datetime.min
+                last_updated = datetime.min
             redis.set(key, last_updated.isoformat(), ex=600)
             lock.release()
         else:
@@ -244,6 +252,45 @@ def get_artists_by_update_time(offset, reload=False):
     else:
         artists = deserialize_artists(artists)
     return artists
+
+
+def ban_artist(id: str, service: str):
+    cursor = get_cursor()
+    query_args = dict(
+        id=id,
+        service=service
+    )
+    query = """
+        INSERT INTO dnp
+            (id, service)
+        VALUES
+            (%(id)s, %(service)s)
+        RETURNING *
+    """
+    cursor.execute(query, query_args)
+    banned_artist: TDArtist = cursor.fetchone()
+
+    return banned_artist
+
+
+def unban_artist(id: str, service: str):
+    cursor = get_cursor()
+    query_args = dict(
+        id=id,
+        service=service
+    )
+    query = """
+        DELETE
+        FROM dnp
+        WHERE
+            id = %(id)s
+            AND service = %(service)s
+        RETURNING *
+    """
+    cursor.execute(query, query_args)
+    unbanned_artist: TDArtist = cursor.fetchone()
+
+    return unbanned_artist
 
 
 def serialize_artists(artists):

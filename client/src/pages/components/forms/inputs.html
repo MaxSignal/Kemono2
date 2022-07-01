@@ -1,0 +1,42 @@
+{% from 'components/forms/base.html' import form_section, label, input, select, option %}
+{# jinja doesn't allow nested callable macros #}
+{# therefore none of these macros are callable #}
+
+{% macro input_text(id, name, title) %}
+  {# djlint: off #}
+  {% call form_section(**kwargs) %}
+    {% call label(for=id) %}
+      {{ title }}
+    {% endcall %}
+    {{ input(id=id, name=name, type="text") }}
+  {% endcall %}
+
+  {# djlint: on #}
+{% endmacro %}
+
+{% macro input_number(id, name, title) %}
+  {# djlint: off #}
+  {% call form_section(**kwargs) %}
+    {% call label(for=id) %}
+      {{ title }}
+    {% endcall %}
+    {{ input(id=id, name=name, type="number") }}
+  {% endcall %}
+
+  {# djlint: on #}
+{% endmacro %}
+
+{% macro input_select(id, name, title, options) %}
+{# djlint: off #}
+  {% call form_section(**kwargs) %}
+    {% call label(for=id) %}
+      {{ title }}
+    {% endcall %}
+    {% call select(id=id, name=name) %}
+      {% for option_props in options %}
+        {{ option(**option_props) }}
+      {% endfor %}
+    {% endcall %}
+  {% endcall %}
+{# djlint: on #}
+{% endmacro %}

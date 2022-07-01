@@ -1,7 +1,25 @@
+{% from 'components/meta/attributes.html' import attributes %}
+
 {%- macro button(text, class_name=none, is_focusable=true) -%}
-  <button
-    class="button {{ class_name if class_name}}"
-    type="button"
-    {{ 'tabindex=-1' if not is_focusable }}
+  {% set final_class = class_name if class_name else "" + " " + kwargs.pop("class") if kwargs.class else "" %}
+  <button type="button"
+  {{ 'tabindex=-1' if not is_focusable }}
+  {{ attributes(
+    'button',
+    class=final_class,
+    **kwargs
+  ) }}
   >{{ text if not caller else caller() }}</button>
+{%- endmacro -%}
+
+{%- macro ban_button(artist_id, service) -%}
+  {%- call button(
+    class="artist-ban",
+    data_artist_id=artist_id,
+    data_service=service,
+    **kwargs
+  ) -%}
+    <span class="artist-ban__action artist-ban__action--ban" >Ban</span>
+    <span class="artist-ban__action artist-ban__action--unban" >Unban</span>
+  {%- endcall -%}
 {%- endmacro -%}

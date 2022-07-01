@@ -4,12 +4,12 @@
 const components = new Map();
 
 /**
- * @param {HTMLElement} footer 
+ * @param {HTMLElement} footer
  */
 export function initComponentFactory(footer) {
   const container = footer.querySelector(".component-container");
   /**
-   * @type {NodeListOf<HTMLElement}
+   * @type {NodeListOf<HTMLElement>}
    */
   const componentElements = container.querySelectorAll(`#${container.id} > *`);
 
@@ -20,13 +20,13 @@ export function initComponentFactory(footer) {
 }
 
 /**
- * @param {string} className 
+ * @param {string} className
  */
 export function createComponent(className) {
   const componentSkeleton = components.get(className);
 
   if (!componentSkeleton) {
-    return console.error(`Component "${className}" doesn't exist.`);
+    console.error(`Component "${className}" doesn't exist.`);
   }
 
   const newInstance = componentSkeleton.cloneNode(true);

@@ -4,16 +4,13 @@ import re
 from datetime import timedelta
 from os import getenv
 from os.path import dirname, join
-from threading import Lock
 from urllib.parse import urljoin
 
 from dotenv import load_dotenv
 from flask import Flask, abort, g, redirect, render_template, request, session
 
-import src.internals.cache.redis as redis
-import src.internals.database.database as database
-from configs.derived_vars import is_development
-from src.internals.cache.flask_cache import cache
+from src.database import init_database, get_pool
+from src.lib.cache import init_redis_cache, flask_cache
 from src.lib.ab_test import get_all_variants
 from src.lib.account import is_logged_in, load_account
 from src.lib.notification import count_new_notifications
@@ -33,6 +30,7 @@ from src.utils.utils import (
     freesites,
     paysite_list,
     paysites,
+    paysite_options,
     render_page_data,
     url_is_for_non_logged_file_extension
 )
@@ -60,12 +58,13 @@ app.register_blueprint(favorites)
 app.register_blueprint(dms)
 app.register_blueprint(help_app, url_prefix='/help')
 app.register_blueprint(imports)
-if (is_development):
-    from development import development
-    app.register_blueprint(development)
 
 
 app.config.from_pyfile('flask.cfg')
+app.config.update(
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_SAMESITE='Strict',
+)
 app.jinja_options = dict(
     trim_blocks=True,
     lstrip_blocks=True
@@ -80,9 +79,9 @@ logging.getLogger('PIL').setLevel(logging.INFO)
 logging.getLogger('requests').setLevel(logging.WARNING)
 logging.getLogger('urllib3').setLevel(logging.WARNING)
 
-cache.init_app(app)
-database.init()
-redis.init()
+flask_cache.init_app(app)
+init_database()
+init_redis_cache()
 
 
 @app.before_request
@@ -92,6 +91,7 @@ def do_init_stuff():
     g.freesites = freesites
     g.paysite_list = paysite_list
     g.paysites = paysites
+    g.paysite_options = paysite_options
     g.origin = getenv("KEMONO_SITE")
     g.canonical_url = urljoin(getenv("KEMONO_SITE"), request.path)
     session.permanent = True
@@ -99,7 +99,7 @@ def do_init_stuff():
     session.modified = False
     account = load_account()
     if account:
-        g.account = Account.init_from_dict(account)
+        g.account = Account.from_dict(account)
         g.new_notifications_count = count_new_notifications(g.account.id)
 
 
@@ -140,7 +140,7 @@ def close(e):
         connection = g.pop('connection', None)
         if connection is not None:
             try:
-                pool = database.get_pool()
+                pool = get_pool()
                 connection.commit()
                 pool.putconn(connection)
             except:

@@ -1,4 +1,4 @@
-{% extends 'components/shell.html' %}
+{% extends "components/shell.html" %}
 
 {% from 'components/headers.html' import user_header %}
 {% from "components/loading_icon.html" import loading_icon %}
@@ -10,7 +10,7 @@
 
 {% block title %}
   <title>{{ page_title }}</title>
-{% endblock title %}  
+{% endblock title %}
 
 {% block meta %}
   <meta name="id" content="{{ props.id }}">
@@ -63,7 +63,7 @@
     </div>
   {% else %}
     <div class="no-results">
-      <h2 class="site-section__subheading">Nobody here but us chickens!</h1>
+      <h2 class="site-section__subheading">Nobody here but us chickens!</h2>
       <p class="subtitle">
         There are either no more posts beyond this page, or this user hasn't been imported.
       </p>

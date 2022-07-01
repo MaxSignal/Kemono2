@@ -1,12 +1,38 @@
-import { isLoggedIn } from "@wp/js/account";
+import { isLoggedIn } from "@wp/lib/account.js";
+
+/**
+ * @template {unknown} DataType
+ * @typedef IAPIRequest
+ * @property {DataType} data
+ */
+
+/**
+ * @template {unknown} DataType
+ * @typedef IAPIResponse
+ * @property {boolean} is_successful
+ * @property {DataType} data
+ */
+
+export const defaultHeaders = new Headers([
+  ["Content-Type", "application/json"],
+  ["Accept", "application/json"]
+]);
+
+/**
+ * @param {Record<string, unknown>} body
+ */
+export function createRequestBody(body) {
+  return JSON.stringify({ data: body })
+}
 
 /**
  * Generic request for Kemono API.
  * @param {RequestInfo} endpoint
- * @param {RequestInit} options
+ * @param {RequestInit} [options]
  * @returns {Promise<Response>}
  */
- export async function kemonoFetch(endpoint, options) {
+export async function kemonoFetch(endpoint, options) {
+
   try {
     const response = await fetch(endpoint, options);
 

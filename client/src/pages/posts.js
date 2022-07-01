@@ -1,9 +1,9 @@
 import { CardList, PostCard } from "@wp/components";
-import { isLoggedIn } from "@wp/js/account";
+import { isLoggedIn } from "@wp/lib/account.js";
 import { findFavouritePost, findFavouriteArtist } from "@wp/js/favorites";
 
 /**
- * @param {HTMLElement} section 
+ * @param {HTMLElement} section
  */
 export function postsPage(section) {
   const cardListElement = section.querySelector(".card-list");

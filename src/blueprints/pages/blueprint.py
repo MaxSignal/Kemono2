@@ -8,6 +8,8 @@ from flask import (
     render_template,
     request
 )
+from configs.derived_vars import is_development
+from .search import search
 
 pages = Blueprint('pages', __name__)
 
@@ -51,3 +53,23 @@ def do_antiscraper_thing():
     except Exception as error:
         current_app.logger.exception(f'Couldn\'t bypass "{url}". Reason: {error}')
         return ('Error while trying to bypass the antiscraper link. The admins were notified of the problem.', 500)
+
+
+@pages.route('/help/bans')
+def bans():
+    props = dict(
+        currentPage='help'
+    )
+    response = make_response(render_template(
+        'help/bans.html',
+        props=props
+    ), 200)
+    response.headers['Cache-Control'] = 'max-age=60, public, stale-while-revalidate=2592000'
+    return response
+
+
+if is_development:
+    from .development import development
+    pages.register_blueprint(development)
+
+pages.register_blueprint(search)

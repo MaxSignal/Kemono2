@@ -1,36 +1,39 @@
-# from abc import abstractmethod
-from dataclasses import dataclass, fields
+import json
+from dataclasses import dataclass, fields, asdict
 
 from typing import Dict
 from src.internals.types import AbstractDataclass
 
+
 @dataclass
 class DatabaseEntry(AbstractDataclass):
-    
+
     @classmethod
-    def init_from_dict(cls, dictionary: Dict):
+    def from_json(cls, input_json: str):
+        output_dict = json.loads(input_json)
+
+        return cls.from_json(output_dict)
+
+    @classmethod
+    def from_dict(cls, input_dict: Dict):
         """
         Init a dataclass instance off a dictionary.
         """
-        instance = cls(**{ key: value
-            for key, value in dictionary.items()
-            if key in { field.name for field in fields(cls) }
-        })
+        args = {
+            key: value
+            for key, value in input_dict.items()
+            if key in {
+                field.name
+                for field
+                in fields(cls)
+            }
+        }
+        instance = cls(**args)
+
         return instance
-    
-    # @abstractmethod
-    # def serialize():
-    #     """
-    #     Serialize python-specific property types.
-    #     Mostly used for Redis caching.
-    #     """
-    #     pass
-    
-    # @abstractmethod
-    # def deserialize():
-    #     """
-    #     Deserialize certain properties into python-specific types.
-    #     Mostly for transforming the results returned by Redis cache.
-    #     `Psycopg` already transforms between types where applicable.
-    #     """
-    #     pass
+
+    def to_dict(self):
+        return asdict(self)
+
+    def to_json(self):
+        return json.dumps(self.to_dict())

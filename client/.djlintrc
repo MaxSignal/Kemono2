@@ -1,0 +1,8 @@
+{
+  "ignore": "H006,H013,H017,H021,H029,J004,J018",
+  "indent": "2",
+  "profile": "jinja",
+  "custom_blocks": "endcall",
+  "blank_line_after_tag": "extends,include,endblock,from,endcall,endmacro",
+  "max_line_length": "120"
+}

@@ -1,11 +1,26 @@
-from urllib.parse import urlencode, parse_qs, urlsplit, urlunsplit
-from datetime import datetime
-from flask import request, g
+import hashlib
 import json
 import random
-import hashlib
+from base64 import b64encode
+from dataclasses import fields
+from datetime import datetime
+from typing import Optional, TypedDict
+from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
+
+from flask import g, request
+
 from configs.derived_vars import is_development
 from src.types.paysites import Paysites
+
+
+class TDOption(TypedDict):
+    """
+    `<option>` attributes plus `title` for macro.
+    """
+    value: str
+    title: Optional[str]
+    selected: Optional[str]
+
 
 freesites = {
     "kemono": {
@@ -21,17 +36,19 @@ freesites = {
     }
 }
 
-paysite_list = [
-    "patreon",
-    "fanbox",
-    "gumroad",
-    "subscribestar",
-    "dlsite",
-    "discord",
-    "fantia",
+paysites = Paysites()
+# pre-configured `options`
+# because Jinja cannot into list comprehensions
+paysite_options = [
+    TDOption(
+        value=field.name,
+        title=paysites[field.name].title
+    )
+    for field
+    in fields(paysites)
 ]
 
-paysites = Paysites()
+paysite_list = [field.name for field in fields(paysites)]
 
 
 def set_query_parameter(url, param_name, param_value):
@@ -100,9 +117,9 @@ def allowed_file(mime, accepted):
     return any(x in mime for x in accepted)
 
 
-def get_value(d, key, default=None):
-    if key in d:
-        return d[key]
+def get_value(dictionary, key, default=None):
+    if key in dictionary:
+        return dictionary[key]
     return default
 
 
@@ -140,13 +157,13 @@ def offset(num, list_var):
     return list_var[num:]
 
 
-def limit_int(i: int, limit: int):
-    if i > limit:
+def limit_int(integer: int, limit: int):
+    if integer > limit:
         return limit
-    return i
+    return integer
 
 
-def parse_int(string, default=0):
+def parse_int(string: str, default: int = 0):
     try:
         return int(string)
     except Exception:
@@ -162,8 +179,9 @@ def get_import_id(data):
     return take(16, hashlib.sha256((data + salt).encode('utf-8')).hexdigest())
 
 
-# doing it in the end to avoid circular import error
-if is_development:
-    from development import kemono_dev
-    paysite_list.append(kemono_dev.name)
-    setattr(paysites, kemono_dev.name, kemono_dev)
+def encode_text_query(query: str):
+    return b64encode(query.encode('utf-8')).decode('utf-8') if query else ""
+
+
+def is_valid_service(service: str):
+    return service in paysite_list

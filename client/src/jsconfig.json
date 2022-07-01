@@ -4,9 +4,9 @@
     "paths": {
       "@wp/pages": ["./pages/_index.js"],
       "@wp/lib": ["./lib/_index.js"],
+      "@wp/lib/*": ["./lib/*"],
       "@wp/components": ["./pages/components/_index.js"],
       "@wp/env/*": ["./env/*"],
-      "@wp/lib/*": ["./lib/*"],
       "@wp/js/*": ["./js/*"],
       "@wp/css/*": ["./css/*"],
       "@wp/assets/*": ["./assets/*"],
@@ -15,8 +15,9 @@
     },
     "target": "es6",
     "module": "es6",
-    "lib": ["dom", "dom.iterable"],
+    "lib": ["DOM", "DOM.Iterable", "ES7"],
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "checkJs": true
   }
 }

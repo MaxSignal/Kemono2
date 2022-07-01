@@ -2,7 +2,7 @@ import { kemonoAPI } from "@wp/api";
 import { addFavouritePost, removeFavouritePost, findFavouritePost } from "@wp/js/favorites";
 import { LoadingIcon, registerMessage, showTooltip } from "@wp/components";
 import { createComponent } from "@wp/js/component-factory";
-import { isLoggedIn } from "@wp/js/account";
+import { isLoggedIn } from "@wp/lib/account.js";
 import { isAntiscraperLink } from "@wp/lib";
 import { AntiscraperLink } from "@wp/components";
 

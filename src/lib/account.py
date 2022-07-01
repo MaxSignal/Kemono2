@@ -1,27 +1,44 @@
-import ujson
-import copy
-import bcrypt
 import base64
+import copy
 import hashlib
-import dateutil
-import redis_lock
 import time
-from flask import session, current_app, flash
+from datetime import datetime
 from threading import Lock
+from typing import Dict, List, Optional, TypedDict
+
+import bcrypt
+import ujson
 from bleach.sanitizer import Cleaner
-from ..internals.database.database import get_cursor
-from ..utils.utils import get_value
-from ..internals.cache.redis import get_conn, serialize_dict_list, deserialize_dict_list, KemonoRedisLock
-from ..lib.favorites import add_favorite_artist
-from ..lib.artist import get_artist
-from ..lib.security import is_login_rate_limited
-from src.types.account import Account, Service_Key
-from typing import Dict, List, Optional
+from dateutil import parser as date_parser
+from flask import current_app, flash, session
+
+from src.database import get_cursor
+from src.lib.artist import get_artist
+from src.lib.cache import (
+    KemonoRedisLock,
+    deserialize_dict_list,
+    get_conn,
+    serialize_dict_list
+)
+from src.lib.favorites import add_favorite_artist
+from src.lib.security import is_login_rate_limited
+from src.types.account import Account, IAccountRoles, Service_Key
+from src.utils.utils import get_value
 
 account_create_lock = Lock()
 
 
-def load_account(account_id: str = None, reload: bool = False):
+class TDAccount(TypedDict):
+    id: int
+    username: str
+    created_at: datetime
+    role: IAccountRoles
+
+
+def load_account(
+    account_id: str = None,
+    reload: bool = False
+) -> Optional[TDAccount]:
     """
     TODO: Make it return an instance of `Account`.
     """
@@ -104,7 +121,7 @@ def get_saved_keys(account_id: int, reload: bool = False):
             return get_saved_keys(account_id, reload=reload)
     else:
         result = deserialize_dict_list(saved_keys)
-    saved_keys = [Service_Key.init_from_dict(service_key) for service_key in result]
+    saved_keys = [Service_Key.from_dict(service_key) for service_key in result]
     return saved_keys
 
 
@@ -239,5 +256,5 @@ def prepare_account_fields(account):
 
 
 def rebuild_account_fields(account):
-    account['created_at'] = dateutil.parser.parse(account['created_at'])
+    account['created_at'] = date_parser.parse(account['created_at'])
     return account

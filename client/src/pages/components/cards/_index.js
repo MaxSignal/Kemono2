@@ -3,7 +3,7 @@ import { ImageLink, FancyLink, Timestamp } from "@wp/components";
 import { freesites, paysites } from "@wp/utils";
 
 /**
- * @param {HTMLElement} element 
+ * @param {HTMLElement} element
  * @param {KemonoAPI.Post} post
  */
 export function PostCard(element = null, post = {}) {
@@ -30,7 +30,7 @@ export function PostCard(element = null, post = {}) {
 };
 
 /**
- * @param {HTMLElement} element 
+ * @param {HTMLElement} element
  */
 function initFromElement(element) {
   const { id, service, user } = element.dataset;
@@ -43,7 +43,7 @@ function initFromElement(element) {
 }
 
 /**
- * @param {KemonoAPI.Post} post 
+ * @param {KemonoAPI.Post} post
  */
 function initFromScratch(post) {
   /**
@@ -70,17 +70,17 @@ function handlePostView(link) {
 }
 
 /**
- * @param {HTMLElement} element 
- * @param {KemonoAPI.User} user 
- * @param {boolean} isCount 
- * @param {boolean} isDate 
- * @param {string} className 
+ * @param {HTMLElement | null} element
+ * @param {KemonoAPI.Artist} user
+ * @param {boolean} isCount
+ * @param {boolean} isDate
+ * @param {string} className
  */
 export function UserCard(
-  element, 
-  user = {}, 
-  isCount = false, 
-  isDate = false, 
+  element,
+  user = {},
+  isCount = false,
+  isDate = false,
   className=null
 ) {
   const userCard = element
@@ -91,7 +91,7 @@ export function UserCard(
 }
 
 /**
- * @param {HTMLElement} element 
+ * @param {HTMLElement} element
  */
 function initUserCardFromElement(element) {
   const userCard = element;
@@ -100,10 +100,10 @@ function initUserCardFromElement(element) {
 }
 
 /**
- * @param {KemonoAPI.User} user 
- * @param {boolean} isCount 
- * @param {boolean} isDate 
- * @param {string} className 
+ * @param {KemonoAPI.Artist} user
+ * @param {boolean} isCount
+ * @param {boolean} isDate
+ * @param {string} className
  */
 function initUserCardFromScratch(user, isCount, isDate, className) {
   const profileIcon = freesites.kemono.user.icon(user.service, user.id)
@@ -134,6 +134,7 @@ function initUserCardFromScratch(user, isCount, isDate, className) {
   userIcon.appendChild(imageLink);
   userName.appendChild(fancyLink);
   userService.textContent = paysites[user.service].title;
+
 
   if (className) {
     userCard.classList.add(className);

@@ -1,10 +1,32 @@
-from flask import Blueprint, request, make_response, render_template, redirect, flash, url_for
+from flask import (
+    Blueprint,
+    flash,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    url_for
+)
 
-from src.utils.utils import make_cache_key, get_value, restrict_value, sort_dict_list_by, take, offset, parse_int
 from src.lib.account import load_account
-from src.lib.favorites import get_favorite_artists, get_favorite_posts, add_favorite_post, add_favorite_artist, remove_favorite_post, remove_favorite_artist
+from src.lib.favorites import (
+    add_favorite_artist,
+    add_favorite_post,
+    get_favorite_artists,
+    get_favorite_posts,
+    remove_favorite_artist,
+    remove_favorite_post
+)
 from src.lib.security import is_password_compromised
-from src.internals.cache.flask_cache import cache
+from src.utils.utils import (
+    get_value,
+    make_cache_key,
+    offset,
+    parse_int,
+    restrict_value,
+    sort_dict_list_by,
+    take
+)
 
 favorites = Blueprint('favorites', __name__)
 

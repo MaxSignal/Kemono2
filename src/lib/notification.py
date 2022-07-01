@@ -1,11 +1,11 @@
-from ujson import dumps
-
 from typing import List, Optional, TypedDict
 
-from src.internals.cache.redis import get_conn, serialize_dict_list, deserialize_dict_list
-from src.internals.database.database import get_cursor
+from ujson import dumps
 
+from src.database import get_cursor
+from src.lib.cache import deserialize_dict_list, get_conn, serialize_dict_list
 from src.types.account import Notification
+
 
 def count_account_notifications(account_id: int) -> int:
     """
@@ -30,13 +30,14 @@ def count_account_notifications(account_id: int) -> int:
     except:
         return 0
 
+
 def count_new_notifications(account_id: int) -> int:
     """
     TODO: fix `psycopg2.ProgrammingError: no results to fetch` error
     """
     try:
         args_dict = dict(
-            account_id= account_id
+            account_id=account_id
         )
 
         cursor = get_cursor()
@@ -58,9 +59,10 @@ def count_new_notifications(account_id: int) -> int:
     except:
         return 0
 
+
 def set_notifications_as_seen(notification_ids: List[int]) -> bool:
     args_dict = dict(
-        notification_ids= notification_ids
+        notification_ids=notification_ids
     )
 
     cursor = get_cursor()
@@ -73,6 +75,7 @@ def set_notifications_as_seen(notification_ids: List[int]) -> bool:
 
     return True
 
+
 def get_account_notifications(account_id: int, reload: bool = False) -> List[Notification]:
     redis = get_conn()
     key = f"notifications_for_account:{account_id}"
@@ -81,7 +84,7 @@ def get_account_notifications(account_id: int, reload: bool = False) -> List[Not
 
     if notifications is None or reload:
         args_dict = dict(
-            account_id= account_id
+            account_id=account_id
         )
 
         cursor = get_cursor()
@@ -94,12 +97,13 @@ def get_account_notifications(account_id: int, reload: bool = False) -> List[Not
         """
         cursor.execute(query, args_dict)
         result = cursor.fetchall()
-        redis.set(key, serialize_dict_list(result), ex = 60)
+        redis.set(key, serialize_dict_list(result), ex=60)
     else:
         result = deserialize_dict_list(notifications)
     # TODO: fix this mess
-    notifications = [Notification.init_from_dict(notification) for notification in result]
+    notifications = [Notification.from_dict(notification) for notification in result]
     return notifications
+
 
 def send_notifications(
     account_ids: List[str],
@@ -107,7 +111,7 @@ def send_notifications(
     extra_info: Optional[TypedDict]
 ) -> bool:
     cursor = get_cursor()
-    if  not account_ids:
+    if not account_ids:
         return False
 
     if extra_info is not None:
