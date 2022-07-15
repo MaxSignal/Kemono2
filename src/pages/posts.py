@@ -20,7 +20,7 @@ def get_posts():
     offset = parse_int(request.args.get('o'), 0)
     props['limit'] = 25
 
-    if not query or len(query) < 3:
+    if not query or len(query) < 2:
         results = get_all_posts(offset)
         props['count'] = count_all_posts()
     else:
