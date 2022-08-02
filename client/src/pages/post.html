@@ -4,6 +4,7 @@
 {% from 'components/links.html' import kemono_link, local_link %}
 {% from 'components/fancy_image.html' import fancy_image, background_image %}
 {% from 'components/image_link.html' import image_link %}
+{% from 'components/exoclick.html' import video_ad %}
 
 {% set paysite = g.paysites[props.service] %}
 {% set post_title = post.title if post.title else 'Untitled' %}
@@ -39,6 +40,7 @@
 {% endblock opengraph %}
 
 {% block content %}
+{{ video_ad() }}
 <section class="site-section site-section--post" id="page">
   {% if post %}
     <nav class="post__nav-links">

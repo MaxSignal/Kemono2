@@ -1,0 +1,15 @@
+{% macro video_ad() %}
+  <script type="application/javascript" src="https://a.realsrv.com/video-slider.js"></script>
+  <script type="application/javascript">
+    var adConfig = {
+      "idzone": 4754830,
+      "frequency_period": 5,
+      "close_after": 0,
+      "on_complete": "repeat",
+      "branding_enabled": 1,
+      "screen_density": 25,
+      "cta_enabled": 1
+    };
+    ExoVideoSlider.init(adConfig);
+  </script>
+{% endmacro %}

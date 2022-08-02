@@ -1,9 +1,11 @@
 {% extends 'components/shell.html' %}
 
 {% from 'components/card_list.html' import card_list %}
+{% from 'components/exoclick.html' import video_ad %}
 {% from 'components/cards/dm.html' import dm_card %}
 
 {% block content %}
+  {{ video_ad() }}
   <section class="site-section site-section--all-dms">
     <header class="site-section__header">
       <h1 class="site-section__heading">DMs</h1>
