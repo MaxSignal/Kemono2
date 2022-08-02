@@ -4,6 +4,7 @@
 {% from "components/loading_icon.html" import loading_icon %}
 {% from 'components/card_list.html' import card_list %}
 {% from 'components/cards/post.html' import post_card %}
+{% from 'components/ads.html' import video_ad %}
 
 {% set paysite = g.paysites[props.service] %}
 {% set page_title = 'Posts of ' ~ props.name ~ ' from ' ~ paysite.title ~ ' | Kemono' %}
@@ -28,6 +29,7 @@
 {% endblock opengraph %}
 
 {% block content %}
+{{ video_ad() }}
 {% if props.service == 'fanbox' and props.id == '314223' %}
   <p style="font-family: 'Comic Sans MS', 'Comic Sans', cursive; text-align: center;">
     jadf, pls stop wasting your time by repeatedly killing your links, this is getting kinda pathetic

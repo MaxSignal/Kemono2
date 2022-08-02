@@ -3,8 +3,10 @@
 {% from 'components/image_link.html' import image_link %}
 {% from 'components/card_list.html' import card_list %}
 {% from 'components/cards/user.html' import user_card, user_card_header, user_card_skeleton %}
+{% from 'components/ads.html' import video_ad %}
 
 {% block content %}
+  {{ video_ad() }}
   <section 
     class="site-section site-section--artists page" id="page"
   >

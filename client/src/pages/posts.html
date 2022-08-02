@@ -2,8 +2,10 @@
 
 {% from 'components/card_list.html' import card_list %}
 {% from 'components/cards/post.html' import post_card %}
+{% from 'components/ads.html' import video_ad %}
 
 {% block content %}
+{{ video_ad() }}
   <section class="site-section site-section--posts">
     <header class="site-section__header">
       <h1 class="site-section__heading">Posts</h1>

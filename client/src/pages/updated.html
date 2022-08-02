@@ -2,8 +2,10 @@
 
 {% from 'components/card_list.html' import card_list %}
 {% from 'components/cards/user.html' import user_card, user_card_header %}
+{% from 'components/ads.html' import video_ad %}
 
 {% block content %}
+  {{ video_ad() }}
   <div class="site-section site-section--updated page" id="page">
     {% if results|length %}
       <div class="paginator" id="paginator-top">

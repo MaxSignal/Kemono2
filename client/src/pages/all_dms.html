@@ -3,9 +3,11 @@
 {% import 'components/site.html' as site %}
 {% from 'components/card_list.html' import card_list %}
 {% from 'components/cards/dm.html' import approved_dm_card %}
+{% from 'components/ads.html' import video_ad %}
 
 {% block content %}
 {% call site.section("all-dms", title="DMs") %}
+  {{ video_ad() }}
   <div class="paginator" id="paginator-top">
     {% include 'components/paginator.html' %}
     <form
