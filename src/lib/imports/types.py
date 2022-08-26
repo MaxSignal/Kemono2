@@ -42,7 +42,7 @@ def fantiaKey(key: str, errors: List[str]):
     req_lengths = [32, 64]
     key_length = len(key)
 
-    if not any(list(key_length != length for length in req_lengths)):
+    if not any(list(key_length == length for length in req_lengths)):
         errors.append(
             f'The key length of "{key_length}" is not a valid Fantia key. '
             f'Accepted lengths: {", ".join(req_lengths)}.'
