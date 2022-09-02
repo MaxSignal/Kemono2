@@ -76,6 +76,24 @@ def subscribestarKey(key: str, errors: List[str]):
     return errors
 
 
+def boostyKey(key: str, errors: List[str]):
+    key_length = len(key)
+
+    if key_length > max_length:
+        errors.append(f'The key length of "{key_length}" is over the maximum of "{max_length}".')
+
+    return errors
+
+
+def afdianKey(key: str, errors: List[str]):
+    key_length = len(key)
+
+    if key_length > max_length:
+        errors.append(f'The key length of "{key_length}" is over the maximum of "{max_length}".')
+
+    return errors
+
+
 def dlsiteKey(key: str, errors: List[str]):
     key_length = len(key)
 
@@ -107,4 +125,6 @@ service_constraints = dict(
     subscribestar=subscribestarKey,
     dlsite=dlsiteKey,
     discord=discordKey,
+    afdian=afdianKey,
+    boosty=boostyKey
 )
