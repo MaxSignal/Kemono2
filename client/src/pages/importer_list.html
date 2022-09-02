@@ -26,7 +26,7 @@
             class="form__option"
             value="{{ entry }}"
             {{ "selected" if loop.first }}
-            {{ "disabled" if entry == 'subscribestar' or entry == 'discord' or entry == 'gumroad' }}
+            {{ "disabled" if entry == 'discord' or entry == 'dlsite' }}
           >
             {{ paysite.title }}
           </option>
@@ -141,6 +141,20 @@
   <p>
     Your session key is used to scrape paid posts from your feed. After downloading missing posts, the key is immediately discarded and never stored without permission.
   </p>
+  <h3>Importer statuses</h3>
+  <ul>
+    <li>
+      <em>Patreon, Fanbox, and Fantia</em> are <span style="color: var(--positive-colour1-secondary)">fully operational.</span>
+    </li>
+    <li>
+      <em>Boosty, Subscribestar, Afdian, and Gumroad</em> are <span style="color: var(--favourite-colour2-primary)">in research.</span>
+      Your contributions may not be processed immediately; however, submitting keys for these services greatly helps us perform the manual reverse-engineering, development, and testing work to bring support up to scratch.
+    </li>
+    <li>
+      <em>DLsite and Discord</em> are currently <span style="color: var(--negative-colour1-primary)">defunct.</span>
+      Due to development issues, contribution for these sites has been disabled for now. Please stay tuned through Partychan, Twitter, and the homepage announcements for word on when they will return.
+    </li>
+  </ul>
   <h3>Fantia</h3>
   <ul>
     <li>At least one paid content must be unlocked for the post to be imported. <i>Free posts cannot be archived at this time.</i></li>

@@ -27,7 +27,9 @@ paysite_list = [
     "subscribestar",
     "dlsite",
     "discord",
-    "fantia"
+    "fantia",
+    "boosty",
+    "afdian"
 ]
 
 # because fanbox requires `post_id` and `artist_id` for post link
@@ -94,6 +96,24 @@ paysites = {
         },
         "post": {
             "link": lambda post_id: f"https://fantia.jp/posts/{post_id}",
+        },
+    },
+    "boosty": {
+        "title": "Boosty",
+        "user": {
+            "profile": lambda user_id: f"",
+        },
+        "post": {
+            "link": lambda post_id: f"",
+        },
+    },
+    "afdian": {
+        "title": "Afdian",
+        "user": {
+            "profile": lambda user_id: f"",
+        },
+        "post": {
+            "link": lambda post_id: f"",
         },
     }
 }
