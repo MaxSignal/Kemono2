@@ -13,7 +13,7 @@ from src.lib.favorites import is_artist_favorited
 from src.lib.post import (get_all_posts_by_artist, get_artist_posts,
                           get_render_data_for_posts, is_post_flagged)
 from src.utils.utils import (limit_int, offset, parse_int, sort_dict_list_by,
-                             take)
+                             take, step_int)
 from src.internals.database.database import get_cursor
 from .artists_types import ArtistDMsProps, ArtistPageProps
 
@@ -115,9 +115,11 @@ def get(service: str, artist_id: str):
     base["service"] = service
     base["artist_id"] = artist_id
 
-    offset = parse_int(request.args.get('o'), 0)
     query = request.args.get('q', default='').strip()
     limit = limit_int(int(request.args.get('limit') or 25), 50)
+    offset = step_int(parse_int(request.args.get('o'), 0), limit)
+    if offset is None:
+        return redirect(url_for('artists.list'))
 
     favorited = False
     account = load_account()
