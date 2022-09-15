@@ -1,15 +1,28 @@
 {% macro video_ad() %}
-  <script type="application/javascript" src="https://a.realsrv.com/video-slider.js"></script>
-  <script type="application/javascript">
-    var adConfig = {
-      "idzone": 4754838,
-      "frequency_period": 5,
-      "close_after": 0,
-      "on_complete": "repeat",
-      "branding_enabled": 0,
-      "screen_density": 25,
-      "cta_enabled": 1
-    };
-    ExoVideoSlider.init(adConfig);
+  <script
+    id="SCSpotScript"
+    type="text/javascript"
+    src="https://creative.xlivrdr.com/widgets/Spot/lib.js"
+  ></script>
+  <div id="player-container" style="width:300px;height:100px"></div>
+  <script type="text/javascript">
+    const spot = new StripchatSpot({
+      autoplay: 'all',
+      userId: '264cbbb50205e9a9821f9f5de3203d265034cb1e5b6453a81fd33706d8a579ca',
+      campaignId: 'videoslider',
+      //sourceId: '',
+      tag:'girls',
+      showModal: 'signup',
+      hideButton: '1',
+      autoclose: 0,
+      closeButtonDelay: 0,
+      //width: 350,
+      //height: 200,
+    });
+    spot.mount(document.getElementById('player-container')).then((app) => {
+      setTimeout(() => {
+        Object.assign(document.getElementById('player-container').firstChild.style, {width: '300px', height: '100px'})
+      }, 10);
+    });
   </script>
 {% endmacro %}
