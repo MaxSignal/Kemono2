@@ -14,31 +14,6 @@ from ..lib.account import load_account
 
 post = Blueprint('post', __name__)
 
-@post.route('/<service>/user/<user_id>/post/<post_id>/prev')
-def post_prev(service, user_id, post_id):
-    previous_post_id = get_previous_post_id(post_id, user_id, service)
-
-    previous_post = None
-    if previous_post_id is not None:
-        previous_post = get_post(previous_post_id, user_id, service)
-
-    if not previous_post:
-        return redirect(request.headers.get('Referer') if request.headers.get('Referer') else '/')
-    else:
-        return redirect(url_for('post.get', service = previous_post['service'], artist_id = previous_post['user'], post_id = previous_post['id']))
-
-@post.route('/<service>/user/<user_id>/post/<post_id>/next')
-def post_next(service, user_id, post_id):
-    next_post_id = get_next_post_id(post_id, user_id, service)
-    
-    next_post = None
-    if next_post_id is not None:
-        next_post = get_post(next_post_id, user_id, service)
-
-    if not next_post:
-        return redirect(request.headers.get('Referer') if request.headers.get('Referer') else '/')
-    else:
-        return redirect(url_for('post.get', service = next_post['service'], artist_id = next_post['user'], post_id = next_post['id']))
 
 @post.route('/<service>/user/<artist_id>/post/<post_id>')
 def get(service, artist_id, post_id):

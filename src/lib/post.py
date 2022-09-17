@@ -59,9 +59,26 @@ def get_post(post_id, artist_id, service, reload=False):
         lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
         if lock.acquire(blocking=False):
             cursor = get_cursor()
-            query = 'SELECT * FROM posts WHERE id = %s AND \"user\" = %s AND service = %s'
-            cursor.execute(query, (post_id, artist_id, service))
+            query = """
+                SELECT *
+                FROM (
+                    SELECT *,
+                        LAG(id)  OVER (ORDER BY published DESC, id ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) as prev,
+                        LEAD(id) OVER (ORDER BY published DESC, id ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) as next
+                    FROM posts
+                    WHERE
+                        "user" = %(artist_id)s
+                        AND service = %(service)s
+                ) x
+                WHERE %(post_id)s IN (id);
+            """
+            cursor.execute(query, dict(
+                artist_id=artist_id,
+                post_id=post_id,
+                service=service
+            ))
             post = cursor.fetchone()
+            print(post)
             redis.set(key, serialize_post(post), ex=600)
             lock.release()
         else:

@@ -49,22 +49,31 @@
   {% if post %}
     <nav class="post__nav-links">
       <ul class="post__nav-list">
-        <li class="post__nav-item">
-          <a 
-            class="post__nav-link prev" 
-            href="{{ post_link ~ '/prev' }}"
-          >
-            ‹ previous
-          </a> 
-        </li>
-        <li class="post__nav-item">
-          <a 
-            class="post__nav-link next" 
-            href="{{ post_link ~ '/next' }}"
-          >
-            next ›
-          </a>
-        </li>
+        {% if post.prev %}
+          <li class="post__nav-item">
+            <a
+              class="post__nav-link prev"
+              href="/{{ post.service }}/user/{{ post.user }}/post/{{ post.prev }}"
+            >
+              ‹ previous
+            </a>
+          </li>
+        {% else %}
+          <li class="post__nav-item subtitle">‹ previous</li>
+        {% endif %}
+
+        {% if post.next %}
+          <li class="post__nav-item">
+            <a
+              class="post__nav-link next"
+              href="/{{ post.service }}/user/{{ post.user }}/post/{{ post.next }}"
+            >
+              next ›
+            </a>
+          </li>
+        {% else %}
+          <li class="post__nav-item subtitle">next ›</li>
+        {% endif %}
       </ul>
     </nav>
 
