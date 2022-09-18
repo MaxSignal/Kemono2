@@ -78,7 +78,6 @@ def get_post(post_id, artist_id, service, reload=False):
                 service=service
             ))
             post = cursor.fetchone()
-            print(post)
             redis.set(key, serialize_post(post), ex=600)
             lock.release()
         else:
