@@ -91,7 +91,7 @@ export async function artistsPage(section) {
         sortSelect.value,
         queryInput.value
       );
-      await loadCards(displayStatus, cardContainer, pagination);
+      await loadCards(displayStatus, cardContainer, pagination, sortSelect.value);
     }
   });
 
@@ -105,6 +105,7 @@ export async function artistsPage(section) {
   orderSelect.addEventListener("change", handleSearch(orderSelect, serviceSelect, sortSelect, queryInput, displayStatus, cardContainer, pagination));
 
   await retrieveArtists(loadingStatus);
+  handleSearch(orderSelect, serviceSelect, sortSelect, queryInput, displayStatus, cardContainer, pagination)(null);
 }
 
 /**
@@ -133,7 +134,7 @@ function handleSearch(
       sortSelect.value,
       queryInput.value
     );
-    await loadCards(displayStatus, cardContainer, pagination);
+    await loadCards(displayStatus, cardContainer, pagination, sortSelect.value);
   }
 }
 
@@ -252,8 +253,9 @@ function createPaginator() {
  * @param {HTMLDivElement} displayStatus
  * @param {HTMLDivElement} cardContainer
  * @param {{ top: HTMLElement, bottom: HTMLElement }} pagination
+ * @param {String} sortBy
  */
-async function loadCards(displayStatus, cardContainer, pagination) {
+async function loadCards(displayStatus, cardContainer, pagination, sortBy) {
   displayStatus.textContent = 'Displaying search results';
   pagination.top.innerHTML = createPaginator();
   pagination.bottom.innerHTML = createPaginator();
@@ -276,7 +278,10 @@ async function loadCards(displayStatus, cardContainer, pagination) {
     const fragment = document.createDocumentFragment();
 
     for await (const user of filteredCreators.slice(skip, skip + 25)) {
-      const userCard = UserCard(null, user, true);
+      const userIsCount = sortBy === 'favorited';
+      const userIsIndexed = sortBy === 'indexed';
+      const userIsUpdated = sortBy === 'updated';
+      const userCard = UserCard(null, user, userIsCount, userIsUpdated, userIsIndexed);
       const isFaved = isLoggedIn && await findFavouriteArtist(user.id, user.service);
 
       if (isFaved) {
@@ -304,7 +309,10 @@ async function retrieveArtists(loadingStatus) {
     for (const artist of artists) {
       // preemptively do it here, it's taxing to parse a date string then convert it to a unix timestamp in milliseconds
       // this way we only have to do it once after fetching and none for sorting
-      artist.parsedIndexed = Date.parse(artist.indexed);
+      artist.parsedIndexed = artist.indexed * 1000;
+      artist.parsedUpdated = artist.updated * 1000;
+      artist.indexed = new Date(artist.parsedIndexed).toISOString();
+      artist.updated = new Date(artist.parsedUpdated).toISOString();
     }
 
     loadingStatus.innerHTML = '';

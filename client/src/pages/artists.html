@@ -12,13 +12,13 @@
   >
     <div class="no-posts" id="loading">
       <span class="subtitle">
-        Loading creator index... (please wait before searching)
+        Loading creators... please wait!
       </span>
     </div>
     <form
       autocomplete="off"
       id="search-form"
-      class="search-form"
+      class="search-form{{ '-hidden' if base.get('commit') }}"
       novalidate="novalidate"
       accept-charset="UTF-8"
     >
@@ -37,7 +37,7 @@
         <select id="service" name="service">
           <option value="">All</option>
           {% for paysite in g.paysite_list %}
-            <option value="{{ paysite }}">
+            <option value="{{ paysite }}" {{ 'selected' if base.get('service') == paysite }}>
               {{ g.paysites[paysite].title }}
             </option>
           {% else %}
@@ -47,13 +47,15 @@
       <div>
         <label for="sort_by">Sort by</label>
         <select id="sort_by" name="sort_by">
-          <option value="indexed" >Date Indexed</option>
-          <option value="name">Alphabetical Order</option>
-          <option value="service">Service</option>
+          <option value="favorited" {{ 'selected' if base.get('sort_by') == 'favorited' }}>Popularity</option>
+          <option value="indexed" {{ 'selected' if base.get('sort_by') == 'indexed' }}>Date Indexed</option>
+          <option value="updated" {{ 'selected' if base.get('sort_by') == 'updated' }}>Date Updated</option>
+          <option value="name" {{ 'selected' if base.get('sort_by') == 'name' }}>Alphabetical Order</option>
+          <option value="service" {{ 'selected' if base.get('sort_by') == 'service' }}>Service</option>
         </select>
         <select id="order" name="order">
-          <option value="desc">Descending</option>
-          <option value="asc">Ascending</option>
+          <option value="desc" {{ 'selected' if base.get('order') == 'desc' }}>Descending</option>
+          <option value="asc" {{ 'selected' if base.get('order') == 'asc' }}>Ascending</option>
         </select>
       </div>
     </form>
@@ -77,7 +79,12 @@
     {% call card_list('table') %}
       {{ user_card_header(is_count=true) }}
       {% for user in results %}
-        {{ user_card(user, is_count=true) }}
+        {{ user_card(
+            user,
+            is_updated=base.get('sort_by') == 'updated',
+            is_indexed=base.get('sort_by') == 'indexed',
+            is_count=base.get('sort_by') == 'favorited'
+        ) }}
       {% else %}
         <p class="subtitle card-list__item--no-results">
           No artists found for your query.

@@ -80,12 +80,13 @@ export function UserCard(
   element, 
   user = {}, 
   isCount = false, 
-  isDate = false, 
+  isUpdated = false, 
+  isIndexed = false, 
   className=null
 ) {
   const userCard = element
     ? initUserCardFromElement(element)
-    : initUserCardFromScratch(user, isCount, isDate, className);
+    : initUserCardFromScratch(user, isCount, isUpdated, isIndexed, className);
 
   return userCard;
 }
@@ -105,8 +106,8 @@ function initUserCardFromElement(element) {
  * @param {boolean} isDate 
  * @param {string} className 
  */
-function initUserCardFromScratch(user, isCount, isDate, className) {
-  const profileIcon = freesites.kemono.user.icon(user.service, user.id)
+function initUserCardFromScratch(user, isCount, isUpdated, isIndexed, className) {
+  const profileIcon = freesites.kemono.user.icon(user.service, user.id);
   const profileLink = freesites.kemono.user.profile(user.service, user.id);
   /**
    * @type {HTMLElement}
@@ -140,13 +141,13 @@ function initUserCardFromScratch(user, isCount, isDate, className) {
   }
 
   if (isCount) {
-    userCount.textContent = user.count
+    userCount.innerHTML = `<b>${user.favorited}</b> favorites`;
   } else {
     userCount.remove();
   }
 
-  if (isDate) {
-    const timestamp = Timestamp(null, user.updated);
+  if (isUpdated || isIndexed) {
+    const timestamp = Timestamp(null, isUpdated ? user.updated : user.indexed);
     userUpdated.appendChild(timestamp);
   } else {
     userUpdated.remove();

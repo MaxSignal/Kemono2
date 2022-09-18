@@ -11,6 +11,7 @@ from os.path import join, dirname, isfile, splitext, basename
 from shutil import move
 
 from PIL import Image
+from decimal import Decimal
 from python_resumable import UploaderFlask
 from flask import Flask, jsonify, render_template, render_template_string, request, redirect, url_for, send_from_directory, make_response, g, abort, session, Blueprint
 from werkzeug.utils import secure_filename
@@ -25,6 +26,7 @@ from ..internals.cache.flask_cache import cache
 from ..utils.utils import make_cache_key, relative_time, delta_key, allowed_file, limit_int
 
 legacy = Blueprint('legacy', __name__)
+
 
 @legacy.route('/posts/upload')
 def upload_post():
@@ -149,9 +151,35 @@ def upload():
 @legacy.route('/api/creators')
 def creators():
     cursor = get_cursor()
-    query = "SELECT * FROM lookup WHERE service != 'discord-channel'"
+    query = """
+        SELECT
+            l.id,
+            l.name,
+            l.service,
+            extract(epoch from l.indexed) AS indexed,
+            extract(epoch from l.updated) AS updated,
+            coalesce(aaf.favorited, 0) AS favorited
+        FROM lookup l
+        LEFT JOIN (
+            SELECT
+                artist_id,
+                service,
+                count(*) AS favorited
+            FROM account_artist_favorite
+            WHERE service != 'discord-channel'
+            GROUP BY artist_id, service
+        ) aaf ON
+            l.id = aaf.artist_id
+            AND l.service = aaf.service
+        WHERE l.service != 'discord-channel';
+    """
     cursor.execute(query)
     results = cursor.fetchall()
+    # Handle decimals.
+    for result in results:
+        for key in result.keys():
+            if isinstance(result[key], Decimal):
+                result[key] = float(result[key])
     return make_response(jsonify(results), 200)
 
 @legacy.route('/api/bans')

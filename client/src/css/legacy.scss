@@ -390,6 +390,10 @@ menu li {
   background-color: #282a2e;
   margin: 0px auto 8px auto;
 
+  &-hidden {
+    display: none;
+  }
+
   & > div {
     display: table-row;
     line-height: 1.5em;

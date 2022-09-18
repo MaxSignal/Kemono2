@@ -21,27 +21,15 @@ artists = Blueprint('artists', __name__)
 
 @artists.route('/artists')
 def list():
-    props = {
-        'currentPage': 'artists'
-    }
-    base = request.args.to_dict()
-    base.pop('o', None)
-
-    q = request.args.get('q')
-    commit = request.args.get('commit')
-    service = request.args.get('service')
-    sort_by = request.args.get('sort_by')
-    order = request.args.get('order')
-    offset = parse_int(request.args.get('o'), 0)
+    props = dict(currentPage='artists')
+    base = dict()
     limit = 25
 
-    (results, total_count) = ([], 0)
-    results = get_top_artists_by_faves(offset, limit)
-    total_count = get_count_of_artists_faved()
-    props['display'] = 'most popular artists'
-
-    props['count'] = total_count
+    results = get_top_artists_by_faves(0, limit)
+    props['display'] = 'cached popular artists'
+    props['count'] = len(results)
     props['limit'] = limit
+
     response = make_response(render_template(
         'artists.html',
         props = props,
@@ -80,28 +68,20 @@ def get_trending_artists():
 
 @artists.route('/artists/updated')
 def updated():
-    props = {
-        'currentPage': 'artists'
-    }
-    base = request.args.to_dict()
-    base.pop('o', None)
-
-    offset = parse_int(request.args.get('o'), 0)
+    base = dict(commit=True, sort_by='updated')
+    props = dict(currentPage='artists')
     limit = 25
 
+    results = get_artists_by_update_time(offset=0)
+    props['display'] = 'cached updated artists'
+    props['count'] = len(results)
     props['limit'] = limit
 
-    results = get_artists_by_update_time(offset=offset)
-    props["count"] = len(get_all_non_discord_artists())
-
-    base = request.args.to_dict()
-    base.pop('o', None)
-
     response = make_response(render_template(
-        'updated.html',
-        base = base,
-        props = props,
-        results = results
+        'artists.html',
+        props=props,
+        results=results,
+        base=base
     ), 200)
     response.headers['Cache-Control'] = 'max-age=60, public, stale-while-revalidate=2592000'
     return response

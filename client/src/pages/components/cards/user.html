@@ -19,6 +19,8 @@
 
 {% macro user_card(
   user, 
+  is_updated=false,
+  is_indexed=false,
   is_count=false,
   is_date=false,
   class_name=none
@@ -43,9 +45,14 @@
     <div class="user-card__service">
       {{ g.paysites[user.service].title }}
     </div>
-    {% if is_date %}
+    {% if is_updated %}
       <div class="user-card__updated">
         {{ timestamp(user.updated) }}
+      </div>
+    {% endif %}
+    {% if is_indexed %}
+      <div class="user-card__updated">
+        {{ timestamp(user.indexed) }}
       </div>
     {% endif %}
     {% if is_count %}
