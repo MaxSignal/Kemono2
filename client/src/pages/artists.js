@@ -161,15 +161,20 @@ function filterCards(order, service, sortBy, query) {
     creator => creator.service === (service || creator.service)
   ).sort((a, b) => {
 
-    if (order === 'desc') {
+    if (order === 'asc') {
       return sortBy === 'indexed'
         ? a.parsedIndexed - b.parsedIndexed
-        : fastCompare(a[sortBy], b[sortBy]);
-
+        : (sortBy === 'updated'
+            ? a.parsedUpdated - b.parsedUpdated
+            : fastCompare(a[sortBy], b[sortBy])
+          );
     } else {
       return sortBy === 'indexed'
         ? b.parsedIndexed - a.parsedIndexed
-        : fastCompare(b[sortBy], a[sortBy]);
+        : (sortBy === 'updated'
+            ? b.parsedUpdated - a.parsedUpdated
+            : fastCompare(b[sortBy], a[sortBy])
+          );
     }
   }).filter(creator => {
     return creator.name.match(
