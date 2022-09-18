@@ -23,6 +23,7 @@ artists = Blueprint('artists', __name__)
 def list():
     props = dict(currentPage='artists')
     base = dict()
+    base['logged_in'] = request.args.get('logged_in', False)
     limit = 25
 
     results = get_top_artists_by_faves(0, limit)
@@ -69,6 +70,7 @@ def get_trending_artists():
 @artists.route('/artists/updated')
 def updated():
     base = dict(commit=True, sort_by='updated')
+    base['logged_in'] = request.args.get('logged_in', False)
     props = dict(currentPage='artists')
     limit = 25
 
