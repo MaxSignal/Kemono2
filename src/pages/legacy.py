@@ -171,7 +171,9 @@ def creators():
         ) aaf ON
             l.id = aaf.artist_id
             AND l.service = aaf.service
-        WHERE l.service != 'discord-channel';
+        WHERE
+            l.service != 'discord-channel'
+            AND l.id NOT IN (SELECT id from dnp);
     """
     cursor.execute(query)
     results = cursor.fetchall()
