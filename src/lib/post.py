@@ -69,8 +69,9 @@ def get_post(post_id, artist_id, service, reload=False):
                     WHERE
                         "user" = %(artist_id)s
                         AND service = %(service)s
+                        AND ("user", service) NOT IN (SELECT id, service from dnp)
                 ) x
-                WHERE %(post_id)s IN (id);
+                WHERE %(post_id)s IN (id) ;
             """
             cursor.execute(query, dict(
                 artist_id=artist_id,
@@ -117,7 +118,14 @@ def get_all_posts_by_artist(artist_id, service, reload=False):
         lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
         if lock.acquire(blocking=False):
             cursor = get_cursor()
-            query = 'SELECT * FROM posts WHERE \"user\" = %s AND service = %s'
+            query = """
+                SELECT *
+                FROM posts
+                WHERE
+                    "user" = %s
+                    AND service = %s
+                    AND ("user", service) NOT IN (SELECT id, service from dnp);
+            """
             cursor.execute(query, (artist_id, service))
             posts = cursor.fetchall()
             redis.set(key, serialize_posts(posts), ex=600)
