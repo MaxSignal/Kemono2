@@ -26,7 +26,7 @@ def get_top_artists_by_faves(offset, count, reload=False):
                     ON l.id = aaf.artist_id AND l.service = aaf.service
                 WHERE
                     aaf.service != 'discord-channel'
-                    AND l.id NOT IN (SELECT id from dnp);
+                    AND (l.id, l.service) NOT IN (SELECT id, service from dnp)
                 GROUP BY (l.id, l.service)
                 ORDER BY count(*) DESC
                 OFFSET %s
@@ -105,7 +105,7 @@ def get_non_discord_artist_keys(reload=False):
                 FROM lookup
                 WHERE
                     service != 'discord-channel'
-                    AND id NOT IN (SELECT id from dnp);
+                    AND (id, service) NOT IN (SELECT id, service from dnp);
             """
             cursor.execute(query)
             artist_keys = cursor.fetchall()
@@ -132,7 +132,7 @@ def get_all_non_discord_artists(reload=False):
                 FROM lookup
                 WHERE
                     service != 'discord-channel'
-                    AND id NOT IN (SELECT id from dnp);
+                    AND (id, service) NOT IN (SELECT id, service from dnp);
             """
             cursor.execute(query)
             artists = cursor.fetchall()
@@ -159,7 +159,7 @@ def get_artists_by_service(service, reload=False):
                 FROM lookup
                 WHERE
                     service = %s
-                    AND id NOT IN (SELECT id from dnp);
+                    AND (id, service) NOT IN (SELECT id, service from dnp);
             """
             cursor.execute(query, (service,))
             artists = cursor.fetchall()
@@ -187,7 +187,7 @@ def get_artist(service: str, artist_id: str, reload: bool = False) -> dict:
                 WHERE
                     id = %s
                     AND service = %s
-                    AND id NOT IN (SELECT id from dnp);
+                    AND (id, service) NOT IN (SELECT id, service from dnp);
             """
             cursor.execute(query, (artist_id, service,))
             artist = cursor.fetchone()
@@ -261,7 +261,7 @@ def get_artists_by_update_time(offset, reload=False):
                 FROM lookup
                 WHERE
                     service != 'discord-channel'
-                    AND id NOT IN (SELECT id from dnp);
+                    AND (id, service) NOT IN (SELECT id, service from dnp)
                 ORDER BY updated desc
             """
             params = ()

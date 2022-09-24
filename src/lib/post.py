@@ -59,7 +59,15 @@ def get_post(post_id, artist_id, service, reload=False):
         lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
         if lock.acquire(blocking=False):
             cursor = get_cursor()
-            query = 'SELECT * FROM posts WHERE id = %s AND \"user\" = %s AND service = %s'
+            query = """
+                SELECT *
+                FROM posts
+                WHERE
+                    id = %s
+                    AND "user" = %s
+                    AND service = %s
+                    AND ("user", service) NOT IN (SELECT id, service from dnp);
+            """
             cursor.execute(query, (post_id, artist_id, service))
             post = cursor.fetchone()
             redis.set(key, serialize_post(post), ex=600)
@@ -101,7 +109,14 @@ def get_all_posts_by_artist(artist_id, service, reload=False):
         lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
         if lock.acquire(blocking=False):
             cursor = get_cursor()
-            query = 'SELECT * FROM posts WHERE \"user\" = %s AND service = %s'
+            query = """
+                SELECT *
+                FROM posts
+                WHERE
+                    "user" = %s
+                    AND service = %s
+                    AND ("user", service) NOT IN (SELECT id, service from dnp);
+            """
             cursor.execute(query, (artist_id, service))
             posts = cursor.fetchall()
             redis.set(key, serialize_posts(posts), ex=600)
