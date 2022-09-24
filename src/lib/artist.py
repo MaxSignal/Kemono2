@@ -24,7 +24,9 @@ def get_top_artists_by_faves(offset, count, reload=False):
                 FROM lookup l
                 INNER JOIN account_artist_favorite aaf
                     ON l.id = aaf.artist_id AND l.service = aaf.service
-                WHERE aaf.service != 'discord-channel'
+                WHERE
+                    aaf.service != 'discord-channel'
+                    AND l.id NOT IN (SELECT id from dnp);
                 GROUP BY (l.id, l.service)
                 ORDER BY count(*) DESC
                 OFFSET %s
@@ -98,7 +100,13 @@ def get_non_discord_artist_keys(reload=False):
         lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
         if lock.acquire(blocking=False):
             cursor = get_cursor()
-            query = "SELECT id, service FROM lookup WHERE service != 'discord-channel'"
+            query = """
+                SELECT id, service
+                FROM lookup
+                WHERE
+                    service != 'discord-channel'
+                    AND id NOT IN (SELECT id from dnp);
+            """
             cursor.execute(query)
             artist_keys = cursor.fetchall()
             redis.set(key, ujson.dumps(artist_keys), ex=600)
@@ -119,7 +127,13 @@ def get_all_non_discord_artists(reload=False):
         lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
         if lock.acquire(blocking=False):
             cursor = get_cursor()
-            query = "SELECT * FROM lookup WHERE service != 'discord-channel'"
+            query = """
+                SELECT *
+                FROM lookup
+                WHERE
+                    service != 'discord-channel'
+                    AND id NOT IN (SELECT id from dnp);
+            """
             cursor.execute(query)
             artists = cursor.fetchall()
             redis.set(key, serialize_artists(artists), ex=600)
@@ -140,7 +154,13 @@ def get_artists_by_service(service, reload=False):
         lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
         if lock.acquire(blocking=False):
             cursor = get_cursor()
-            query = "SELECT * FROM lookup WHERE service = %s"
+            query = """
+                SELECT *
+                FROM lookup
+                WHERE
+                    service = %s
+                    AND id NOT IN (SELECT id from dnp);
+            """
             cursor.execute(query, (service,))
             artists = cursor.fetchall()
             redis.set(key, serialize_artists(artists), ex=600)
@@ -161,7 +181,14 @@ def get_artist(service: str, artist_id: str, reload: bool = False) -> dict:
         lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
         if lock.acquire(blocking=False):
             cursor = get_cursor()
-            query = 'SELECT * FROM lookup WHERE id = %s AND service = %s'
+            query = """
+                SELECT *
+                FROM lookup
+                WHERE
+                    id = %s
+                    AND service = %s
+                    AND id NOT IN (SELECT id from dnp);
+            """
             cursor.execute(query, (artist_id, service,))
             artist = cursor.fetchone()
             redis.set(key, serialize_artist(artist), ex=600)
@@ -229,7 +256,14 @@ def get_artists_by_update_time(offset, reload=False):
         lock = KemonoRedisLock(redis, key, expire=60, auto_renewal=True)
         if lock.acquire(blocking=False):
             cursor = get_cursor()
-            query = "SELECT * FROM lookup WHERE service != 'discord-channel' ORDER BY updated desc "
+            query = """
+                SELECT *
+                FROM lookup
+                WHERE
+                    service != 'discord-channel'
+                    AND id NOT IN (SELECT id from dnp);
+                ORDER BY updated desc
+            """
             params = ()
             query += "OFFSET %s "
             params += (offset,)
