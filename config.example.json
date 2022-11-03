@@ -1,7 +1,7 @@
 {
   "site": "http://localhost:5000",
   "development_mode": true,
-  "automatic_migrations": true,
+  "automatic_migrations": false,
   "webserver": {
     "_secret": "To avoid users from being signed out after a server restart, replace me with a strong string and remove the underscore from my name.",
     "port": 80

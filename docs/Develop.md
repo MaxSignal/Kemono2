@@ -1,7 +1,7 @@
 
 # Develop
 
-For now Docker is a primary way of working on the repo.
+For now Docker is a primary way of working on the repo. Python3.8 and Docker is required.
 
 <br>
 
@@ -13,11 +13,11 @@ For now Docker is a primary way of working on the repo.
     
     ```sh
     #   Install the package if it's not installed
-    pip install virtualenv
+    python3.8 -m pip install virtualenv
     
     #   Make it easier to manage python versions
-    virtualenv --upgrade-embed-wheels
-    virtualenv --python 3.8 venv
+    python3.8 -m virtualenv --upgrade-embed-wheels
+    python3.8 -m virtualenv --python 3.8 venv
     ```
     
     <br>
@@ -34,8 +34,7 @@ For now Docker is a primary way of working on the repo.
 3.  Install python packages.
 
     ```sh
-    pip install \
-        --requirement requirements.txt
+    pip install -r requirements.txt
     ```
     
     <br>
@@ -46,6 +45,13 @@ For now Docker is a primary way of working on the repo.
     pre-commit install --install-hooks
     ````
 
+    <br>
+
+5. Initialize git submodules
+
+    ```
+    git submodule update --init --recursive
+    ```
 <br>
 <br>
 
@@ -75,12 +81,19 @@ For now Docker is a primary way of working on the repo.
 <br>
 
 ## Docker
-
+This assumes you have the git submodules already initialized.
 <br>
 
 ```sh
-docker-compose --file docker-compose.dev.yml build
-docker-compose --file docker-compose.dev.yml up
+# Copy configuration files
+cp config.example.json config.json
+cp redis_map.py.example redis_map.py
+
+# Change directory
+cd docker
+
+# Build and run
+docker-compose build && docker-compose up -d
 ```
 
 <br>
@@ -88,49 +101,22 @@ docker-compose --file docker-compose.dev.yml up
 In a browser, visit  [`http://localhost:5000/`]
 
 <br>
+<br>
 
 ### Database
 
 <br>
 
-1.  Register an account.
-
-2.  Visit  [`http://localhost:5000/development`]
-
-3.  Click either seeded or random generation.
-    
-    *This will start a mock import process,* <br>
-    *which will also populate the database.*
-
-<br>
-
-### Files
-
-TBD
-
-<br>
-
-### Build
-
-```sh
-docker-compose build
-docker-compose up --detach
-```
-
-<br>
-
-In a browser, visit  [`http://localhost:8000/`]
+> **TODO** : Fix implementation of randomly generated db for development
 
 <br>
 <br>
 
 ## Manual
 
-> **TODO** : Write installation and setup instructions
-
 <br>
 
-This assumes you have  `Python 3.8+`  &  `Node 12+`  installed <br>
+This assumes you have  `Python 3.8+`  &  `Node 16+`  installed <br>
 as well as a running **PostgreSQL** server with **Pgroonga**.
 
 <br>
@@ -145,24 +131,11 @@ virtualenv venv
 #   Windows ➞ venv\Scripts\activate 
 source venv/bin/activate
 
-pip install \
-    --requirement requirements.txt
+pip install -r requirements.txt
 
-cd client               \
-    && npm install      \
-    && npm run build    \
-    && cd ..
+cp config.json.example config.json
 
-#   Open .env + Configure
-cp .env.example .env
-
-#   Open flask.cfg + Configure
-cp flask.cfg.example flask.cfg
-
-set FLASK_APP=server.py
-set FLASK_ENV=development
-
-flask run
+python daemon.py
 ```
 
 <br>
