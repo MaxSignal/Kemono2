@@ -1,35 +1,15 @@
 {% macro video_ad() %}
-<script id="SCSpotScript" type="text/javascript" src="https://creative.xlivrdr.com/widgets/Spot/lib.js"></script>
-<script type="text/javascript">
-  (function() {
-    var key = '__SCSpotAppeared';
-    var lastAppeared = Number(window.localStorage.getItem(key));
-    var delay = 15*60*1000; // 15min;
-    if (lastAppeared > Date.now() - delay) {
-      return;
-    }
-    
-    var container = document.createElement('div');
-    document.body.appendChild(container);
-    
-    var spot = new StripchatSpot({
-      autoplay: 'all',
-      userId: '5702af83ed33610ecc1c6f10a58a9861e137fbd2c9a5107191eb3b1b54e6fc00',
-      campaignId: 'bottomslider',
-      sourceId: '',
-      tag:'girls/young',
-      showModal: 'signup',
-      hideButton: '1',
-      autoclose: 0,
-      closeButtonDelay: 0,
-    });
-    spot.mount(container).then(function() {
-      container.addEventListener('click', function(e) {
-        if (e.target.tagName === 'BUTTON') {
-          window.localStorage.setItem(key, Date.now());
-        }
-      })
-    });
-  })();
+<script type="application/javascript" src="https://a.realsrv.com/video-slider.js"></script>
+<script type="application/javascript">
+var adConfig = {
+    "idzone": 4754830,
+    "frequency_period": 15,
+    "close_after": 0,
+    "on_complete": "repeat",
+    "branding_enabled": 0,
+    "screen_density": 25,
+    "cta_enabled": 1
+};
+ExoVideoSlider.init(adConfig);
 </script>
 {% endmacro %}
